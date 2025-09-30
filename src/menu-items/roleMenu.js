@@ -16,37 +16,45 @@ const RoleMenu = {
       icon: icons.IconLayoutDashboard,
       breadcrumbs: false
     },
-    {
-      id: 'rfq',
-      title: 'RFQ',
-      type: 'item',
-      url: '/rfq',
-      icon: icons.IconLayoutDashboard,
-      breadcrumbs: false
-    },
-    {
-      id: 'jobOrder',
-      title: 'Job Orders',
-      type: 'item',
-      url: '/jobOrder',
-      icon: icons.IconScale,
-      breadcrumbs: false
-    },
+    // {
+    //   id: 'rfq',
+    //   title: 'RFQ',
+    //   type: 'item',
+    //   url: '/rfq',
+    //   icon: icons.IconLayoutDashboard,
+    //   breadcrumbs: false
+    // },
+    // {
+    //   id: 'jobOrder',
+    //   title: 'Job Orders',
+    //   type: 'item',
+    //   url: '/jobOrder',
+    //   icon: icons.IconScale,
+    //   breadcrumbs: false
+    // },
 
-    {
-      id: 'myCustomers',
-      title: 'My Customers',
-      type: 'item',
-      url: '/myCustomers',
-      icon: icons.IconClockHour1,
-      breadcrumbs: false
-    },
+    // {
+    //   id: 'myCustomers',
+    //   title: 'My Customers',
+    //   type: 'item',
+    //   url: '/myCustomers',
+    //   icon: icons.IconClockHour1,
+    //   breadcrumbs: false
+    // },
     {
       id: 'facility',
       title: 'Facility',
       type: 'item',
       url: '/facility',
       icon: icons.IconShieldCheck,
+      breadcrumbs: false
+    },
+        {
+      id: 'userManagment',
+      title: 'Users',
+      type: 'item',
+      url: '/userManagment',
+      icon: icons.IconFileImport,
       breadcrumbs: false
     },
     {
@@ -57,15 +65,17 @@ const RoleMenu = {
       icon: icons.IconReceipt2,
       breadcrumbs: false
     },
-
-    {
-      id: 'userManagment',
-      title: 'Users',
+        {
+      id: 'rating',
+      title: 'User Rating',
       type: 'item',
-      url: '/userManagment',
-      icon: icons.IconFileImport,
+      url: '/rating',
+      icon: icons.IconReceipt2,
       breadcrumbs: false
     },
+    
+
+
 
   ]
 };

@@ -10,6 +10,9 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard')));
 const NopageFound = Loadable(lazy(() => import('ui-component/common/no-page/NoPage')));
 const UserManagementPage = Loadable(lazy(() => import('ui-component/user_management/index')));
 const UserFeedbackPage = Loadable(lazy(() => import('ui-component/user_feedback/index')));
+const UserRatingPage = Loadable(lazy(() => import('ui-component/user_rating/index')));
+
+
 
 
 
@@ -34,39 +37,49 @@ const MainRoutes = {
       path: '/dashboard',
       element: <DashboardDefault />
     },
-    {
-      path: 'rfq',
-      children: [
-        {
-          path: '',
-          element: <NopageFound />
-        }
-      ]
-    },
-    {
-      path: 'jobOrder',
-      children: [
-        {
-          path: '',
-          element: <NopageFound />
-        }
-      ]
-    },
-    {
-      path: 'myCustomers',
-      children: [
-        {
-          path: '',
-          element: <NopageFound />
-        }
-      ]
-    },
+    // {
+    //   path: 'rfq',
+    //   children: [
+    //     {
+    //       path: '',
+    //       element: <NopageFound />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'jobOrder',
+    //   children: [
+    //     {
+    //       path: '',
+    //       element: <NopageFound />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'myCustomers',
+    //   children: [
+    //     {
+    //       path: '',
+    //       element: <NopageFound />
+    //     }
+    //   ]
+    // },
+
     {
       path: 'facility',
       children: [
         {
           path: '',
           element: <NopageFound />
+        }
+      ]
+    },
+        {
+      path: 'userManagment',
+      children: [
+        {
+          path: '',
+          element: <UserManagementPage />
         }
       ]
     },
@@ -79,15 +92,17 @@ const MainRoutes = {
         }
       ]
     },
-    {
-      path: 'userManagment',
+         {
+      path: 'rating',
       children: [
         {
           path: '',
-          element: <UserManagementPage />
+          element: <UserRatingPage />
         }
       ]
-    }
+    },
+
+
   ]
 };
 

@@ -12,11 +12,7 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
  import { userFeedback } from 'utils/TableConfig';
 
-const users = [
-  { id: 1, name: 'Alice', age: 30, city: 'New York' },
-  { id: 2, name: 'Bob', age: 24, city: 'London' },
-  { id: 3, name: 'Charlie', age: 45, city: 'Paris' },
-];
+
 import MainCard from 'ui-component/cards/MainCard';
 import Pagination from 'utils/TablePagination';
 import TableHead from 'utils/TableHead';
@@ -28,7 +24,7 @@ import styles from '../common/style';
 import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
 
-export default function Type() {
+export default function userRating() {
   const theme = useTheme();
   const style = styles(theme);
   const cmnstyle = cmnStyles(theme);
@@ -134,7 +130,7 @@ export default function Type() {
       <MainCard>
         <Grid container direction={'row'} justifyContent={'space-between'} alignItems={'center'} spacing={1}>
           <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
-            Feedback
+            Rating
           </Typography>
         </Grid>
         <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
