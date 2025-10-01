@@ -10,29 +10,22 @@ import * as actionType from './slice'; // Assuming this imports all the facility
 // Base API endpoint for facilities (adjust as needed for your specific API)
 const FACILITY_API_BASE = `${appConfig.ip}`; 
 
-// --- Worker Sagas ---
-
-// 1. Fetch Facilities
 function* getFacilitiesSaga(action) {
     console.log("----------------------SSSS-------------------",appConfig.ip);
     
   try {
     const params = {
-      // Example API call for fetching facilities (adjust method name)
-      api:`https://jsonplaceholder.typicode.com/posts`,
-    //   api: `${FACILITY_API_BASE}.get_facility_list`, 
+      api: `${FACILITY_API_BASE}/facilities`, 
       method: 'GET',
       successAction: actionType.getFacilitiesSuccess(),
       failAction: actionType.getFacilitiesFail(),
-      authourization: 'Bearer token_here' // Adjust authorization as needed
+      authourization: 'Bearer token_here' 
     };
     
-    // Call the API
     const res = yield call(commonApi, params);
     
-    if (res?.data) {
-      // Use 'put' to dispatch a success action with the fetched data
-      yield put(actionType.getFacilitiesSuccess(res.data)); 
+    if (res) {
+      yield put(actionType.getFacilitiesSuccess(res)); 
     } else {
       throw new Error('Invalid response data structure for facility list.');
     }
