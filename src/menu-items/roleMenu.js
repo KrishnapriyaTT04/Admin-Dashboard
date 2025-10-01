@@ -1,7 +1,7 @@
-import { IconLayoutDashboard, IconScale, IconReceipt2, IconShieldCheck, IconClockHour1, IconFileImport } from '@tabler/icons-react';
+import { IconLayoutDashboard, IconScale, IconReceipt2, IconShieldCheck, IconClockHour1, IconFileImport, IconUserExclamation } from '@tabler/icons-react';
 
 // constant
-const icons = { IconLayoutDashboard, IconScale, IconReceipt2, IconShieldCheck, IconClockHour1, IconFileImport };
+const icons = { IconLayoutDashboard, IconScale, IconReceipt2, IconShieldCheck, IconClockHour1, IconFileImport, IconUserExclamation };
 
 const RoleMenu = {
   id: 'dashboard',

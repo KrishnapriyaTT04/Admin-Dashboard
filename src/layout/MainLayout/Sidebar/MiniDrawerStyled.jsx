@@ -11,7 +11,7 @@ function openedMixin(theme) {
     width: width,
     borderRight: 'none',
     zIndex: 1099,
-    background: 'transparent linear-gradient(354deg,#3a6f90,#1d3848) 0 0 no-repeat',
+    background: 'linear-gradient(180deg, #019863, #019863)',
     overflowX: 'hidden',
     boxShadow: 'none',
     transition: theme.transitions.create('width', {

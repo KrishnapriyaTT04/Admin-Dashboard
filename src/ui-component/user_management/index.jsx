@@ -1,141 +1,61 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { TableContainer, Table, TextField, InputAdornment, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+// import { downloadExcel } from 'react-export-table-to-excel';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Add as AddIcon } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
-import cmnstyles from '../common/style';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-// --- DUMMY/MOCK IMPORTS FOR MISSING COMPONENTS/DATA ---
+// import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
+ import { userFeedback } from 'utils/TableConfig';
 
-// Mock regex for input validation (allowing letters and spaces for search)
-const regex = /^[a-zA-Z\s]*$/;
+const users = [
+  { id: 1, name: 'Alice', age: 30, city: 'New York' },
+  { id: 2, name: 'Bob', age: 24, city: 'London' },
+  { id: 3, name: 'Charlie', age: 45, city: 'Paris' },
+];
+import MainCard from 'ui-component/cards/MainCard';
+import Pagination from 'utils/TablePagination';
+import TableHead from 'utils/TableHead';
+import TableRows from 'utils/TableRows';
+// import ConfirmModal from 'views/common/ConfirmModal';
+import styles from '../common/style';
+// import EFTypeView from './efTypeView';
+// import UpdateEfTypeForm from './updateForm';
+import { Add as AddIcon } from '@mui/icons-material';
+import cmnStyles from '../common/style1';
 
-// Mock data/config
-const CountryData = {
-  keys: ['id', 'name', 'code', 'action'],
-  config: [
-    { key: 'id', label: 'ID' },
-    { key: 'name', label: 'Country Name' },
-    { key: 'code', label: 'Code' },
-    { key: 'action', label: 'Actions' },
-  ],
-};
-const { config, keys } = CountryData;
-
-// Mock components
-const MainCard = ({ children }) => <Box sx={{ p: 3, border: '1px solid #ccc' }}>{children}</Box>;
-const Pagination = ({ countPagination }) => <Typography variant="caption">Pagination: {countPagination} pages</Typography>;
-
-// Mock TableHead and TableRows (necessary for JSX to compile)
-const TableHead = ({ keys, config }) => (
-  <thead>
-    <tr>
-      {config.map(col => <th key={col.key} style={{ textAlign: 'left', padding: '16px' }}>{col.label}</th>)}
-    </tr>
-  </thead>
-);
-
-const TableRows = ({ data, msg, filter }) => {
-  if (data.length === 0) {
-    return (
-      <tr>
-        <td colSpan={10} style={{ textAlign: 'center', padding: '20px' }}>
-          <Typography variant="subtitle1" color="text.secondary">
-            No {msg} Found {filter && `for "${filter}"`}.
-          </Typography>
-        </td>
-      </tr>
-    );
-  }
-  return (
-    <tbody>
-      {data.map((row) => (
-        <tr key={row.id}>
-          <td style={{ padding: '16px' }}>{row.name}</td>
-          <td style={{ padding: '16px' }}>{row.code}</td>
-          {/* ... other cells based on keys */}
-        </tr>
-      ))}
-    </tbody>
-  );
-};
-// -----------------------------------------------------------------------
-
-
-export default function LandingPage() {
-  // Use the actual MUI theme or fall back to a dummy one if hook fails (unlikely in a running app)
-  const theme = useTheme() || dummyTheme; 
-  
-  // Dummy styles function declaration is moved out, but here for completeness:
-  const styles = (theme) => ({
-    root: { padding: theme.spacing(2) },
-    searchBox: { paddingLeft: theme.spacing(1), borderRadius: '4px' } // Added mock searchBox style
-  });
-
-  const cmnStyles = (theme) => ({
-    cmnBtn: { minWidth: 'auto', textTransform: 'none' }, // Added mock cmnBtn
-    cmnBtnOutline: { borderColor: theme.palette.primary.main, color: theme.palette.primary.main }, // Added mock cmnBtnOutline
-    tableCell: { padding: theme.spacing(1) },
-  });
-
-  // Now, initialize the style objects using the theme
-  const style = useMemo(() => styles(theme), [theme]);
-  const cmnstyle = useMemo(() => cmnStyles(theme), [theme]);
-
-
-  // --- REDUX MOCKING ---
-  // Mock useDispatch and useSelector since Redux is not set up here
-  const dispatch = useDispatch || (() => console.log('Dispatch Called'));
-
-  // Mock Redux state structure
-  const mockReduxState = {
-    additionalMasterData: {
-      countryList: [
-        { id: 'C1', name: 'India', code: 'IN' },
-        { id: 'C2', name: 'United States', code: 'US' },
-        { id: 'C3', name: 'Canada', code: 'CA' },
-         { id: 'C1', name: 'India', code: 'IN' },
-        { id: 'C2', name: 'United States', code: 'US' },
-        { id: 'C3', name: 'Canada', code: 'CA' },
-         { id: 'C1', name: 'India', code: 'IN' },
-        { id: 'C2', name: 'United States', code: 'US' },
-        { id: 'C3', name: 'Canada', code: 'CA' },
-         { id: 'C1', name: 'India', code: 'IN' },
-        { id: 'C2', name: 'United States', code: 'US' },
-        { id: 'C3', name: 'Canada', code: 'CA' },
-         { id: 'C1', name: 'India', code: 'IN' },
-        { id: 'C2', name: 'United States', code: 'US' },
-        { id: 'C3', name: 'Canada', code: 'CA' },
-      ],
-      countries: {
-        count: 3, // Mock total count
-      },
-    },
-  };
-  
-  const countryList = useSelector(state => mockReduxState.additionalMasterData?.countryList || []);
-  const count = useSelector(state => mockReduxState.additionalMasterData?.countries.count || 0);
-
-  // ----------------------------------------------------
-
+export default function Type() {
+  const theme = useTheme();
+  const style = styles(theme);
+  const cmnstyle = cmnStyles(theme);
+  const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [formOpen, setFormOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showXSLModal, setshowXSLModal] = useState(false);
 
+  const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
+  const count = useSelector((state) => state.emission?.efTypeListCount || 0);
+  const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
+  let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
+    slno: index + 1,
+    name: item.name,
+    desc: item.desc
+  }));
   let countPagination = Math.ceil(count / 10);
+  const { config, keys } = userFeedback;
 
   useEffect(() => {
-    // dispatch(getCountries({ searchVal: searchQuery, page: page + 1 }));
-    console.log(`Fetching countries for search: "${searchQuery}" on page: ${page + 1}`);
-  }, [searchQuery, page]); // Dependency added: page
+    // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
+  }, [searchQuery]);
 
   const searchHandler = (e) => {
     const value = e.target.value;
@@ -143,10 +63,29 @@ export default function LandingPage() {
     setPage(0);
   };
 
-  const handlePageClick = (e) => {
-    const selectedPage = e.selected;
-    setPage(selectedPage);
-    // dispatch(getCountries({ searchVal: searchQuery, page: selectedPage + 1 }));
+  function handleDownloadExcel() {
+    setshowXSLModal(true);
+    // dispatch(fetchEmissionFactorTypeXSL({ limit: count }));
+  }
+
+  const XSLHandler = () => {
+    excelExport();
+    closeXSLModal();
+  };
+  const header = ['SL.NO', 'Name', 'Description'];
+  function excelExport() {
+    downloadExcel({
+      fileName: 'Emission Factor Type',
+      sheet: 'Emission Factor Type',
+      tablePayload: {
+        header,
+        body: tableDataFilter
+      }
+    });
+  }
+
+  const closeXSLModal = () => {
+    setshowXSLModal(false);
   };
 
   const handleViewModal = (item) => {
@@ -164,6 +103,17 @@ export default function LandingPage() {
     setSelectedItem({});
   };
 
+  const handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    setPage(selectedPage);
+    // dispatch(
+    //   getEfType({
+    //     page: selectedPage + 1,
+    //     searchVal: searchQuery
+    //   })
+    // );
+  };
+
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
   };
@@ -174,8 +124,7 @@ export default function LandingPage() {
   };
 
   const deleteHandler = () => {
-    // dispatch(deleteCountries(selectedItem));
-    console.log('Delete called for:', selectedItem);
+    // dispatch(deleteEfType(selectedItem));
     setPage(0);
     closeDeleteModal();
   };
@@ -189,32 +138,33 @@ export default function LandingPage() {
           </Typography>
         </Grid>
         <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
-          <Grid item xs={12} lg={3} xl={3} md={3} sm={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {/* Left Button */}
+          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
+            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' }, alignItems: 'center' }}>
               <Button
                 variant="outlined"
                 startIcon={<AddIcon />}
-                // Apply the mock styles
-                sx={{ ...cmnstyle.cmnBtn, ...cmnstyle.cmnBtnOutline, px: 3 }} 
+                sx={{ ...cmnstyle.cmnBtn, ...cmnstyle.cmnBtnOutline, px: 3 }}
                 onClick={handleAddFormModal}
               >
                 Add
               </Button>
             </Box>
           </Grid>
-          <Grid item xs={12} lg={6} xl={6} md={6} sm={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '28px' }}>
+
+          {/* Search Box */}
+          <Grid item xs={12} sm={4} md={6} lg={6} xl={6}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
               <TextField
                 fullWidth
                 variant="outlined"
                 size="small"
                 placeholder="Search by name"
-                sx={{ maxWidth: 300 }}
+                sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
                 onKeyDown={(e) => {
-                  // The regex check was missing
-                  if (!regex.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                  if (!regex.test(e.key) && e.key !== 'Backspace') {
                     e.preventDefault();
                   }
                 }}
@@ -224,19 +174,52 @@ export default function LandingPage() {
                       <SearchIcon />
                     </InputAdornment>
                   ),
-                  // Apply the mock style
-                  sx: style.searchBox 
+                  sx: style.searchBox
                 }}
               />
             </Box>
           </Grid>
-          <Grid item xs={12} lg={3} xl={3} md={3} sm={3}></Grid>
+
+          {/* Export Button */}
+          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
+            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
+              <Button
+                variant="outlined"
+                onClick={handleDownloadExcel}
+                startIcon={<FileDownloadOutlinedIcon />}
+                sx={{
+                  color: '#242121',
+                  backgroundColor: 'white',
+                  borderColor: '#3dcd58',
+                  width: '180px',
+                  py: 1,
+                  borderRadius: '30px',
+                  whiteSpace: 'nowrap', // 🚀 keeps text in one line
+                  textOverflow: 'ellipsis', // optional, trims if overflowing
+                  overflow: 'hidden', // optional, prevents bulge
+                  '&:hover': {
+                    color: '#fcf9f9 !important',
+                    backgroundColor: '#3dcd58',
+                    borderColor: '#3dcd58'
+                  },
+                  '&:active': {
+                    color: '#fcf9f9 !important',
+                    backgroundColor: '#3dcd58',
+                    borderColor: '#3dcd58'
+                  }
+                }}
+              >
+                Export to Excel
+              </Button>
+            </Box>
+          </Grid>
         </Grid>
+
         <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
-              data={countryList}
+              data={efTypeList}
               keys={keys}
               config={config}
               currentPage={page + 1}
@@ -248,8 +231,8 @@ export default function LandingPage() {
               handleViewModel={handleViewModal}
               handleDeleteModal={handleDeleteModal}
               handleFormModal={handleFormModal}
-              msg="Countries" // Changed from 'Projects' for context
-              tableData={countryList}
+              msg="Projects"
+              tableData={efTypeList}
               filter={searchQuery || ''}
             />
           </Table>
@@ -257,6 +240,28 @@ export default function LandingPage() {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 1 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
+        {/* {open && <EFTypeView drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />} */}
+        {/* {formOpen && <UpdateEfTypeForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />} */}
+        {showDeleteModal && (
+          <ConfirmModal
+            show={showDeleteModal}
+            handleCloseModal={closeDeleteModal}
+            submitHandler={deleteHandler}
+            modalTitle={'Delete Confirmation'}
+            modalText={'Are you sure you want to delete?'}
+            btnsubmitText={'DELETE'}
+          />
+        )}
+        {/* {showXSLModal && (
+          <ConfirmModal
+            show={showXSLModal}
+            handleCloseModal={closeXSLModal}
+            submitHandler={XSLHandler}
+            modalTitle={'Download Confirmation'}
+            modalText={'Are you sure you want to download?'}
+            btnsubmitText={'DOWNLOAD'}
+          />
+        )} */}
       </MainCard>
     </>
   );

@@ -7,7 +7,7 @@ import ProfileSection from 'layout/MainLayout/Header/ProfileSection';
 
 const stringAvatar = (name) => ({
   sx: {
-    bgcolor: '#376f8b',
+    bgcolor: '#ffffff54',
     width: 40,
     height: 40,
     fontSize: '17px',
