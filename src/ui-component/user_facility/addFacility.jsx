@@ -6,6 +6,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import * as Yup from 'yup';
 import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+
+
 
 // Box, Typography, TextField, Select
 // Assuming these are defined elsewhere:
@@ -15,9 +18,9 @@ import TextField from '@mui/material/TextField';
 // --- Base Initial Values (Full Structure) ---
 const baseInitialValues = {
   title: '', category: '', isPaid: false, facilityType: '', openingTime: '', closingTime: '', is24H: false,
-  seatCapacity: 0, remarks: '', status: '', frequency: [],
+  seatCapacity: 0, remarks: '', status: 'active', frequency: [],
   contactInfo: { name: '', email: '', phone: '' },
-  city: '', state: '', district: '', pinCode: '', geoLoc: ['', ''], landmark: '',
+  city: '', state: 'kerala', district: '', pinCode: '', geoLoc: ['', ''], landmark: '',
 };
 
 // --- Validation Schema (Correct as is) ---
@@ -25,15 +28,16 @@ const validationSchema = Yup.object({
   title: Yup.string().required('Title is required'),
   category: Yup.string().required('Category is required'),
   isPaid: Yup.boolean(),
-  facilityType: Yup.string().required('Facility Type is required'),
+  facilityType: Yup.string(),
   openingTime: Yup.string().when('is24H', { is: false, then: (schema) => schema.required('Opening time is required'), otherwise: (schema) => schema.nullable(), }),
   closingTime: Yup.string().when('is24H', { is: false, then: (schema) => schema.required('Closing time is required'), otherwise: (schema) => schema.nullable(), }),
   is24H: Yup.boolean(),
   seatCapacity: Yup.number().integer().min(0, 'Capacity cannot be negative'),
   remarks: Yup.string().max(500, 'Remarks must be under 500 characters'),
   status: Yup.string().required('Status is required'),
-  frequency: Yup.array().of(Yup.string()).min(1, 'Select at least one day'),
-  contactInfo: Yup.object({
+  frequency: Yup.array().of(Yup.string())
+//   .min(1, 'Select at least one day'),
+  ,contactInfo: Yup.object({
     name: Yup.string().required('Contact name is required'),
     email: Yup.string().email('Invalid email format'),
     phone: Yup.string().matches(/^[0-9]+$/, 'Phone must be only digits'),
@@ -84,6 +88,8 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
   const dispatch = useDispatch();
 
   const submit = (values) => {
+          console.log('Updating Facility:', values);
+
     // 💡 Bug Fix: Use values.id to check for existing item, not the prop item.id
     if (values.id) { 
       // dispatch(updateEfType(values)); 
@@ -117,7 +123,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             }
           }}
         >
-          <Box sx={{ p: 3, height: '100%', overflowY: 'auto' }}>
+          <Box sx={{ p: 3, height: '100%', }}>
              {/* Header */}
             <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
                 <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>
@@ -133,6 +139,8 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
               className="form-container" 
               style={{ display: 'grid', gap: '20px', margin: '0 auto' }}
             >
+
+               <Box sx={{ p: 3, flexGrow: 1, overflowY: 'auto' }}>
             <Typography variant="h5">Facility Details</Typography>
 
               
@@ -154,24 +162,26 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
     </Grid>
 
     {/* category */}
-    <Grid item xs={12}>
-        <Field name="category">
-            {({ field, meta }) => (
-                <TextField
-                    {...field}
-                    select // use select prop for Select component functionality
-                    label="Category"
-                    fullWidth
-                    error={meta.touched && !!meta.error}
-                    helperText={meta.touched && meta.error}
-                >
-                    <option value="">Select Category</option>
-                    <option value="Sport">Sport</option>
-                    <option value="Cultural">Cultural</option>
-                </TextField>
-            )}
-        </Field>
-    </Grid>
+<Grid item xs={12}>
+    <Field name="category">
+        {({ field, meta }) => (
+            <TextField
+                {...field}
+                select // Tells TextField to render a Select component
+                label="Category"
+                fullWidth
+                error={meta.touched && !!meta.error}
+                helperText={meta.touched && meta.error}
+                // Optional: set inputProps/SelectProps if needed, but usually not required here
+            >
+                {/* FIX: Replace <option> with <MenuItem> */}
+                <MenuItem value="">Select Category</MenuItem>
+                <MenuItem value="Sport">Sport</MenuItem>
+                <MenuItem value="Cultural">Cultural</MenuItem>
+            </TextField>
+        )}
+    </Field>
+</Grid>
 
     {/* isPaid Checkbox */}
     {/* <Grid item xs={12}>
@@ -343,7 +353,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         </Field>
     </Grid>
 </Grid>
-
+</Box>  
 
 {/* --- Submit Button (to be placed in the STICKY FOOTER BOX) --- */}
 
@@ -357,9 +367,10 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             variant="contained" 
             color="primary"
             startIcon={<CheckCircleOutlineIcon />}
-            disabled={isSubmitting}
+            // disabled={isSubmitting}
             fullWidth
             sx={{ py: 1.5, textTransform: 'none' }}
+             disabled={isSubmitting || !isValid} 
         >
             {isSubmitting ? 'Submitting...' : (item?.id ? 'Update Facility' : 'Create Facility')}
         </Button>

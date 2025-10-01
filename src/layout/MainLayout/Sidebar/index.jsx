@@ -101,7 +101,9 @@ const Sidebar = ({ drawerOpen, drawerToggle }) => {
   );
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, width: matchUpMd ? width : 'auto' }}>
+    <Box component="nav" sx={{ flexShrink: { md: 0 }, width: matchUpMd ? width : 'auto'
+    
+    }}>
       {matchUpMd ? (
         <MiniDrawerStyled
           variant={matchUpMd ? 'permanent' : 'temporary'}
@@ -122,6 +124,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }) => {
           anchor="left"
           open={drawerOpen}
           onClose={drawerToggle}
+          
           sx={
             drawerOpen
               ? {
@@ -146,7 +149,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }) => {
                       visibility: 'visible !important',
                       transform: 'none !important',
                       paddingTop: '10px',
-                      backgroundColor: theme.palette.primary.main
+                       backgroundColor: theme.palette.primary.main
                     }
                   },
                   transform: 'none !important'

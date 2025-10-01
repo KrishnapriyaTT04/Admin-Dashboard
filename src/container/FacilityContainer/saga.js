@@ -1,0 +1,128 @@
+import { takeEvery, call, put } from 'redux-saga/effects';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import commonApi from '../api'; // Your common API utility
+import appConfig from '../../config';
+import * as actionType from './slice'; // Assuming this imports all the facility actions
+
+
+// Base API endpoint for facilities (adjust as needed for your specific API)
+const FACILITY_API_BASE = `${appConfig.ip}/method/your_app.api.facility_management`; 
+
+// --- Worker Sagas ---
+
+// 1. Fetch Facilities
+function* getFacilitiesSaga(action) {
+    console.log("----------------------SSSS-------------------",action);
+    
+  try {
+    const params = {
+      // Example API call for fetching facilities (adjust method name)
+      api:`https://jsonplaceholder.typicode.com/posts`,
+    //   api: `${FACILITY_API_BASE}.get_facility_list`, 
+      method: 'GET',
+      successAction: actionType.getFacilitiesSuccess(),
+      failAction: actionType.getFacilitiesFail(),
+      authourization: 'Bearer token_here' // Adjust authorization as needed
+    };
+    
+    // Call the API
+    const res = yield call(commonApi, params);
+    
+    if (res?.data) {
+      // Use 'put' to dispatch a success action with the fetched data
+      yield put(actionType.getFacilitiesSuccess(res.data)); 
+    } else {
+      throw new Error('Invalid response data structure for facility list.');
+    }
+  } catch (error) {
+    console.error('Fetch Facilities failed:', error);
+    // Dispatch failure action
+    yield put(actionType.getFacilitiesFail({ 
+      message: error.message || 'Failed to fetch facilities.', 
+      status: error.response?.status || 500 
+    }));
+    yield call(toast.error, 'Failed to load facility list.', { autoClose: 3000 });
+  }
+}
+
+// 2. Create Facility
+function* createFacilitySaga(action) {
+  try {
+    const facilityData = action.payload;
+
+    const params = {
+      // Example API call for creating a facility
+      api: `${FACILITY_API_BASE}.create_facility`, 
+      method: 'POST',
+      body: JSON.stringify(facilityData), // Send facility data in the body
+      successAction: actionType.createFacilitySuccess(),
+      failAction: actionType.createFacilityFail(),
+      authourization: 'Bearer token_here'
+    };
+
+    const res = yield call(commonApi, params);
+
+    if (res?.message === 'success') {
+      yield call(toast.success, 'Facility added successfully!', { autoClose: 3000 });
+      // Dispatch success and optionally pass the created object back
+      yield put(actionType.createFacilitySuccess(res.data)); 
+      // After creation, optionally re-fetch the list to update the table
+      yield put(actionType.getFacilities());
+    } else {
+      throw new Error(res?.message || 'Facility creation failed.');
+    }
+  } catch (error) {
+    console.error('Create Facility failed:', error);
+    yield put(actionType.createFacilityFail({ 
+      message: error.message || 'Failed to create facility.', 
+      status: error.response?.status || 500 
+    }));
+    yield call(toast.error, `Creation failed: ${error.message}`, { autoClose: 3000 });
+  }
+}
+
+// 3. Update Facility
+function* updateFacilitySaga(action) {
+  try {
+    const facilityData = action.payload;
+
+    const params = {
+      // Example API call for updating a facility
+      api: `${FACILITY_API_BASE}.update_facility`, 
+      method: 'PUT',
+      body: JSON.stringify(facilityData),
+      successAction: actionType.updateFacilitySuccess(),
+      failAction: actionType.updateFacilityFail(),
+      authourization: 'Bearer token_here'
+    };
+
+    const res = yield call(commonApi, params);
+
+    if (res?.message === 'success') {
+      yield call(toast.success, 'Facility updated successfully!', { autoClose: 3000 });
+      // Dispatch success and pass the updated object back
+      yield put(actionType.updateFacilitySuccess(res.data)); 
+      // After update, optionally re-fetch the list
+      yield put(actionType.getFacilities());
+    } else {
+      throw new Error(res?.message || 'Facility update failed.');
+    }
+  } catch (error) {
+    console.error('Update Facility failed:', error);
+    yield put(actionType.updateFacilityFail({ 
+      message: error.message || 'Failed to update facility.', 
+      status: error.response?.status || 500 
+    }));
+    yield call(toast.error, `Update failed: ${error.message}`, { autoClose: 3000 });
+  }
+}
+
+// --- Watcher Saga ---
+
+export default function* facilityActionWatcher() {
+  yield takeEvery(actionType.getFacilities.type, getFacilitiesSaga);
+   yield takeEvery(actionType.createFacility.type, createFacilitySaga);
+  yield takeEvery(actionType.updateFacility.type, updateFacilitySaga);
+}

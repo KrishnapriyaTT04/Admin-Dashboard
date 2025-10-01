@@ -10,6 +10,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
+ import { getFacilities,  } from 'container/FacilityContainer/slice';
+
  import { userFeedback } from 'utils/TableConfig';
 
 const users = [
@@ -57,6 +59,9 @@ export default function Facility() {
 
   useEffect(() => {
     // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
+    console.log("-------------------------------asdf-----------------------1-------------");
+    
+    dispatch(getFacilities())
   }, [searchQuery]);
 
   const searchHandler = (e) => {
