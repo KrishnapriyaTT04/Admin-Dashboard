@@ -57,6 +57,15 @@ const RoleMenu = {
       icon: icons.IconFileImport,
       breadcrumbs: false
     },
+    
+        {
+      id: 'reportedIssues',
+      title: 'User Reported',
+      type: 'item',
+      url: '/reportedIssues',
+      icon: icons.IconReceipt2,
+      breadcrumbs: false
+    },
     {
       id: 'userfeedback',
       title: 'User Feedback',
