@@ -11,6 +11,8 @@ const NopageFound = Loadable(lazy(() => import('ui-component/common/no-page/NoPa
 const UserManagementPage = Loadable(lazy(() => import('ui-component/user_management/index')));
 const UserFeedbackPage = Loadable(lazy(() => import('ui-component/user_feedback/index')));
 const UserRatingPage = Loadable(lazy(() => import('ui-component/user_rating/index')));
+const UserFacility = Loadable(lazy(() => import('ui-component/user_facility/index')));
+
 
 
 
@@ -70,7 +72,7 @@ const MainRoutes = {
       children: [
         {
           path: '',
-          element: <NopageFound />
+          element: <UserFacility />
         }
       ]
     },

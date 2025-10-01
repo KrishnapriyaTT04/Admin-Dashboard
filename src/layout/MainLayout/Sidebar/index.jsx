@@ -47,7 +47,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-end',
-                backgroundColor: 'transparent linear-gradient(180deg,#3a6f90,#1d3848) 0 0 no-repeat',
+                backgroundColor: 'transparent linear-gradient(180deg, #019863, #019863) 0 0 no-repeat',
                 color: '#fff',
                 cursor: isDraftOrPending ? 'not-allowed' : 'pointer',
                 zIndex: 1300
@@ -127,7 +127,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }) => {
               ? {
                   '& .MuiDrawer-paper': {
                     width: width,
-                    backgroundColor: 'transparent linear-gradient(180deg,#3a6f90,#1d3848) 0 0 no-repeat',
+                    backgroundColor: 'transparent linear-gradient(180deg, #019863, #019863) 0 0 no-repeat',
                     paddingTop: '10px',
                     borderRight: 'none',
                     [theme.breakpoints.up('md')]: {
