@@ -8,13 +8,13 @@ import * as actionType from './slice'; // Assuming this imports all the facility
 
 
 // Base API endpoint for facilities (adjust as needed for your specific API)
-const FACILITY_API_BASE = `${appConfig.ip}/method/your_app.api.facility_management`; 
+const FACILITY_API_BASE = `${appConfig.ip}`; 
 
 // --- Worker Sagas ---
 
 // 1. Fetch Facilities
 function* getFacilitiesSaga(action) {
-    console.log("----------------------SSSS-------------------",action);
+    console.log("----------------------SSSS-------------------",appConfig.ip);
     
   try {
     const params = {
