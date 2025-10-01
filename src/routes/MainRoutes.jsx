@@ -12,6 +12,8 @@ const UserManagementPage = Loadable(lazy(() => import('ui-component/user_managem
 const UserFeedbackPage = Loadable(lazy(() => import('ui-component/user_feedback/index')));
 const UserRatingPage = Loadable(lazy(() => import('ui-component/user_rating/index')));
 const UserFacility = Loadable(lazy(() => import('ui-component/user_facility/index')));
+const UserReportedIssues = Loadable(lazy(() => import('ui-component/user_reported_issues/index')));
+
 
 
 
@@ -82,6 +84,15 @@ const MainRoutes = {
         {
           path: '',
           element: <UserManagementPage />
+        }
+      ]
+    },
+      {
+      path: 'reportedIssues',
+      children: [
+        {
+          path: '',
+          element: <UserReportedIssues />
         }
       ]
     },
