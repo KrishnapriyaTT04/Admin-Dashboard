@@ -141,7 +141,7 @@ export default function Facility() {
       <MainCard>
         <Grid container direction={'row'} justifyContent={'space-between'} alignItems={'center'} spacing={1}>
           <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
-            Feedback
+            Facility
           </Typography>
         </Grid>
         <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
