@@ -8,7 +8,7 @@ const facilitySlice = createSlice({
         listLoading: false,
         listError: null,
         
-        // State for single facility operations (add/update)
+        // State for single facility operations (add/update/delete)
         operationLoading: false,
         operationError: null,
         operationSuccess: false,
@@ -17,7 +17,6 @@ const facilitySlice = createSlice({
         // === FETCH LIST ACTIONS ===
         
         getFacilities: (state) => {
-
             state.listLoading = true;
             state.listError = null;
         },
@@ -43,8 +42,8 @@ const facilitySlice = createSlice({
         },
         createFacilitySuccess: (state, action) => {
             state.operationLoading = false;
-            // Optionally prepend the new facility to the list immediately
-            // state.list.unshift(action.payload); 
+            // IMPLEMENTED: Prepend the new facility to the list immediately
+            state.list.unshift(action.payload); 
             state.operationSuccess = true;
         },
         createFacilityFail: (state, action) => {
@@ -64,17 +63,39 @@ const facilitySlice = createSlice({
         },
         updateFacilitySuccess: (state, action) => {
             state.operationLoading = false;
-            // Find the updated facility and replace it in the list
-            // const index = state.list.findIndex(f => f.id === action.payload.id);
-            // if (index !== -1) {
-            //     state.list[index] = action.payload;
-            // }
+            // IMPLEMENTED: Find the updated facility and replace it in the list
+            const index = state.list.findIndex(f => f.id === action.payload.id);
+            if (index !== -1) {
+                 // Redux Toolkit uses Immer, so direct mutation is safe
+                state.list[index] = action.payload;
+            }
             state.operationSuccess = true;
         },
         updateFacilityFail: (state, action) => {
             state.operationLoading = false;
             state.operationError = {
                 message: action.payload.message || 'Failed to update facility',
+                status: action.payload.status || 500
+            };
+        },
+
+        // === DELETE ACTIONS (NEW) ===
+
+        deleteFacility: (state) => {
+            state.operationLoading = true;
+            state.operationError = null;
+            state.operationSuccess = false;
+        },
+        deleteFacilitySuccess: (state, action) => {
+            state.operationLoading = false;
+            // NEW: Filter out the deleted facility by ID (action.payload should be the ID)
+            state.list = state.list.filter(f => f.id !== action.payload);
+            state.operationSuccess = true;
+        },
+        deleteFacilityFail: (state, action) => {
+            state.operationLoading = false;
+            state.operationError = {
+                message: action.payload.message || 'Failed to delete facility',
                 status: action.payload.status || 500
             };
         },
@@ -99,6 +120,10 @@ export const {
     updateFacility,
     updateFacilitySuccess,
     updateFacilityFail,
+    // NEW EXPORTS
+    deleteFacility,
+    deleteFacilitySuccess,
+    deleteFacilityFail,
     resetFacilityOperationState
 } = facilitySlice.actions;
 

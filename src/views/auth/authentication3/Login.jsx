@@ -79,6 +79,8 @@ const AuthLogin = (props) => {
         </Typography>
         <Formik
           initialValues={{
+            client_id: "webapp",
+            client_secret: "saqw21!@",
             email: '',
             password: ''
           }}
