@@ -88,6 +88,8 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
   const dispatch = useDispatch();
 
   const submit = (values) => {
+
+    
           console.log('Updating Facility:', values);
 
     // 💡 Bug Fix: Use values.id to check for existing item, not the prop item.id
