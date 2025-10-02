@@ -29,7 +29,7 @@ function* login(action) {
     let res = yield call(commonApi, params);
    console.log("------------tkn---",res);
      if(res){
-      localStorage.setItem('userToken', JSON.stringify(res));
+      localStorage.setItem('klooToken', JSON.stringify(res));
 
       yield call(action.payload.navigate, '/dashboard');
      }else{

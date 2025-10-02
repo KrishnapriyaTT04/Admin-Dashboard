@@ -76,7 +76,7 @@ const getInitialValues = (item) => ({
     pinCode: item?.pinCode || baseInitialValues.pinCode,
     geoLoc: item?.geoLoc?.length === 2 ? item.geoLoc : baseInitialValues.geoLoc,
     landmark: item?.landmark || baseInitialValues.landmark,
-    id: item?.id || '', 
+    // id: item?.id || '', 
 });
 
 // -------------------------------------------------------------------------
@@ -91,19 +91,18 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
   const submit = (values) => {
 
 
-          console.log('Updating Facility:', values);
+         const token = JSON.parse(localStorage.getItem('klooToken'));
+          console.log('Updating Facility:', token);
 
-    // 💡 Bug Fix: Use values.id to check for existing item, not the prop item.id
+   values.contactInfo.phone=  values.contactInfo.phone.toString()
+
     if (values.id) { 
       // dispatch(updateEfType(values)); 
       console.log('Updating Facility:', values);
     } else {
-      // dispatch(createEfType(values));
-      // setPage(0); // Only reset page/fetch new data if creating
-      console.log('Creating Facility:', values);
       dispatch(createFacility(values));
     }
-    setDrawerOpen(false);
+    //setDrawerOpen(false);
   };
 
   return (
@@ -180,8 +179,8 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             >
                 {/* FIX: Replace <option> with <MenuItem> */}
                 <MenuItem value="">Select Category</MenuItem>
-                <MenuItem value="Sport">Sport</MenuItem>
-                <MenuItem value="Cultural">Cultural</MenuItem>
+                <MenuItem value="public">Public</MenuItem>
+                <MenuItem value="private">Private</MenuItem>
             </TextField>
         )}
     </Field>

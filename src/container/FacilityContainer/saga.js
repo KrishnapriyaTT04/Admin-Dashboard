@@ -7,19 +7,20 @@ import appConfig from '../../config';
 import * as actionType from './slice'; // Assuming this imports all the facility actions
 
 
+
 // Base API endpoint for facilities (adjust as needed for your specific API)
 const FACILITY_API_BASE = `${appConfig.ip}`; 
 
 function* getFacilitiesSaga(action) {
+
     console.log("----------------------SSSS-------------------",appConfig.ip);
-    
   try {
     const params = {
       api: `${FACILITY_API_BASE}/facilities`, 
       method: 'GET',
       successAction: actionType.getFacilitiesSuccess(),
       failAction: actionType.getFacilitiesFail(),
-      authourization: 'Bearer token_here' 
+      authourization: `Bearer`
     };
     
     const res = yield call(commonApi, params);
@@ -43,19 +44,24 @@ function* getFacilitiesSaga(action) {
 
 // 2. Create Facility
 function* createFacilitySaga(action) {
-      console.log("----------------------saga-------------------",action);
+     const token = JSON.parse(localStorage.getItem('klooToken'));
+      console.log("----------------------saga-------------------",token);
 
   try {
-    action.payload.facilityId= '1234'
+     action.payload.facilityId= '1234'
         action.payload.parentFacilityId= '1234'
        action.payload.avgStarRating=2
               action.payload.ratingCount=1
               action.payload.reviewCount=2
+              action.payload.reviewCount.toString()
                             // action.payload.additionalProperty="9876"
 
-                            action.payload.allowedValues="public"
-                                                        action.payload.seatCapacity="2"
+                                                        action.payload.seatCapacity=2
 
+  action.payload.facilityType='indian'
+    action.payload.district='kozhikkode',
+    action.payload.pinCode="673525"
+    action.payload.landmark="Library"
 
 
 
@@ -73,7 +79,8 @@ function* createFacilitySaga(action) {
       body: JSON.stringify(facilityData), // Send facility data in the body
       successAction: actionType.createFacilitySuccess(),
       failAction: actionType.createFacilityFail(),
-      authourization: 'Bearer token_here'
+      authorization: 'Bearer',
+      token:`${token.accessToken}`
     };
 
     const res = yield call(commonApi, params);
@@ -109,7 +116,7 @@ function* updateFacilitySaga(action) {
       body: JSON.stringify(facilityData),
       successAction: actionType.updateFacilitySuccess(),
       failAction: actionType.updateFacilityFail(),
-      authourization: 'Bearer token_here'
+      authorization: 'Bearer token_here'
     };
 
     const res = yield call(commonApi, params);
