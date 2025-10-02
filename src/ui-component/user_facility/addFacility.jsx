@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 
 
+ import { createFacility } from 'container/FacilityContainer/slice'; 
 
 // Box, Typography, TextField, Select
 // Assuming these are defined elsewhere:
@@ -89,7 +90,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
   const submit = (values) => {
 
-    
+
           console.log('Updating Facility:', values);
 
     // 💡 Bug Fix: Use values.id to check for existing item, not the prop item.id
@@ -100,6 +101,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
       // dispatch(createEfType(values));
       // setPage(0); // Only reset page/fetch new data if creating
       console.log('Creating Facility:', values);
+      dispatch(createFacility(values));
     }
     setDrawerOpen(false);
   };

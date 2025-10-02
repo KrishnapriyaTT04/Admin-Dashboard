@@ -43,12 +43,32 @@ function* getFacilitiesSaga(action) {
 
 // 2. Create Facility
 function* createFacilitySaga(action) {
+      console.log("----------------------saga-------------------",action);
+
   try {
+    action.payload.facilityId= '1234'
+        action.payload.parentFacilityId= '1234'
+       action.payload.avgStarRating=2
+              action.payload.ratingCount=1
+              action.payload.reviewCount=2
+                            // action.payload.additionalProperty="9876"
+
+                            action.payload.allowedValues="public"
+                                                        action.payload.seatCapacity="2"
+
+
+
+
+              
+
+       
+       
+
     const facilityData = action.payload;
 
     const params = {
       // Example API call for creating a facility
-      api: `${FACILITY_API_BASE}.create_facility`, 
+      api: `${FACILITY_API_BASE}/facilities`, 
       method: 'POST',
       body: JSON.stringify(facilityData), // Send facility data in the body
       successAction: actionType.createFacilitySuccess(),
