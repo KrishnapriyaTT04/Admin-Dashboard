@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
- import { getFacilities, selectFacilityList } from 'container/FacilityContainer/slice';
+ import { getFacilities, selectFacilityList,getFacilitiesCount } from 'container/FacilityContainer/slice';
 
  import { facilityHeads } from 'utils/TableConfig';
 
@@ -39,6 +39,8 @@ export default function Facility() {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
+    const [limit, setLimit] = useState(5);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
@@ -67,6 +69,21 @@ export default function Facility() {
     // include other fields you need
   }));
 
+
+  const searchfilterObject = {
+    limit: limit,
+    skip: page,
+    order: ["createdOn DESC"],
+    where: {
+        title: {
+            // Note: The 'like' value must be escaped if it contains special characters, 
+            // but JSON.stringify handles basic string quoting.
+            like: searchQuery, 
+            options: "i" // Case-insensitive search
+        }
+    }
+};
+
   // useEffect(() => {
   //   // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
     
@@ -77,15 +94,47 @@ export default function Facility() {
 
 // const facilityList = useSelector(selectFacilityList);
   useEffect(() => {
-  dispatch(getFacilities());
+   //deleted false
+   let reqUrl =`facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
+   let countUrl =`facilities/count`
+   
+   
+  dispatch(getFacilities(reqUrl));
+     dispatch(getFacilitiesCount(countUrl));
+
     console.log("Facilities in component:", facilityList);
 }, [dispatch]); 
 
-  const searchHandler = (e) => {
-    const value = e.target.value;
+const searchHandler = (e) => {
+    // 1. Get the current, accurate input value
+    const value = e.target.value; 
+
+    console.log("---------------------search----------", value);
+    
+    // 2. Update the state (this is asynchronous, but necessary for the TextField value prop)
     setSearchQuery(value);
+    
+    // 3. Use the local variable 'value' for the API call (NOT the stale 'searchQuery')
+    const filterObject = {
+        limit: limit,
+        skip: 0, // Reset page to 0 immediately for a new search
+        order: ["createdOn DESC"],
+        where: {
+            title: {
+                like: value, // <-- USE 'value' HERE
+                options: "i"
+            }
+        }
+    };
+    
+    // Correctly construct and encode the URL
+    const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
+    let reqUrl = `facilities?filter=${encodedFilter}`;
+
+    // 4. Dispatch the action and reset the page state
+    dispatch(getFacilities(reqUrl));
     setPage(0);
-  };
+};
 
   function handleDownloadExcel() {
     setshowXSLModal(true);
@@ -192,11 +241,11 @@ export default function Facility() {
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
-                onKeyDown={(e) => {
-                  if (!regex.test(e.key) && e.key !== 'Backspace') {
-                    e.preventDefault();
-                  }
-                }}
+                // onKeyDown={(e) => {
+                //   if (!regex.test(e.key) && e.key !== 'Backspace') {
+                //     e.preventDefault();
+                //   }
+                // }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

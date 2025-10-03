@@ -13,10 +13,10 @@ const FACILITY_API_BASE = `${appConfig.ip}`;
 
 function* getFacilitiesSaga(action) {
 
-    console.log("----------------------SSSS-------------------",appConfig.ip);
+    console.log("----------------------SSSS-------------------",action);
   try {
     const params = {
-      api: `${FACILITY_API_BASE}/facilities`, 
+      api: `${FACILITY_API_BASE}/${action.payload}`, 
       method: 'GET',
       successAction: actionType.getFacilitiesSuccess(),
       failAction: actionType.getFacilitiesFail(),
@@ -137,10 +137,45 @@ function* updateFacilitySaga(action) {
   }
 }
 
+
+function* getFacilitiesCount(action) {
+
+    console.log("----------------------SSSS-------------------",action);
+  try {
+    const params = {
+      api: `${FACILITY_API_BASE}/${action.payload}`, 
+      method: 'GET',
+      successAction: actionType.getFacilitiesCountSuccess(),
+      failAction: actionType.getFacilitiesCountFail(),
+      authourization: `Bearer`
+    };
+    
+    const res = yield call(commonApi, params);
+    console.log("---------------res----------------------",res);
+    
+    if (res) {
+      yield put(actionType.getFacilitiesSuccess(res)); 
+    } else {
+      throw new Error('Invalid response data structure for facility list.');
+    }
+  } catch (error) {
+    console.error('Fetch Facilities failed:', error);
+    // Dispatch failure action
+    yield put(actionType.getFacilitiesCountFail({ 
+      message: error.message || 'Failed to fetch facilities.', 
+      status: error.response?.status || 500 
+    }));
+    yield call(toast.error, 'Failed to load facility list.', { autoClose: 3000 });
+  }
+}
+
 // --- Watcher Saga ---
 
 export default function* facilityActionWatcher() {
   yield takeEvery(actionType.getFacilities.type, getFacilitiesSaga);
    yield takeEvery(actionType.createFacility.type, createFacilitySaga);
   yield takeEvery(actionType.updateFacility.type, updateFacilitySaga);
+    yield takeEvery(actionType.updateFacility.type, getFacilitiesCount);
+
+  
 }

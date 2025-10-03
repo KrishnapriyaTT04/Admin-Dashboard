@@ -12,6 +12,9 @@ const facilitySlice = createSlice({
         operationLoading: false,
         operationError: null,
         operationSuccess: false,
+
+        listcountLoading:false,
+        listCount:0
     },
     reducers: {
         // === FETCH LIST ACTIONS ===
@@ -100,6 +103,24 @@ const facilitySlice = createSlice({
             };
         },
 
+
+      getFacilitiesCount: (state) => {
+            state.listcountLoading = true;
+            
+        },
+        getFacilitiesCountSuccess: (state, action) => {
+            state.listcountLoading = false;
+            state.listCount = action.payload; // Payload is the array of facilities
+        },
+        getFacilitiesCountFail: (state, action) => {
+            state.listcountLoading = false;
+            // state.listError = {
+            //     message: action.payload.message || 'Failed to fetch facilities',
+            //     status: action.payload.status || 500
+            // };
+        },
+        
+
         // === UTILITY/RESET ACTIONS ===
 
         resetFacilityOperationState: (state) => {
@@ -124,15 +145,21 @@ export const {
     deleteFacility,
     deleteFacilitySuccess,
     deleteFacilityFail,
-    resetFacilityOperationState
+    resetFacilityOperationState,
+    getFacilitiesCount,
+    getFacilitiesCountSuccess,
+    getFacilitiesCountFail
 } = facilitySlice.actions;
 
 // Selectors for easy access to state
 export const selectFacilityList = (state) => state.facility.list;
 export const selectListLoading = (state) => state.facility.listLoading;
+
 export const selectListError = (state) => state.facility.listError;
 export const selectOperationLoading = (state) => state.facility.operationLoading;
 export const selectOperationSuccess = (state) => state.facility.operationSuccess;
 export const selectOperationError = (state) => state.facility.operationError;
+export const selectListcountLoading = (state) => state.facility.listcountLoading;
+export const selectListCount = (state) => state.facility.listCount;
 
 export default facilitySlice.reducer;
