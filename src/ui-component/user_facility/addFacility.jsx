@@ -11,6 +11,10 @@ import MenuItem from '@mui/material/MenuItem';
 
  import { createFacility } from 'container/FacilityContainer/slice'; 
 
+
+  import { districtsData } from '../common/district' 
+
+
 // Box, Typography, TextField, Select
 // Assuming these are defined elsewhere:
 // import { createEfType, updateEfType } from 'container/EmissionContainer/slice'; 
@@ -21,7 +25,7 @@ const baseInitialValues = {
   title: '', category: '', isPaid: false, facilityType: '', openingTime: '', closingTime: '', is24H: false,
   seatCapacity: 0, remarks: '', status: 'active', frequency: [],
   contactInfo: { name: '', email: '', phone: '' },
-  city: '', state: 'kerala', district: '', pinCode: '', geoLoc: ['', ''], landmark: '',
+  city: '', state: 'kerala',stateId: 'kl', district: '', pinCode: '', geoLoc: ['', ''], landmark: '',
 };
 
 // --- Validation Schema (Correct as is) ---
@@ -45,6 +49,7 @@ const validationSchema = Yup.object({
   }),
   city: Yup.string().required('City is required'),
   state: Yup.string().required('State is required'),
+  stateId: Yup.string().required('State Id is required'),
   district: Yup.string(),
   pinCode: Yup.string().matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
@@ -72,6 +77,7 @@ const getInitialValues = (item) => ({
     },
     city: item?.city || baseInitialValues.city,
     state: item?.state || baseInitialValues.state,
+    stateId: item?.stateId || baseInitialValues.stateId,
     district: item?.district || baseInitialValues.district,
     pinCode: item?.pinCode || baseInitialValues.pinCode,
     geoLoc: item?.geoLoc?.length === 2 ? item.geoLoc : baseInitialValues.geoLoc,
@@ -164,8 +170,22 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         </Field>
     </Grid>
 
+        <Grid item xs={6}>
+        <Field name="facilityType">
+            {({ field, meta }) => (
+                <TextField
+                    {...field}
+                    label="Facility Type"
+                    fullWidth
+                    error={meta.touched && !!meta.error}
+                    helperText={meta.touched && meta.error}
+                />
+            )}
+        </Field>
+    </Grid>
+
     {/* category */}
-<Grid item xs={12}>
+<Grid item xs={6}>
     <Field name="category">
         {({ field, meta }) => (
             <TextField
@@ -306,7 +326,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
     
     {/* Location Divider */}
     <Grid item xs={12}>
-        <Box sx={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginTop: '10px' }}>
+        <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
             <Typography variant="h5">Location</Typography>
         </Box>
     </Grid>
@@ -340,6 +360,75 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             )}
         </Field>
     </Grid>
+
+  {/* state */}
+<Grid item xs={6}>
+    <Field name="state">
+        {({ field, meta }) => (
+            <TextField
+                {...field}
+                select // Tells TextField to render a Select component
+                label="State"
+                fullWidth
+                error={meta.touched && !!meta.error}
+                helperText={meta.touched && meta.error}
+                disabled={true}
+                backgroundColor={'yellow'}
+                 sx={{
+                    '& .MuiInputBase-root.Mui-disabled': {
+                        backgroundColor: '#cececeff',
+                    }
+                 }}
+            >
+                {/* FIX: Replace <option> with <MenuItem> */}
+                <MenuItem value="">Select State</MenuItem>
+                <MenuItem value="kerala">Kerala</MenuItem>
+            </TextField>
+        )}
+    </Field>
+</Grid>
+{/* district */}
+
+<Grid item xs={6}>
+    <Field name="district"> 
+        {({ field, meta }) => (
+            <TextField
+                {...field}
+                select // Renders as a Select component
+                label="District" // Updated label
+                fullWidth
+                
+                // Formik Error/HelperText Logic
+                error={meta.touched && !!meta.error}
+                helperText={meta.touched && meta.error}
+                
+                // Static Props
+                disabled={false} // Typically, a district field is NOT disabled
+
+                // Custom Styling for Disabled State (You might remove this if not disabled)
+                sx={{
+                    '& .MuiInputBase-root.Mui-disabled': {
+                        backgroundColor: '#cececeff',
+                        WebkitTextFillColor: 'rgba(0, 0, 0, 0.87)',
+                    },
+                }}
+            >
+                {/* 1. Default/Placeholder Option */}
+                <MenuItem value="">Select District</MenuItem>
+                
+                {/* 2. Map over the districtsData to create dynamic options */}
+                {districtsData && districtsData.map((district) => (
+                    <MenuItem 
+                        key={district.districtId} 
+                        value={district.districtId} // Use the short code (e.g., 'kkd') as the value
+                    >
+                        {district.label} {/* Display the full name (e.g., 'Kozhikkode') */}
+                    </MenuItem>
+                ))}
+            </TextField>
+        )}
+    </Field>
+</Grid>
 
     {/* city */}
     <Grid item xs={12}>
