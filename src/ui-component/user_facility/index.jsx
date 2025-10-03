@@ -10,9 +10,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
- import { getFacilities,  } from 'container/FacilityContainer/slice';
+ import { getFacilities, selectFacilityList } from 'container/FacilityContainer/slice';
 
- import { userFeedback } from 'utils/TableConfig';
+ import { facilityHeads } from 'utils/TableConfig';
 
 const users = [
   { id: 1, name: 'Alice', age: 30, city: 'New York' },
@@ -46,7 +46,9 @@ export default function Facility() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
 
-  const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
+   const facilityList = useSelector((state) => state.facility?.list || []);
+    // const facilityList = useSelector(selectFacilityList);
+
   const count = useSelector((state) => state.emission?.efTypeListCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
@@ -55,14 +57,29 @@ export default function Facility() {
     desc: item.desc
   }));
   let countPagination = Math.ceil(count / 10);
-  const { config, keys } = userFeedback;
+  const { config, keys } = facilityHeads;
 
-  useEffect(() => {
-    // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
-    console.log("-------------------------------asdf-----------------------1-------------");
+    const flattenedFacilityList = facilityList.map(facility => ({
+    id: facility.id,
+    title: facility.title,
+    email: facility.contactInfo?.email || 'N/A',
+    phone: facility.contactInfo?.phone || 'N/A',
+    // include other fields you need
+  }));
+
+  // useEffect(() => {
+  //   // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
     
-    dispatch(getFacilities())
-  }, [searchQuery]);
+  //   dispatch(getFacilities())
+
+ 
+  // }, [searchQuery]);
+
+// const facilityList = useSelector(selectFacilityList);
+  useEffect(() => {
+  dispatch(getFacilities());
+    console.log("Facilities in component:", facilityList);
+}, [dispatch]); 
 
   const searchHandler = (e) => {
     const value = e.target.value;
@@ -135,6 +152,9 @@ export default function Facility() {
     setPage(0);
     closeDeleteModal();
   };
+
+    // console.log("Current facility list:", facilityList);
+
 
   return (
     <>
@@ -226,7 +246,7 @@ export default function Facility() {
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
-              data={efTypeList}
+              data={flattenedFacilityList}
               keys={keys}
               config={config}
               currentPage={page + 1}
@@ -239,7 +259,7 @@ export default function Facility() {
               handleDeleteModal={handleDeleteModal}
               handleFormModal={handleFormModal}
               msg="Projects"
-              tableData={efTypeList}
+              tableData={facilityList}
               filter={searchQuery || ''}
             />
           </Table>

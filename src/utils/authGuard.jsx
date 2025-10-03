@@ -8,8 +8,11 @@ const AuthGuard = ({ children, user }) => {
   const dispatch = useDispatch();
   // const isAuthenticated = JSON.parse(localStorage.getItem('userDtls'));
   // const checkUser = user && user?.includes(isAuthenticated?.message?.roles);
-      const isAuthenticated = true;
+     const isAuthenticated = JSON.parse(localStorage.getItem('klooToken'));
+
+      //const isAuthenticated = true;
     const checkUser = true
+            console.log("===================================isAuthenticated====---0----------",isAuthenticated);
 
 
 

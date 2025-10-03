@@ -7,32 +7,27 @@ import appConfig from '../../config';
 import * as actionType from './slice'; // Assuming this imports all the facility actions
 
 
+
 // Base API endpoint for facilities (adjust as needed for your specific API)
-const FACILITY_API_BASE = `${appConfig.ip}/method/your_app.api.facility_management`; 
+const FACILITY_API_BASE = `${appConfig.ip}`; 
 
-// --- Worker Sagas ---
-
-// 1. Fetch Facilities
 function* getFacilitiesSaga(action) {
-    console.log("----------------------SSSS-------------------",action);
-    
+
+    console.log("----------------------SSSS-------------------",appConfig.ip);
   try {
     const params = {
-      // Example API call for fetching facilities (adjust method name)
-      api:`https://jsonplaceholder.typicode.com/posts`,
-    //   api: `${FACILITY_API_BASE}.get_facility_list`, 
+      api: `${FACILITY_API_BASE}/facilities`, 
       method: 'GET',
       successAction: actionType.getFacilitiesSuccess(),
       failAction: actionType.getFacilitiesFail(),
-      authourization: 'Bearer token_here' // Adjust authorization as needed
+      authourization: `Bearer`
     };
     
-    // Call the API
     const res = yield call(commonApi, params);
+    console.log("---------------res----------------------",res);
     
-    if (res?.data) {
-      // Use 'put' to dispatch a success action with the fetched data
-      yield put(actionType.getFacilitiesSuccess(res.data)); 
+    if (res) {
+      yield put(actionType.getFacilitiesSuccess(res)); 
     } else {
       throw new Error('Invalid response data structure for facility list.');
     }
@@ -49,17 +44,43 @@ function* getFacilitiesSaga(action) {
 
 // 2. Create Facility
 function* createFacilitySaga(action) {
+     const token = JSON.parse(localStorage.getItem('klooToken'));
+      console.log("----------------------saga-------------------",token);
+
   try {
+     action.payload.facilityId= '1234'
+        action.payload.parentFacilityId= '1234'
+       action.payload.avgStarRating=2
+              action.payload.ratingCount=1
+              action.payload.reviewCount=2
+              action.payload.reviewCount.toString()
+                            // action.payload.additionalProperty="9876"
+
+                                                        action.payload.seatCapacity=2
+
+  action.payload.facilityType='indian'
+    action.payload.district='kozhikkode',
+    action.payload.pinCode="673525"
+    action.payload.landmark="Library"
+
+
+
+              
+
+       
+       
+
     const facilityData = action.payload;
 
     const params = {
       // Example API call for creating a facility
-      api: `${FACILITY_API_BASE}.create_facility`, 
+      api: `${FACILITY_API_BASE}/facilities`, 
       method: 'POST',
       body: JSON.stringify(facilityData), // Send facility data in the body
       successAction: actionType.createFacilitySuccess(),
       failAction: actionType.createFacilityFail(),
-      authourization: 'Bearer token_here'
+      authorization: 'Bearer',
+      token:`${token.accessToken}`
     };
 
     const res = yield call(commonApi, params);
@@ -95,7 +116,7 @@ function* updateFacilitySaga(action) {
       body: JSON.stringify(facilityData),
       successAction: actionType.updateFacilitySuccess(),
       failAction: actionType.updateFacilityFail(),
-      authourization: 'Bearer token_here'
+      authorization: 'Bearer token_here'
     };
 
     const res = yield call(commonApi, params);

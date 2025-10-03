@@ -3,12 +3,26 @@ import appConfig from '../config';
 import { Base64 } from 'js-base64';
 
 function* commonApi(value) {
+
+  console.log("-------------value.authourization-----------",value.token);
+  
   const token = appConfig.token;
-  let authorization = value.authourization
-    ? value.authourization === 'Basic'
-      ? 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password)
-      : token
-    : token;
+  let authorization = value.authorization
+    // ? value.authourization === 'Basic'
+    //   ? 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password)
+    //   : token
+    // : token;
+  console.log("-------------value.authourization-----------",value.authorization);
+
+  if (value.authorization == 'Basic') {
+    authorization = 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password);
+  } else if (value.authorization == 'Bearer') {
+      console.log("-------------value.Bearer-----------",value.token);
+    authorization = 'Bearer ' + value.token;
+  } else {
+    authorization = token;
+  }
+
 
   const authHeader = { Accept: 'application/json', 'Content-Type': 'application/json', Authorization: authorization };
   const noauthHeader = {
