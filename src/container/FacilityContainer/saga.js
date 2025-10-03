@@ -48,17 +48,14 @@ function* createFacilitySaga(action) {
       console.log("----------------------saga-------------------",token);
 
   try {
-     action.payload.facilityId= '1234'
-        action.payload.parentFacilityId= '1234'
-       action.payload.avgStarRating=2
-              action.payload.ratingCount=1
-              action.payload.reviewCount=2
-              action.payload.reviewCount.toString()
-                            // action.payload.additionalProperty="9876"
 
-                                                        action.payload.seatCapacity=2
+       action.payload.avgStarRating=0
+              action.payload.ratingCount=0
+              action.payload.reviewCount=0
 
-  action.payload.facilityType='indian'
+              action.payload.seatCapacity=2
+
+    action.payload.facilityType='indian'
     action.payload.district='kozhikkode',
     action.payload.pinCode="673525"
     action.payload.landmark="Library"
