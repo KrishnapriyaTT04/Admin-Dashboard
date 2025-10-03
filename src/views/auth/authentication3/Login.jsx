@@ -19,7 +19,11 @@ import { useDispatch } from 'react-redux';
 
 import FormikTextField from 'ui-component/common/loginInput';
 import { userLogin } from 'container/LoginContainer/slice';
-import logo from "C:/Users/DELL/Desktop/kloo_admin_react_v2/src/assets/images/auth/kloo-icon.svg";
+
+// import logo from "C:/Users/DELL/Desktop/kloo_admin_react_v2/src/assets/images/auth/kloo-icon.svg";
+
+import logo from "assets/images/auth/kloo-icon.svg";
+
 
 const AuthLogin = (props) => {
   const dispatch = useDispatch();
