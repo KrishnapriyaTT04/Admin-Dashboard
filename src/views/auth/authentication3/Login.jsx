@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Cookies from 'js-cookie';
-import { Box, Button, Card, IconButton, InputAdornment, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  IconButton,
+  InputAdornment,
+  Stack,
+  Typography,
+  Divider
+} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,8 +19,7 @@ import { useDispatch } from 'react-redux';
 
 import FormikTextField from 'ui-component/common/loginInput';
 import { userLogin } from 'container/LoginContainer/slice';
-
-import logo from 'assets/images/logo.png';
+import logo from "C:/Users/DELL/Desktop/kloo_admin_react_v2/src/assets/images/auth/kloo-icon.svg";
 
 const AuthLogin = (props) => {
   const dispatch = useDispatch();
@@ -26,125 +34,161 @@ const AuthLogin = (props) => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    const cookieNames = ['user_id', 'full_name', 'sid', 'user_image'];
-    cookieNames.forEach((cookieName) => {
-      Cookies.remove(cookieName);
-    });
+    ['user_id', 'full_name', 'sid', 'user_image'].forEach((cookie) => Cookies.remove(cookie));
   }, []);
 
   useEffect(() => {
-    if (props.failAction && props.failAction.statusText) {
+    if (props.failAction?.statusText) {
       setLoginError(props.failAction.statusText);
-      const errorTimeout = setTimeout(() => {
-        setLoginError('');
-      }, 3000);
-
-      return () => clearTimeout(errorTimeout);
+      const timeout = setTimeout(() => setLoginError(''), 3000);
+      return () => clearTimeout(timeout);
     }
   }, [props.failAction]);
 
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const handleTogglePasswordVisibility = () => setShowPassword(!showPassword);
 
   return (
     <Box
       sx={{
-        mt: 5,
+        minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '80vh'
+        bgcolor: 'background.default',
+        px: 2
       }}
     >
       <Card
         sx={{
-          width: { xs: '90%', sm: '28rem' },
-          p: 4,
-          borderRadius: 2,
-          boxShadow: 3,
+          width: { xs: '100%', sm: '400px', md: '450px' },
+          p: { xs: 3, sm: 4 },
+          borderRadius: 3,
+          boxShadow: 4,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
-        <Box sx={{ width: '100%', mb: 3, display: 'flex', justifyContent: 'center' }}>
-          {/* <img src={logo} alt="Logo" style={{ height: '40px' }} /> */}
-           <Typography variant="h2" component="h1" sx={{ mb: 3, color: 'text.primary' }}>
-         Kloo
-        </Typography>
+        {/* Logo */}
+        <Box sx={{ mb: 3, display: 'flex', justifyContent: 'center' }}>
+          <Box
+            component="img"
+            src={logo}
+            alt="Kloo Logo"
+            sx={{ height: { xs: 35, sm: 45 }, maxWidth: '100%' }}
+          />
         </Box>
-        <Typography variant="h4" component="h1" sx={{ mb: 3, color: 'text.primary' }}>
-          Log in
+
+        {/* Heading */}
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{
+            mb: 2,
+            fontWeight: 700,
+            textAlign: 'center',
+            letterSpacing: 0.5,
+            color: 'text.primary'
+          }}
+        >
+          Welcome Back
         </Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            mb: 3,
+            textAlign: 'center',
+            color: 'text.secondary'
+          }}
+        >
+          Log in to your account to continue
+        </Typography>
+
+        {/* Formik Form */}
         <Formik
-          initialValues={{
-            client_id: "webapp",
-            client_secret: "saqw21!@",
-            email: '',
-            password: ''
-          }}
+          initialValues={{ client_id: 'webapp', client_secret: 'saqw21!@', email: '', password: '' }}
           validationSchema={validate}
-          onSubmit={(value) => {
-            dispatch(userLogin({ ...value, navigate }));
-          }}
+          onSubmit={(values) => dispatch(userLogin({ ...values, navigate }))}
         >
           {() => (
             <Form style={{ width: '100%' }}>
-              <Box sx={{ paddingBottom: '15px' }}>
-                <FormikTextField name="email" label="Enter Your Email Address" type="text" />
-              </Box>
-              <FormikTextField
-                name="password"
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePasswordVisibility} edge="end">
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
+              <Stack spacing={2}>
+                <FormikTextField
+                  name="email"
+                  label="Email Address"
+                  type="text"
+                  fullWidth
+                />
+                <FormikTextField
+                  name="password"
+                  label="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
 
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  mt: 2,
-                  width: '100%',
-                  bgcolor: 'primary.main',
-                  '&:hover': {
-                    bgcolor: 'primary.dark'
-                  }
-                }}
-              >
-                Login
-              </Button>
+                {/* Login Button */}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  sx={{
+                    mt: 1,
+                    py: 1.5,
+                    fontWeight: 600,
+                    fontSize: 16,
+                    color: '#fff',
+                    backgroundImage: 'linear-gradient(180deg, #019863, #019863)',
+                    borderRadius: 2,
+                      border: '1px solid #019863',
+                    boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                      color: '#019863',
+                      border: '1px solid #019863',
+                      backgroundImage: 'none',
+                    }
+                  }}
+                >
+                  Login
+                </Button>
+              </Stack>
             </Form>
           )}
         </Formik>
 
+        {/* Error message */}
         {loginError && (
-          <Typography color="error" sx={{ mt: 2 }}>
-            Invalid User name or Password
+          <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
+            {loginError}
           </Typography>
         )}
 
-        <Stack direction="column" spacing={1} sx={{ mt: 3, width: '100%', alignItems: 'center' }}>
+        {/* Divider */}
+        <Divider sx={{ my: 3, width: '100%' }} />
+
+        {/* Footer links */}
+        <Stack direction="column" spacing={1} sx={{ width: '100%', alignItems: 'center' }}>
           <Link to="/forgotpassword" style={{ textDecoration: 'none' }}>
-            <Typography variant="body2" color="primary.main" fontWeight="bold">
+            <Typography variant="body2" color="primary.main" fontWeight="600">
               Forgot Password?
             </Typography>
           </Link>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Don't have an account?
+              Don’t have an account?
             </Typography>
             <Link to="/SignupRole" style={{ textDecoration: 'none' }}>
-              <Typography variant="body2" color="primary.main" fontWeight="bold">
+              <Typography variant="body2" color="primary.main" fontWeight="600">
                 Sign Up
               </Typography>
             </Link>
