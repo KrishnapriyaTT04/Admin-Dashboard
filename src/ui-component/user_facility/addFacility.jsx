@@ -207,15 +207,15 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 </Grid>
 
     {/* isPaid Checkbox */}
-    {/* <Grid item xs={12}>
+    <Grid item xs={6}>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
             <Field name="isPaid" type="checkbox" />
             <Typography variant="body1" component="label" htmlFor="isPaid">Is Paid?</Typography>
         </Box>
-    </Grid> */}
+    </Grid>
 
     {/* is24H Checkbox */}
-    <Grid item xs={12}>
+    <Grid item xs={6}>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
             <Field name="is24H" type="checkbox" />
             <Typography variant="body1" component="label" htmlFor="is24H">Open 24 Hours?</Typography>
@@ -431,7 +431,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 </Grid>
 
     {/* city */}
-    <Grid item xs={12}>
+    <Grid item xs={6}>
         <Field name="city">
             {({ field, meta }) => (
                 <TextField
@@ -444,6 +444,22 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             )}
         </Field>
     </Grid>
+
+      {/* pin */}
+    <Grid item xs={6}>
+        <Field name="pinCode">
+            {({ field, meta }) => (
+                <TextField
+                    {...field}
+                    label="Pin Code"
+                    fullWidth
+                    error={meta.touched && !!meta.error}
+                    helperText={meta.touched && meta.error}
+                />
+            )}
+        </Field>
+    </Grid>
+    
 </Grid>
 </Box>  
 
