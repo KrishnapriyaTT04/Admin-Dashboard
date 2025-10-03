@@ -2,6 +2,8 @@ import { all, call } from 'redux-saga/effects';
 
 import LoginActionWatcher from 'container/LoginContainer/saga';
 import FacilityActionWatcher from 'container/FacilityContainer/saga';
+import userActionWatcher from 'container/UsersContainer/saga';
+
 
 
 function* rootSaga() {
@@ -10,7 +12,8 @@ function* rootSaga() {
 
      yield all([
         call(LoginActionWatcher),
-        call(FacilityActionWatcher) // The Facility watcher will now start concurrently with Login.
+        call(FacilityActionWatcher),
+         call(userActionWatcher) 
     ]);
 }
 

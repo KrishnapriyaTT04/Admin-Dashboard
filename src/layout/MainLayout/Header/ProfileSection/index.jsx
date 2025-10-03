@@ -40,7 +40,7 @@ const ResponsiveIcons = () => {
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
 
   const handleLogoutConfirm = () => {
-    localStorage.removeItem('userDtls');
+    localStorage.removeItem('klooToken');
     setLogoutOpen(false);
     navigate('/login');
   };

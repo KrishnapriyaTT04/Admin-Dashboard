@@ -10,7 +10,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
- import { userFeedback } from 'utils/TableConfig';
+
+ import { getUsers } from 'container/UsersContainer/slice';
+
+ import { usersHeads } from 'utils/TableConfig';
 
 const users = [
   { id: 1, name: 'Alice', age: 30, city: 'New York' },
@@ -42,6 +45,9 @@ export default function Type() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
 
+
+     const usersList = useSelector((state) => state.user?.list || []);
+  
   const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
   const count = useSelector((state) => state.emission?.efTypeListCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
@@ -51,10 +57,11 @@ export default function Type() {
     desc: item.desc
   }));
   let countPagination = Math.ceil(count / 10);
-  const { config, keys } = userFeedback;
+  const { config, keys } = usersHeads;
 
   useEffect(() => {
-    // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
+    dispatch(getUsers())
+    //  dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
   }, [searchQuery]);
 
   const searchHandler = (e) => {
@@ -219,7 +226,7 @@ export default function Type() {
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
-              data={efTypeList}
+              data={usersList}
               keys={keys}
               config={config}
               currentPage={page + 1}
@@ -232,7 +239,7 @@ export default function Type() {
               handleDeleteModal={handleDeleteModal}
               handleFormModal={handleFormModal}
               msg="Projects"
-              tableData={efTypeList}
+              tableData={usersList}
               filter={searchQuery || ''}
             />
           </Table>
