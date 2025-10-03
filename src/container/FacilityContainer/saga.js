@@ -49,16 +49,16 @@ function* createFacilitySaga(action) {
 
   try {
 
-       action.payload.avgStarRating=0
-              action.payload.ratingCount=0
-              action.payload.reviewCount=0
+      //  action.payload.avgStarRating=0
+      //         action.payload.ratingCount=0
+      //         action.payload.reviewCount=0
 
-              action.payload.seatCapacity=2
+      //         action.payload.seatCapacity=2
 
-    action.payload.facilityType='indian'
-    action.payload.district='kozhikkode',
-    action.payload.pinCode="673525"
-    action.payload.landmark="Library"
+    // action.payload.facilityType='indian'
+    // action.payload.district='kozhikkode',
+    // action.payload.pinCode="673525"
+    // action.payload.landmark="Library"
 
 
 

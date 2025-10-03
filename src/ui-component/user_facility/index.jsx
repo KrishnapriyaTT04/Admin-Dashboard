@@ -118,8 +118,10 @@ export default function Facility() {
   };
 
   const handleFormModal = (item) => {
+    facilityList
+    const foundItem = facilityList.find(items => items.id === item.id);
     setFormOpen(true);
-    setSelectedItem(item);
+    setSelectedItem(foundItem);
   };
 
   const handleAddFormModal = (item) => {

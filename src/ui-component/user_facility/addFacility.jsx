@@ -15,17 +15,23 @@ import MenuItem from '@mui/material/MenuItem';
   import { districtsData } from '../common/district' 
 
 
-// Box, Typography, TextField, Select
-// Assuming these are defined elsewhere:
-// import { createEfType, updateEfType } from 'container/EmissionContainer/slice'; 
-// import cmnstyles from '../common/style';
+const dayMap = [
+    { id: 'Monday', label: 'Mon' },
+    { id: 'Tuesday', label: 'Tue' },
+    { id: 'Wednesday', label: 'Wed' },
+    { id: 'Thursday', label: 'Thu' },
+    { id: 'Friday', label: 'Fri' },
+    { id: 'Saturday', label: 'Sat' },
+    { id: 'Sunday', label: 'Sun' },
+];
 
 // --- Base Initial Values (Full Structure) ---
 const baseInitialValues = {
   title: '', category: '', isPaid: false, facilityType: '', openingTime: '', closingTime: '', is24H: false,
-  seatCapacity: 0, remarks: '', status: 'active', frequency: [],
+  seatCapacity: 0,ratingCount:0,reviewCount:0, remarks: '', status: 'active', frequency: [],
   contactInfo: { name: '', email: '', phone: '' },
   city: '', state: 'kerala',stateId: 'kl', district: '', pinCode: '', geoLoc: ['', ''], landmark: '',
+  isIndianType:false
 };
 
 // --- Validation Schema (Correct as is) ---
@@ -54,10 +60,15 @@ const validationSchema = Yup.object({
   pinCode: Yup.string().matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
   landmark: Yup.string(),
+  isIndianType:Yup.boolean(),
 });
 
 // --- Function to Map Item Data to Formik Values (Correct as is) ---
-const getInitialValues = (item) => ({
+const getInitialValues = (item) => (
+        console.log("-------------------------item---------",item),
+
+    {
+    
     ...baseInitialValues, 
     title: item?.title || baseInitialValues.title,
     category: item?.category || baseInitialValues.category,
@@ -82,12 +93,13 @@ const getInitialValues = (item) => ({
     pinCode: item?.pinCode || baseInitialValues.pinCode,
     geoLoc: item?.geoLoc?.length === 2 ? item.geoLoc : baseInitialValues.geoLoc,
     landmark: item?.landmark || baseInitialValues.landmark,
-    // id: item?.id || '', 
+    isIndianType:item?.isIndianType ?? baseInitialValues.isIndianType,
+    ratingCount: item?.ratingCount ?? baseInitialValues.ratingCount,
+    reviewCount:item?.reviewCount ?? baseInitialValues.reviewCount,
+    id: item?.id || '', 
 });
 
-// -------------------------------------------------------------------------
-// ----------------------- THE MAIN COMPONENT ------------------------------
-// -------------------------------------------------------------------------
+
 
 const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
   const theme = useTheme();
@@ -95,17 +107,25 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
   const dispatch = useDispatch();
 
   const submit = (values) => {
+      if(values.is24H==true){
+       values.openingTime="00:00";
+       values.closingTime="00:00";
+      }
 
+      console.log('Updating Facility:', values);
+                    
 
-         const token = JSON.parse(localStorage.getItem('klooToken'));
-          console.log('Updating Facility:', token);
 
    values.contactInfo.phone=  values.contactInfo.phone.toString()
 
     if (values.id) { 
+         delete values.ratingCount
+         delete values.reviewCount
       // dispatch(updateEfType(values)); 
       console.log('Updating Facility:', values);
     } else {
+         delete values.id; 
+
       dispatch(createFacility(values));
     }
     //setDrawerOpen(false);
@@ -207,7 +227,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 </Grid>
 
     {/* isPaid Checkbox */}
-    <Grid item xs={6}>
+    <Grid item xs={4}>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
             <Field name="isPaid" type="checkbox" />
             <Typography variant="body1" component="label" htmlFor="isPaid">Is Paid?</Typography>
@@ -215,10 +235,18 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
     </Grid>
 
     {/* is24H Checkbox */}
-    <Grid item xs={6}>
+    <Grid item xs={4}>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
             <Field name="is24H" type="checkbox" />
             <Typography variant="body1" component="label" htmlFor="is24H">Open 24 Hours?</Typography>
+        </Box>
+    </Grid>
+
+       {/* isIndian */}
+    <Grid item xs={4}>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <Field name="isIndianType" type="checkbox" />
+            <Typography variant="body1" component="label" htmlFor="is24H">Indian?</Typography>
         </Box>
     </Grid>
 
@@ -259,17 +287,41 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
     )}
 
     {/* frequency */}
-    <Grid item xs={12}>
+ <Grid item xs={12}>
         <Typography variant="subtitle1" gutterBottom>Frequency (Days Available)</Typography>
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                <label key={day}>
-                    <Field type="checkbox" name="frequency" value={day} />
-                    {day}
+            {dayMap.map(day => (
+                <label key={day.id} style={{ display: 'flex', alignItems: 'center' }}>
+                    <Field 
+                        type="checkbox" 
+                        name="frequency" 
+                        value={day.id} // <-- This passes the full name (e.g., "Monday")
+                        style={{ marginRight: '4px' }}
+                    />
+                    {day.label} {/* <-- This displays the short name (e.g., "Mon") */}
                 </label>
             ))}
         </Box>
-        <ErrorMessage name="frequency" component="div" style={{ color: 'red', fontSize: '0.8em', marginTop: '4px' }} />
+        <ErrorMessage 
+            name="frequency" 
+            component="div" 
+            style={{ color: 'red', fontSize: '0.8em', marginTop: '4px' }} 
+        />
+    </Grid>
+
+           <Grid item xs={6} sm={6}>
+        <Field name="seatCapacity">
+            {({ field, meta }) => (
+                <TextField
+                    {...field}
+                    label="Seat Capacity"
+                    type="number"
+                    fullWidth
+                    error={meta.touched && !!meta.error}
+                    helperText={meta.touched && meta.error}
+                />
+            )}
+        </Field>
     </Grid>
 
     {/* Contact Information Divider */}
@@ -373,7 +425,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                 error={meta.touched && !!meta.error}
                 helperText={meta.touched && meta.error}
                 disabled={true}
-                backgroundColor={'yellow'}
                  sx={{
                     '& .MuiInputBase-root.Mui-disabled': {
                         backgroundColor: '#cececeff',
@@ -459,6 +510,23 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             )}
         </Field>
     </Grid>
+
+          {/* landmark */}
+    <Grid item xs={6}>
+        <Field name="landmark">
+            {({ field, meta }) => (
+                <TextField
+                    {...field}
+                    label="Landmark"
+                    fullWidth
+                    error={meta.touched && !!meta.error}
+                    helperText={meta.touched && meta.error}
+                />
+            )}
+        </Field>
+    </Grid>
+
+    
     
 </Grid>
 </Box>  
@@ -475,10 +543,9 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             variant="contained" 
             color="primary"
             startIcon={<CheckCircleOutlineIcon />}
-            // disabled={isSubmitting}
             fullWidth
             sx={{ py: 1.5, textTransform: 'none' }}
-             disabled={isSubmitting || !isValid} 
+            //  disabled={isSubmitting || !isValid} 
         >
             {isSubmitting ? 'Submitting...' : (item?.id ? 'Update Facility' : 'Create Facility')}
         </Button>
