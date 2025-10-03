@@ -9,6 +9,9 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
+
+ import { getIssueReports }from 'container/ReportIssuesContainer/slice';
+
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
  import { userFeedback } from 'utils/TableConfig';
 
@@ -50,6 +53,8 @@ export default function userReportedIssues() {
   const { config, keys } = userFeedback;
 
   useEffect(() => {
+    
+     dispatch(getIssueReports());
     // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
   }, [searchQuery]);
 

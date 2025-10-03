@@ -5,7 +5,8 @@ import customizationReducer from './customizationReducer';
 import loginReducer from 'container/LoginContainer/slice';
 import dashboardReducer from 'container/DashboardContainer/slice';
 import facilitiesReducer from 'container/FacilityContainer/slice';
-import userReducer from 'container/UsersContainer/slice'
+import userReducer from 'container/UsersContainer/slice';
+import reportIssue from 'container/ReportIssuesContainer/slice'
 
 
 
@@ -16,7 +17,8 @@ const reducer = combineReducers({
   dashboardReducer: dashboardReducer,
   customization: customizationReducer,
   facility: facilitiesReducer,
-  user:userReducer
+  user:userReducer,
+  reportIssue:reportIssue
 });
 
 export default reducer;
