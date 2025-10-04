@@ -228,7 +228,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
     {/* isPaid Checkbox */}
     <Grid item xs={4}>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', color: 'red'}}>
             <Field name="isPaid" type="checkbox" />
             <Typography variant="body1" component="label" htmlFor="isPaid">Is Paid?</Typography>
         </Box>
@@ -533,7 +533,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
 {/* --- Submit Button (to be placed in the STICKY FOOTER BOX) --- */}
 
-<Grid container spacing={1}>
+<Grid container spacing={1} pb={5}>
     <Grid item xs={6}>
         {/* Placeholder for Cancel/Other Button */}
     </Grid>

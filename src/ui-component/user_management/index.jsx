@@ -147,7 +147,7 @@ export default function Type() {
         <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
           {/* Left Button */}
           <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' }, alignItems: 'center' }}>
+            {/* <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' }, alignItems: 'center' }}>
               <Button
                 variant="outlined"
                 startIcon={<AddIcon />}
@@ -156,7 +156,7 @@ export default function Type() {
               >
                 Add
               </Button>
-            </Box>
+            </Box> */}
           </Grid>
 
           {/* Search Box */}
@@ -189,7 +189,7 @@ export default function Type() {
 
           {/* Export Button */}
           <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
+            {/* <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
               <Button
                 variant="outlined"
                 onClick={handleDownloadExcel}
@@ -218,7 +218,7 @@ export default function Type() {
               >
                 Export to Excel
               </Button>
-            </Box>
+            </Box> */}
           </Grid>
         </Grid>
 
@@ -231,7 +231,7 @@ export default function Type() {
               config={config}
               currentPage={page + 1}
               hasView={true}
-              hasEdit={true}
+              hasEdit={false}
               hasDelete={true}
               hasStatusChange={false}
               hasMore={false}

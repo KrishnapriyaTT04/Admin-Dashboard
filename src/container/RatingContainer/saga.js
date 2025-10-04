@@ -29,7 +29,7 @@ function* getRatingsSaga() {
 
         // API request parameters
         const params = {
-            api: `${RATING_API_BASE}/feedback`, // Your Ratings endpoint
+            api: `${RATING_API_BASE}/feedbacks`, // Your Ratings endpoint
             method: 'GET',
             authorization: `Bearer`,
             token: accessToken,

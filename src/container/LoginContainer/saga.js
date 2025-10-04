@@ -30,7 +30,7 @@ function* login(action) {
    console.log("------------tkn---",res);
      if(res){
       localStorage.setItem('klooToken', JSON.stringify(res));
-
+       yield call(toast.success, 'Login successful', { autoClose: 3000 });
       yield call(action.payload.navigate, '/dashboard');
      }else{
       //localStorage.setItem('userToken', JSON.stringify(null));
