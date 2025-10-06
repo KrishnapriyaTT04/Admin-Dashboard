@@ -16,7 +16,7 @@ const FACILITY_API_BASE = `${appConfig.ip}`;
 
 
 // 1. Get Users Saga (FETCH LIST ONLY)
-function* getUsersSaga() {
+function* getUsersSaga(action) {
           console.log('Fetch Users failed: No access token found.----------------');
 
   // Retrieve token from local storage (or wherever it's stored)
@@ -39,7 +39,7 @@ function* getUsersSaga() {
   try {
     const params = {
       // 🚨 Adjust the API endpoint as required for fetching users
-      api: `${FACILITY_API_BASE}/users`, 
+      api: `${FACILITY_API_BASE}/${action.payload}`, 
       method: 'GET',
        successAction: actionType.getUsersSuccess(),
       failAction: actionType.getUsersFail(),

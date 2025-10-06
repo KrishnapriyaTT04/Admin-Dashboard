@@ -1,13 +1,13 @@
 import { Grid, Typography, Box } from '@mui/material';
-import { UserOutlined } from '@ant-design/icons';
+// import { UserOutlined } from '@ant-design/icons';
 
 import Service from './Service';
 
 const DashboardDefault = () => {
   return (
     <>
-      <Grid container>
-        <Grid
+      <Grid >
+        {/* <Grid
           container
           xs={12}
           sx={{
@@ -44,7 +44,7 @@ const DashboardDefault = () => {
             </Box>
           </Box>
         </Grid>
-        <Service/>
+        <Service/> */}
       </Grid>
     </>
   );

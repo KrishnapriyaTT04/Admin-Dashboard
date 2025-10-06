@@ -38,6 +38,8 @@ export default function Type() {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
+      const [limit, setLimit] = useState(5);
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
@@ -60,15 +62,34 @@ export default function Type() {
   const { config, keys } = usersHeads;
 
   useEffect(() => {
-    dispatch(getUsers())
+       let reqUrl =`users?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
+
+    dispatch(getUsers(reqUrl))
     //  dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
   }, [searchQuery]);
 
+
   const searchHandler = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    setPage(0);
+      const value = e.target.value; 
+      setSearchQuery(value);
+          const filterObject = {
+          limit: limit,
+          skip: 0,
+          order: ["createdOn DESC"],
+          where: {
+              email: {
+                  like: value, 
+                  options: "i"
+              }
+          }
+      };
+      
+      const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
+      let reqUrl = `users?filter=${encodedFilter}`;
+      dispatch(getFacilities(reqUrl));
+      setPage(0);
   };
+
 
   function handleDownloadExcel() {
     setshowXSLModal(true);
@@ -136,6 +157,9 @@ export default function Type() {
     closeDeleteModal();
   };
 
+
+
+
   return (
     <>
       <MainCard>
@@ -170,11 +194,7 @@ export default function Type() {
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
-                onKeyDown={(e) => {
-                  if (!regex.test(e.key) && e.key !== 'Backspace') {
-                    e.preventDefault();
-                  }
-                }}
+               npm run build
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Card from './card'
-import { UserOutlined, HomeOutlined, WarningOutlined, MessageOutlined } from "@ant-design/icons";
+// import { UserOutlined, HomeOutlined, WarningOutlined, MessageOutlined } from "@ant-design/icons";
 import { DetailCard } from './DetailCard';
 import { useSelector } from 'react-redux';
 

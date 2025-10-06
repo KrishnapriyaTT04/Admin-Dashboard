@@ -65,7 +65,6 @@ const validationSchema = Yup.object({
 
 // --- Function to Map Item Data to Formik Values (Correct as is) ---
 const getInitialValues = (item) => (
-        console.log("-------------------------item---------",item),
 
     {
     
@@ -145,7 +144,10 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         <Drawer
           anchor="right"
           open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
+          onClose={() => setDrawerOpen(false)}            // state.listError = {
+            //     message: action.payload.message || 'Failed to fetch facilities',
+            //     status: action.payload.status || 500
+            // };
           PaperProps={{
             sx: {
               width: { xs: '100%', sm: '80%', md: '60%', lg: '1100px' },
@@ -582,7 +584,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
     <Grid item xs={6}>
         {/* Placeholder for Cancel/Other Button */}
     </Grid>
-    <Grid item xs={6}>
+    <Grid item xs={12} marginInline={3}>
         <Button 
             type="submit" 
             variant="contained" 
