@@ -175,7 +175,7 @@ export default function* facilityActionWatcher() {
   yield takeEvery(actionType.getFacilities.type, getFacilitiesSaga);
    yield takeEvery(actionType.createFacility.type, createFacilitySaga);
   yield takeEvery(actionType.updateFacility.type, updateFacilitySaga);
-    yield takeEvery(actionType.updateFacility.type, getFacilitiesCount);
+    yield takeEvery(actionType.getFacilitiesCount.type, getFacilitiesCount);
 
   
 }
