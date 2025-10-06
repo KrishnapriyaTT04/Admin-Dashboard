@@ -1,5 +1,7 @@
 import { List } from '@mui/icons-material';
 import { createSlice } from '@reduxjs/toolkit';
+import { get } from 'immutable';
+import { act } from 'react';
 
 const userFeedbackSlice = createSlice({
   name: 'feedback',
@@ -8,13 +10,13 @@ const userFeedbackSlice = createSlice({
     // loading: false,
     error: null,
     listLoading : false,
-
+    listCount : 0,
+    countLoad: false,
+    countError : null
   },
   reducers: {
      
-   getUserFeedback: (state) => {
-    console.log('------------------------ called');
-    
+   getUserFeedback: (state) => {    
     state.listLoading = true;
     state.error = null;
    } ,
@@ -30,8 +32,30 @@ const userFeedbackSlice = createSlice({
         message: action.payload.message || 'Failed to Fetch',
         status: action.payload.status || 500
        }
-   }
+   },
 
+
+   getUserFeedbackCount: (state) => {
+    state.countLoad = true;
+    state.countError = null;
+   },
+   getFeedbackCountSucces: (state, action) => {
+    console.log('---------------------countin succes   ---------- ', action.payload.count);
+    
+    state.listCount = action.payload.count;
+        state.countError = null;
+     state.countLoad = false;
+     
+   },
+
+
+   getFeedbackCountFail: (state, action) => {
+    state.countLoad = false;
+     state.countError= {
+        message: action.payload.message || 'Failed to Fetch',
+        status: action.payload.status || 500
+       }
+   }
 
     // userLogin: (state) => {
     //   state.loading = true;
@@ -53,7 +77,7 @@ const userFeedbackSlice = createSlice({
 });
 
 export const { 
-    getUserFeedback,getUserFeedbackSucces, getUserFeedbackFail
+    getUserFeedback,getUserFeedbackSucces, getUserFeedbackFail,getUserFeedbackCount,getFeedbackCountSucces,getFeedbackCountFail
     
     // userLogin, loginSuccess, loginFail 
 } = userFeedbackSlice.actions;
@@ -62,5 +86,8 @@ export const {
 export const selectFeedbackList = (state) => state.feedback.list;
 export const selectListLoading = (state) => state.feedback.listLoading;
 export const selectFeedbackError = (state) => state.feedback.error;
+export const selectFeedbackCount = (state) => state.feedback.listCount;
+export const selectFeedbackCountError = (state) => state.feedback.countError;
+export const selectFeedbackCountLoad = (state) => state.feedback.countLoad;
 
 export default userFeedbackSlice.reducer;

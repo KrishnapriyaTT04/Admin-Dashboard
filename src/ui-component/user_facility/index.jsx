@@ -54,14 +54,15 @@ export default function Facility() {
 
     // const facilityList = useSelector(selectFacilityList);
 
-  const count = useSelector((state) => state.emission?.efTypeListCount || 0);
+    const count = useSelector((state) => state.facility?.listCount || 0);
+  // const count = useSelector((state) => state.emission?.efTypeListCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
     slno: index + 1,
     name: item.name,
     desc: item.desc
   }));
-  let countPagination = Math.ceil(count / 10);
+let countPagination = Math.ceil(count / limit); 
   const { config, keys } = facilityHeads;
 
   if(facilityList.length)
@@ -102,7 +103,7 @@ export default function Facility() {
    let reqUrl =`facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
    let countUrl =`facilities/count`
    
-        // dispatch(getFacilitiesCount(countUrl));
+       dispatch(getFacilitiesCount(countUrl));
 
   dispatch(getFacilities(reqUrl));
 
@@ -173,15 +174,22 @@ const searchHandler = (e) => {
   };
 
   const handlePageClick = (e) => {
-    const selectedPage = e.selected;
-    setPage(selectedPage);
-    // dispatch(
-    //   getEfType({
-    //     page: selectedPage + 1,
-    //     searchVal: searchQuery
-    //   })
-    // );
-  };
+    // e.selected is typically the 0-based index of the new page (0, 1, 2, ...)
+    const selectedPage = e.selected; 
+    
+    // 1. Calculate the new skip value based on the current limit
+    // If limit is 5: Page 0 (0*5=0), Page 1 (1*5=5), Page 2 (2*5=10)
+    const newSkip = selectedPage * limit;
+
+    // 2. Set the new page index in the state
+    setPage(selectedPage); 
+
+    // 3. Construct the URL with the correct, calculated values
+    let reqUrl = `facilities?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
+    
+    // 4. Dispatch the action
+    dispatch(getFacilities(reqUrl));
+};
 
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
@@ -310,7 +318,7 @@ const searchHandler = (e) => {
           </Table>
         </TableContainer>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
-          {countPagination > 1 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
+          {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
         {/* {open && <EFTypeView drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />} */}
         {formOpen && <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />}

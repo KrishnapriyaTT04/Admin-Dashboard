@@ -11,7 +11,7 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
  import { userFeedback } from 'utils/TableConfig';
- import { getUserFeedback } from 'container/UserFeedbackContainer/slice';
+ import { getUserFeedback,getUserFeedbackCount } from 'container/UserFeedbackContainer/slice';
 import ViewFeedbackDetail from './viewFeedback';
 const users = [
   { id: 1, name: 'Alice', age: 30, city: 'New York' },
@@ -44,7 +44,7 @@ export default function Type() {
   const [showXSLModal, setshowXSLModal] = useState(false);
 
   const efTypeList = useSelector((state) => state.feedback?.list || []);
-  const count = useSelector((state) => state.emission?.efTypeListCount || 0);
+  const count = useSelector((state) => state.feedback?.listCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
     slno: index + 1,
@@ -56,6 +56,7 @@ export default function Type() {
 
   useEffect(() => {
     dispatch(getUserFeedback());
+    dispatch(getUserFeedbackCount())
     // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
   }, [searchQuery]);
 

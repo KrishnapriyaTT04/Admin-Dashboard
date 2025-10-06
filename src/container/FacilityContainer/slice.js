@@ -110,7 +110,7 @@ const facilitySlice = createSlice({
         },
         getFacilitiesCountSuccess: (state, action) => {
             state.listcountLoading = false;
-            state.listCount = action.payload; // Payload is the array of facilities
+            state.listCount = action.payload.count; // Payload is the array of facilities
         },
         getFacilitiesCountFail: (state, action) => {
             state.listcountLoading = false;

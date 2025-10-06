@@ -39,11 +39,50 @@ function* getUserFeedback(action) {
     //  localStorage.setItem('userDtls', JSON.stringify(data));
             // yield call(action.payload.navigate, '/dashboard');
 
-    console.error('Fetch user feed back failed:', error);
     yield call(toast.error, 'Failed to fetch user feedbacks.', { autoClose: 3000 });
   }
 }
 
-export default function* UserFeedbakActionWatcher() {
+function* getFeedbackCount(action) {
+    console.log('------------------------------------------ cld cont');
+  
+  const tokenData = JSON.parse(localStorage.getItem('klooToken'));
+  const accessToken = tokenData?.accessToken;
+  try {
+    let params = {
+      api: `${appConfig.ip}/feedbacks/count`,
+      method: 'GET',
+      successAction: actionType.getFeedbackCountSucces(),
+      failAction: actionType.getFeedbackCountFail(),
+      authourization: 'Bearer',
+      token:  accessToken
+    };
+    let res = yield call(commonApi, params);
+    if (res) {
+    //   if (res.message.roles !== 'Inclips Admin') {
+    //     localStorage.setItem('userDtls', JSON.stringify(res));
+        // yield call(toast.success, 'successful', { autoClose: 3000 });
+    //     yield call(action.payload.navigate, '/dashboard');
+    //   } else {
+    //     throw new Error('User not valid');
+    //   }
+    } else {
+      throw new Error('Invalid response from API');
+    }
+  } catch (error) {
+    //  data={
+    //   'message':{"role":"admin"}
+    //  }
+    //  localStorage.setItem('userDtls', JSON.stringify(data));
+            // yield call(action.payload.navigate, '/dashboard');
+
+    console.error('Fetch user feed back count failed:', error);
+    // yield call(toast.error, 'Failed to fetch user feedbacks count.', { autoClose: 3000 });
+  }
+}
+
+export default function* UserFeedbakWatcher() {
   yield takeEvery(actionType.getUserFeedback, getUserFeedback);
+    yield takeEvery(actionType.getUserFeedbackCount, getFeedbackCount);
+
 }
