@@ -3,7 +3,7 @@ export default function componentStyleOverrides() {
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#1d3848', // Dark green sidebar background
+          background: 'linear-gradient(180deg, #019863, #019863) !important', // Dark green sidebar background
           color: '#FFFFFF' // White text color
         }
       }
