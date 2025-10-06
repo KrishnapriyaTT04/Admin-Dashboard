@@ -18,6 +18,32 @@ export const userFeedback = {
     }
   }
 };
+export const userRating = {
+  keys: ['createdOn', 'createdUser', 'comments', 'starRating'],
+  config: {
+    createdOn: {
+      label: 'Created Date',
+      type: 'date',
+      class: 'commonDesc'
+    },
+    createdUser: {
+      label: 'Created By',
+      type: 'string',
+      class: 'cmn_Cap commonDesc'
+    },
+    comments: {
+      label: 'Comment',
+      type: 'string',
+      class: 'cmn_Cap commonDesc'
+    },
+    starRating: {
+      label: 'Count', // The column title
+      type: 'number',
+      class: 'cmn_Cap commonDesc'
+    }
+  }
+};
+  
 
 
 export const facilityHeads = {

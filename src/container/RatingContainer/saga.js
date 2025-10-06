@@ -31,6 +31,8 @@ function* getRatingsSaga() {
         const params = {
             api: `${RATING_API_BASE}/feedbacks`, // Your Ratings endpoint
             method: 'GET',
+            successAction: actionType.getRatingsSuccess(),
+            failAction: actionType.getRatingsFail(),
             authorization: `Bearer`,
             token: accessToken,
         };
