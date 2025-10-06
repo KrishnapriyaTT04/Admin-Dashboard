@@ -138,83 +138,44 @@ export default function userReportedIssues() {
             Report Issues
           </Typography>
         </Grid>
-        <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
-          {/* Left Button */}
-          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' }, alignItems: 'center' }}>
-              <Button
-                variant="outlined"
-                startIcon={<AddIcon />}
-                sx={{ ...cmnstyle.cmnBtn, ...cmnstyle.cmnBtnOutline, px: 3 }}
-                onClick={handleAddFormModal}
-              >
-                Add
-              </Button>
-            </Box>
-          </Grid>
+       <Grid 
+  container 
+  sx={{ 
+    width: '100%', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+ 
+  }}
+>
+  <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
+    <Box 
+      sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+      }}
+    >
+      <TextField
+        fullWidth
+        variant="outlined"
+        size="small"
+        placeholder="Search by name"
+        sx={{ maxWidth: 300, width: '100%' }}
+        value={searchQuery}
+        onChange={searchHandler}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+          sx: style.searchBox
+        }}
+      />
+    </Box>
+  </Grid>
+</Grid>
 
-          {/* Search Box */}
-          <Grid item xs={12} sm={4} md={6} lg={6} xl={6}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                size="small"
-                placeholder="Search by name"
-                sx={{ maxWidth: 300, width: '100%' }}
-                value={searchQuery}
-                onChange={searchHandler}
-                onKeyDown={(e) => {
-                  if (!regex.test(e.key) && e.key !== 'Backspace') {
-                    e.preventDefault();
-                  }
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                  sx: style.searchBox
-                }}
-              />
-            </Box>
-          </Grid>
-
-          {/* Export Button */}
-          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
-              <Button
-                variant="outlined"
-                onClick={handleDownloadExcel}
-                startIcon={<FileDownloadOutlinedIcon />}
-                sx={{
-                  color: '#242121',
-                  backgroundColor: 'white',
-                  borderColor: '#3dcd58',
-                  width: '180px',
-                  py: 1,
-                  borderRadius: '30px',
-                  whiteSpace: 'nowrap', // 🚀 keeps text in one line
-                  textOverflow: 'ellipsis', // optional, trims if overflowing
-                  overflow: 'hidden', // optional, prevents bulge
-                  '&:hover': {
-                    color: '#fcf9f9 !important',
-                    backgroundColor: '#3dcd58',
-                    borderColor: '#3dcd58'
-                  },
-                  '&:active': {
-                    color: '#fcf9f9 !important',
-                    backgroundColor: '#3dcd58',
-                    borderColor: '#3dcd58'
-                  }
-                }}
-              >
-                Export to Excel
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
 
         <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="project table">

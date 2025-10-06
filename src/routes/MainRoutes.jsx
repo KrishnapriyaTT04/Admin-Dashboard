@@ -6,7 +6,7 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/authGuard';
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard')));
+const DashboardDefault = Loadable(lazy(() => import('views/dashboard/index')));
 const NopageFound = Loadable(lazy(() => import('ui-component/common/no-page/NoPage')));
 const UserManagementPage = Loadable(lazy(() => import('ui-component/user_management/index')));
 const UserFeedbackPage = Loadable(lazy(() => import('ui-component/user_feedback/index')));
@@ -41,34 +41,6 @@ const MainRoutes = {
       path: '/dashboard',
       element: <DashboardDefault />
     },
-    // {
-    //   path: 'rfq',
-    //   children: [
-    //     {
-    //       path: '',
-    //       element: <NopageFound />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'jobOrder',
-    //   children: [
-    //     {
-    //       path: '',
-    //       element: <NopageFound />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'myCustomers',
-    //   children: [
-    //     {
-    //       path: '',
-    //       element: <NopageFound />
-    //     }
-    //   ]
-    // },
-
     {
       path: 'facility',
       children: [
