@@ -36,11 +36,16 @@ function* commonApi(value) {
       headers: value.authourization !== null ? authHeader : noauthHeader,
       body: value.body ? value.body : null
     });
-
+        console.log("--------------------response----cmn-------------",response.ok);
+        
     if (!response.ok) {
       throw response;
     } else {
+      
+        console.log("------------1--------response----cmn--else-----------");
+
       const resJSON = yield response.json();
+        console.log("--------------------response----cmn--ok-----------",resJSON);
 
       yield put({
         type: `${value.successAction.type}`,

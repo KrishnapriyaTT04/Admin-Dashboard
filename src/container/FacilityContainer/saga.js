@@ -89,7 +89,7 @@ function* createFacilitySaga(action) {
       // After creation, optionally re-fetch the list to update the table
       yield put(actionType.getFacilities());
     } else {
-      throw new Error(res?.message || 'Facility creation failed.');
+      // throw new Error(res?.message || 'Facility creation failed.');
     }
   } catch (error) {
     console.error('Create Facility failed:', error);
@@ -102,30 +102,38 @@ function* createFacilitySaga(action) {
 }
 
 // 3. Update Facility
-function* updateFacilitySaga(action) {
-  try {
-    const facilityData = action.payload;
+function* updateFacilitySaga(action,facilityId) {
 
+   const token = JSON.parse(localStorage.getItem('klooToken'));
+  try {
+    const facilityData = action.payload;    
+    
+  if (!facilityData.id) { 
+      return
+    }
+    let updateBody = { ...facilityData }; 
+
+    delete updateBody.id;
     const params = {
       // Example API call for updating a facility
-      api: `${FACILITY_API_BASE}.update_facility`, 
-      method: 'PUT',
-      body: JSON.stringify(facilityData),
+      api: `${FACILITY_API_BASE}/facilities/${facilityData.id}`, 
+      method: 'PATCH',
+      body: JSON.stringify(updateBody),
       successAction: actionType.updateFacilitySuccess(),
       failAction: actionType.updateFacilityFail(),
-      authorization: 'Bearer token_here'
+       authorization: 'Bearer',
+      token:`${token.accessToken}`
     };
 
     const res = yield call(commonApi, params);
+      console.log("----------------------saga-res------------------",res);
 
     if (res?.message === 'success') {
       yield call(toast.success, 'Facility updated successfully!', { autoClose: 3000 });
-      // Dispatch success and pass the updated object back
       yield put(actionType.updateFacilitySuccess(res.data)); 
-      // After update, optionally re-fetch the list
       yield put(actionType.getFacilities());
     } else {
-      throw new Error(res?.message || 'Facility update failed.');
+      // throw new Error(res?.message || 'Facility update failed.');
     }
   } catch (error) {
     console.error('Update Facility failed:', error);
