@@ -7,7 +7,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import * as Yup from 'yup';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-
+import FormikSwitch from '../common/toggleSwitch';
 
  import { createFacility } from 'container/FacilityContainer/slice'; 
 
@@ -169,7 +169,21 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
               style={{ display: 'grid', gap: '20px', margin: '0 auto' }}
             >
 
-               <Box sx={{ p: 3, flexGrow: 1, overflowY: 'auto' }}>
+               <Box sx={{ p: 3, flexGrow: 1, overflowY: 'auto', maxHeight: '78vh',
+
+                '&::-webkit-scrollbar': {
+                width: '6px', // Make the scrollbar thin
+                backgroundColor: 'transparent',
+            },
+            '&::-webkit-scrollbar-thumb': {
+                // Style the part the user drags (the "thumb")
+                backgroundColor: 'rgba(0, 0, 0, 0.2)', // Subtle gray
+                borderRadius: '10px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.4)', // Darken on hover
+            },
+                }}>
             <Typography variant="h5">Facility Details</Typography>
 
               
@@ -226,29 +240,53 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
     </Field>
 </Grid>
 
+
+
     {/* isPaid Checkbox */}
-    <Grid item xs={4}>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', color: 'red'}}>
-            <Field name="isPaid" type="checkbox" />
-            <Typography variant="body1" component="label" htmlFor="isPaid">Is Paid?</Typography>
-        </Box>
-    </Grid>
+ <Grid item xs={4}>
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <FormikSwitch name="isPaid" /> 
+        <Typography 
+            variant="body1" 
+            component="label" 
+            htmlFor="isPaid"
+            sx={{color:values.isPaid?'green':'gray'}}
+        >Is Paid?
+        </Typography>
+    </Box>
+</Grid>
 
     {/* is24H Checkbox */}
-    <Grid item xs={4}>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-            <Field name="is24H" type="checkbox" />
-            <Typography variant="body1" component="label" htmlFor="is24H">Open 24 Hours?</Typography>
-        </Box>
-    </Grid>
+
+     <Grid item xs={4}>
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <FormikSwitch name="is24H" /> 
+        <Typography 
+            variant="body1" 
+            component="label" 
+            htmlFor="is24H"
+            sx={{color:values.is24H?'green':'gray'}}
+        >Open 24 Hours?
+        </Typography>
+    </Box>
+</Grid>
+
 
        {/* isIndian */}
-    <Grid item xs={4}>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-            <Field name="isIndianType" type="checkbox" />
-            <Typography variant="body1" component="label" htmlFor="is24H">Indian?</Typography>
-        </Box>
-    </Grid>
+
+     <Grid item xs={4}>
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <FormikSwitch name="isIndianType" /> 
+        <Typography 
+            variant="body1" 
+            component="label" 
+            htmlFor="isIndianType"
+            sx={{color:values.isIndianType?'green':'gray'}}
+        >Open 24 Hours?
+        </Typography>
+    </Box>
+</Grid>
+
 
     {/* Conditional Time Inputs */}
     {!values.is24H && (
@@ -291,12 +329,12 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         <Typography variant="subtitle1" gutterBottom>Frequency (Days Available)</Typography>
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             {dayMap.map(day => (
-                <label key={day.id} style={{ display: 'flex', alignItems: 'center' }}>
+                <label key={day.id} style={{ display: 'flex', alignItems: 'center' , color:'gray' }}>
                     <Field 
                         type="checkbox" 
                         name="frequency" 
                         value={day.id} // <-- This passes the full name (e.g., "Monday")
-                        style={{ marginRight: '4px' }}
+                        style={{ marginRight: '4px'  }}
                     />
                     {day.label} {/* <-- This displays the short name (e.g., "Mon") */}
                 </label>
