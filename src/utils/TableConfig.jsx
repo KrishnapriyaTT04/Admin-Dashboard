@@ -1,18 +1,18 @@
 export const userFeedback = {
-  keys: ['name', 'email', 'sesaId'],
+  keys: ['createdOn', 'createdUser', 'comments'],
   config: {
-    name: {
-      label: 'Name',
-      type: 'string',
+    createdOn: {
+      label: 'Created Date',
+      type: 'date',
       class: ' commonDesc'
     },
-    email: {
-      label: 'Email',
+    createdUser: {
+      label: 'Created By',
       type: 'string',
       class: ' cmn_Cap commonDesc'
     },
-    sesaId: {
-      label: 'SESA ID',
+    comments: {
+      label: 'Comment',
       type: 'string',
       class: ' cmn_Cap commonDesc'
     }
