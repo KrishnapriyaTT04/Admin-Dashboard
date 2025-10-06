@@ -126,7 +126,6 @@ const TableRows = ({
                 >
 
                       {
-              console.log("keyItem======><>>",config[keyItem] )
               
             }
                   <Tooltip

@@ -70,14 +70,17 @@ export default function Type() {
 
 
   const searchHandler = (e) => {
+
       const value = e.target.value; 
+      console.log("--**********************************-",value);
+      
       setSearchQuery(value);
           const filterObject = {
           limit: limit,
           skip: 0,
           order: ["createdOn DESC"],
           where: {
-              email: {
+              fullName: {
                   like: value, 
                   options: "i"
               }
@@ -86,7 +89,7 @@ export default function Type() {
       
       const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
       let reqUrl = `users?filter=${encodedFilter}`;
-      dispatch(getFacilities(reqUrl));
+      dispatch(getUsers(reqUrl));
       setPage(0);
   };
 
