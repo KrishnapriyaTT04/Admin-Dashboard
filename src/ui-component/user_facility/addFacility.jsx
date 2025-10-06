@@ -186,7 +186,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                 backgroundColor: 'rgba(0, 0, 0, 0.4)', // Darken on hover
             },
                 }}>
-            <Typography variant="h5">Facility Details</Typography>
+            <Typography variant="h5" sx={{mb:2}}>Facility Details</Typography>
 
               
               {/* title */}

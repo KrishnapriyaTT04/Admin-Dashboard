@@ -110,32 +110,22 @@ export default function Facility() {
 }, [dispatch]); 
 
 const searchHandler = (e) => {
-    // 1. Get the current, accurate input value
     const value = e.target.value; 
-
-    console.log("---------------------search----------", value);
-    
-    // 2. Update the state (this is asynchronous, but necessary for the TextField value prop)
     setSearchQuery(value);
-    
-    // 3. Use the local variable 'value' for the API call (NOT the stale 'searchQuery')
-    const filterObject = {
+        const filterObject = {
         limit: limit,
-        skip: 0, // Reset page to 0 immediately for a new search
+        skip: 0,
         order: ["createdOn DESC"],
         where: {
             title: {
-                like: value, // <-- USE 'value' HERE
+                like: value, 
                 options: "i"
             }
         }
     };
     
-    // Correctly construct and encode the URL
     const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
     let reqUrl = `facilities?filter=${encodedFilter}`;
-
-    // 4. Dispatch the action and reset the page state
     dispatch(getFacilities(reqUrl));
     setPage(0);
 };
