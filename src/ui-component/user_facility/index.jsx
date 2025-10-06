@@ -98,9 +98,9 @@ export default function Facility() {
    let reqUrl =`facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
    let countUrl =`facilities/count`
    
-   
+        // dispatch(getFacilitiesCount(countUrl));
+
   dispatch(getFacilities(reqUrl));
-     dispatch(getFacilitiesCount(countUrl));
 
     console.log("Facilities in component:", facilityList);
 }, [dispatch]); 

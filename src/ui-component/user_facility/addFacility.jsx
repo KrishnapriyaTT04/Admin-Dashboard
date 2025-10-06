@@ -282,7 +282,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             component="label" 
             htmlFor="isIndianType"
             sx={{color:values.isIndianType?'green':'gray'}}
-        >Open 24 Hours?
+        >Indian?
         </Typography>
     </Box>
 </Grid>
@@ -321,8 +321,25 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                     )}
                 </Field>
             </Grid>
+
+
         </>
     )}
+
+               <Grid item xs={6} sm={6}>
+        <Field name="seatCapacity">
+            {({ field, meta }) => (
+                <TextField
+                    {...field}
+                    label="Seat Capacity"
+                    type="number"
+                    fullWidth
+                    error={meta.touched && !!meta.error}
+                    helperText={meta.touched && meta.error}
+                />
+            )}
+        </Field>
+    </Grid>
 
     {/* frequency */}
  <Grid item xs={12}>
@@ -347,20 +364,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         />
     </Grid>
 
-           <Grid item xs={6} sm={6}>
-        <Field name="seatCapacity">
-            {({ field, meta }) => (
-                <TextField
-                    {...field}
-                    label="Seat Capacity"
-                    type="number"
-                    fullWidth
-                    error={meta.touched && !!meta.error}
-                    helperText={meta.touched && meta.error}
-                />
-            )}
-        </Field>
-    </Grid>
+
 
     {/* Contact Information Divider */}
     <Grid item xs={12}>

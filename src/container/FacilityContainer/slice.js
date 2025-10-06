@@ -104,7 +104,7 @@ const facilitySlice = createSlice({
         },
 
 
-      getFacilitiesCount: (state) => {
+       getFacilitiesCount: (state) => {
             state.listcountLoading = true;
             
         },
@@ -154,12 +154,12 @@ export const {
 // Selectors for easy access to state
 export const selectFacilityList = (state) => state.facility.list;
 export const selectListLoading = (state) => state.facility.listLoading;
-
 export const selectListError = (state) => state.facility.listError;
 export const selectOperationLoading = (state) => state.facility.operationLoading;
 export const selectOperationSuccess = (state) => state.facility.operationSuccess;
 export const selectOperationError = (state) => state.facility.operationError;
 export const selectListcountLoading = (state) => state.facility.listcountLoading;
 export const selectListCount = (state) => state.facility.listCount;
+
 
 export default facilitySlice.reducer;
