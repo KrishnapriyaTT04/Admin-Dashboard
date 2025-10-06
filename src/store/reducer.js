@@ -8,6 +8,8 @@ import facilitiesReducer from 'container/FacilityContainer/slice';
 import userReducer from 'container/UsersContainer/slice';
 import reportIssue from 'container/ReportIssuesContainer/slice'
 import ratingReducer from 'container/RatingContainer/slice';
+import feedbackReducer from 'container/UserFeedbackContainer/slice';
+
 
 
 
@@ -20,7 +22,8 @@ const reducer = combineReducers({
   facility: facilitiesReducer,
   user:userReducer,
   reportIssue:reportIssue,
-  rating: ratingReducer
+  rating: ratingReducer,
+  feedback: feedbackReducer
 });
 
 export default reducer;

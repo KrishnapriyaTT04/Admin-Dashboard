@@ -11,7 +11,8 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
  import { userFeedback } from 'utils/TableConfig';
-
+ import { getUserFeedback } from 'container/UserFeedbackContainer/slice';
+import ViewFeedbackDetail from './viewFeedback';
 const users = [
   { id: 1, name: 'Alice', age: 30, city: 'New York' },
   { id: 2, name: 'Bob', age: 24, city: 'London' },
@@ -42,7 +43,7 @@ export default function Type() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
 
-  const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
+  const efTypeList = useSelector((state) => state.feedback?.list || []);
   const count = useSelector((state) => state.emission?.efTypeListCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
@@ -54,6 +55,7 @@ export default function Type() {
   const { config, keys } = userFeedback;
 
   useEffect(() => {
+    dispatch(getUserFeedback());
     // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
   }, [searchQuery]);
 
@@ -137,9 +139,9 @@ export default function Type() {
             Feedback
           </Typography>
         </Grid>
-        <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
+        <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Left Button */}
-          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
+          {/* <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
             <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' }, alignItems: 'center' }}>
               <Button
                 variant="outlined"
@@ -150,11 +152,11 @@ export default function Type() {
                 Add
               </Button>
             </Box>
-          </Grid>
+          </Grid> */}
 
           {/* Search Box */}
           <Grid item xs={12} sm={4} md={6} lg={6} xl={6}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -224,8 +226,8 @@ export default function Type() {
               config={config}
               currentPage={page + 1}
               hasView={true}
-              hasEdit={true}
-              hasDelete={true}
+              hasEdit={false}
+              hasDelete={false}
               hasStatusChange={false}
               hasMore={false}
               handleViewModel={handleViewModal}
@@ -240,7 +242,7 @@ export default function Type() {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 1 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
-        {/* {open && <EFTypeView drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />} */}
+        {open && <ViewFeedbackDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} setPage={setPage}/>}
         {/* {formOpen && <UpdateEfTypeForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />} */}
         {showDeleteModal && (
           <ConfirmModal
