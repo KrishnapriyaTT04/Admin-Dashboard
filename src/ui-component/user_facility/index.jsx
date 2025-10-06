@@ -241,7 +241,7 @@ const searchHandler = (e) => {
                 fullWidth
                 variant="outlined"
                 size="small"
-                placeholder="Search by name"
+                placeholder="Search by title"
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
