@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import FormikSwitch from '../common/toggleSwitch';
 
- import { createFacility } from 'container/FacilityContainer/slice'; 
+ import { createFacility ,updateFacility} from 'container/FacilityContainer/slice'; 
 
 
   import { districtsData } from '../common/district' 
@@ -117,18 +117,20 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
 
    values.contactInfo.phone=  values.contactInfo.phone.toString()
+   values.geoLoc = values.geoLoc.map(str => parseFloat(str)); 
+
 
     if (values.id) { 
          delete values.ratingCount
          delete values.reviewCount
-      // dispatch(updateEfType(values)); 
+      dispatch(updateFacility(values,values.id)); 
       console.log('Updating Facility:', values);
     } else {
          delete values.id; 
 
-      dispatch(createFacility(values));
+        dispatch(createFacility(values));
     }
-    //setDrawerOpen(false);
+    setDrawerOpen(false);
   };
 
   return (
@@ -282,7 +284,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             component="label" 
             htmlFor="isIndianType"
             sx={{color:values.isIndianType?'green':'gray'}}
-        >Open 24 Hours?
+        >Indian?
         </Typography>
     </Box>
 </Grid>
@@ -298,7 +300,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                             {...field}
                             label="Opening Time"
                             type="time"
-                            fullWidth
+                             fullWidth
                             InputLabelProps={{ shrink: true }}
                             error={meta.touched && !!meta.error}
                             helperText={meta.touched && meta.error}
@@ -321,8 +323,25 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                     )}
                 </Field>
             </Grid>
+
+
         </>
     )}
+
+               <Grid item xs={6} sm={6}>
+        <Field name="seatCapacity">
+            {({ field, meta }) => (
+                <TextField
+                    {...field}
+                    label="Seat Capacity"
+                    type="number"
+                    fullWidth
+                    error={meta.touched && !!meta.error}
+                    helperText={meta.touched && meta.error}
+                />
+            )}
+        </Field>
+    </Grid>
 
     {/* frequency */}
  <Grid item xs={12}>
@@ -347,20 +366,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         />
     </Grid>
 
-           <Grid item xs={6} sm={6}>
-        <Field name="seatCapacity">
-            {({ field, meta }) => (
-                <TextField
-                    {...field}
-                    label="Seat Capacity"
-                    type="number"
-                    fullWidth
-                    error={meta.touched && !!meta.error}
-                    helperText={meta.touched && meta.error}
-                />
-            )}
-        </Field>
-    </Grid>
+
 
     {/* Contact Information Divider */}
     <Grid item xs={12}>
@@ -405,7 +411,8 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                 <TextField
                     {...field}
                     label="Phone"
-                    type="number"
+                    // type="number"
+                    type="tel" 
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
@@ -583,7 +590,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             startIcon={<CheckCircleOutlineIcon />}
             fullWidth
             sx={{ py: 1.5, textTransform: 'none' }}
-            //  disabled={isSubmitting || !isValid} 
+             disabled={isSubmitting || !isValid} 
         >
             {isSubmitting ? 'Submitting...' : (item?.id ? 'Update Facility' : 'Create Facility')}
         </Button>

@@ -13,7 +13,7 @@ import { Add as AddIcon } from '@mui/icons-material';
 import { getRatings } from 'container/RatingContainer/slice';
 
 // Table Config for Ratings
-import { userFeedback } from 'utils/TableConfig';
+import { userRating } from 'utils/TableConfig';
 
 // Components
 import MainCard from 'ui-component/cards/MainCard';
@@ -43,7 +43,7 @@ export default function UserRating() {
   const count = ratingsList.length; // If you have totalCount in API, replace here
 
   // Table config
-  const { config, keys } = userFeedback;
+  const { config, keys } = userRating;
 
   // Dispatch ratings
   useEffect(() => {
@@ -130,9 +130,9 @@ export default function UserRating() {
         </Grid>
 
         {/* Actions Row */}
-        <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
-          {/* Add Button */}
-          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
+        <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Left Button */}
+          {/* <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
             <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' }, alignItems: 'center' }}>
               <Button
                 variant="outlined"
@@ -143,19 +143,24 @@ export default function UserRating() {
                 Add
               </Button>
             </Box>
-          </Grid>
+          </Grid> */}
 
           {/* Search Box */}
           <Grid item xs={12} sm={4} md={6} lg={6} xl={6}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
               <TextField
                 fullWidth
                 variant="outlined"
                 size="small"
-                placeholder="Search by feedback"
+                placeholder="Search by name"
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
+                onKeyDown={(e) => {
+                  if (!regex.test(e.key) && e.key !== 'Backspace') {
+                    e.preventDefault();
+                  }
+                }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -182,9 +187,9 @@ export default function UserRating() {
                   width: '180px',
                   py: 1,
                   borderRadius: '30px',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
+                  whiteSpace: 'nowrap', // 🚀 keeps text in one line
+                  textOverflow: 'ellipsis', // optional, trims if overflowing
+                  overflow: 'hidden', // optional, prevents bulge
                   '&:hover': {
                     color: '#fcf9f9 !important',
                     backgroundColor: '#3dcd58',

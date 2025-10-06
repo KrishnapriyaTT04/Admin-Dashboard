@@ -49,6 +49,9 @@ export default function Facility() {
   const [showXSLModal, setshowXSLModal] = useState(false);
 
    const facilityList = useSelector((state) => state.facility?.list || []);
+
+      let flattenedFacilityList =  [];
+
     // const facilityList = useSelector(selectFacilityList);
 
   const count = useSelector((state) => state.emission?.efTypeListCount || 0);
@@ -61,7 +64,8 @@ export default function Facility() {
   let countPagination = Math.ceil(count / 10);
   const { config, keys } = facilityHeads;
 
-    const flattenedFacilityList = facilityList.map(facility => ({
+  if(facilityList.length)
+     flattenedFacilityList = facilityList.map(facility => ({
     id: facility.id,
     title: facility.title,
     email: facility.contactInfo?.email || 'N/A',
@@ -98,9 +102,9 @@ export default function Facility() {
    let reqUrl =`facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
    let countUrl =`facilities/count`
    
-   
+        // dispatch(getFacilitiesCount(countUrl));
+
   dispatch(getFacilities(reqUrl));
-     dispatch(getFacilitiesCount(countUrl));
 
     console.log("Facilities in component:", facilityList);
 }, [dispatch]); 
@@ -237,7 +241,7 @@ const searchHandler = (e) => {
                 fullWidth
                 variant="outlined"
                 size="small"
-                placeholder="Search by name"
+                placeholder="Search by title"
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
