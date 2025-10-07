@@ -64,7 +64,7 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <FeedbackOutlinedIcon color="primary" sx={{ mr: 1 }} />
               <Typography variant="h6" fontWeight={600}>
-                Feedback
+                Rating
               </Typography>
             </Box>
 
@@ -75,11 +75,6 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 {item?.starRating ? `${Number(item.starRating)} / 5` : 'No rating provided'}
               </Typography>
             </Box>
-
-            {/* Comment */}
-            <Typography variant="body1" sx={{ color: 'text.secondary', mt: 1 }}>
-              {item?.comments || 'No comment provided.'}
-            </Typography>
 
             {/* Attachments */}
             {item?.attachments?.length > 0 && (
@@ -117,13 +112,7 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                   Created By
                 </Typography>
                 <Typography variant="body1">{item?.createdUser || item?.createdBy || 'N/A'}</Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Modified By
-                </Typography>
-                <Typography variant="body1">{item?.modifiedUser || item?.modifiedBy || 'N/A'}</Typography>
-              </Grid>
+              </Grid>   
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle2" color="text.secondary">
                   Created On
@@ -132,48 +121,10 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                   {item?.createdOn ? `${formatDate(item.createdOn)} ${formatTime(item.createdOn)}` : 'N/A'}
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Modified On
-                </Typography>
-                <Typography variant="body1">
-                  {item?.modifiedOn ? `${formatDate(item.modifiedOn)} ${formatTime(item.modifiedOn)}` : 'N/A'}
-                </Typography>
-              </Grid>
+             
             </Grid>
           </Paper>
 
-          {/* Facility Info Section */}
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-              border: '1px solid #e0e0e0',
-              borderRadius: 2
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <BusinessIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>
-                Facility Information
-              </Typography>
-            </Box>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Facility ID
-                </Typography>
-                <Typography variant="body1">{item?.facilityId || 'N/A'}</Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Facility Internal ID
-                </Typography>
-                <Typography variant="body1">{item?.facilityInternalId || 'N/A'}</Typography>
-              </Grid>
-            </Grid>
-          </Paper>
         </Box>
       </Box>
     </Drawer>
