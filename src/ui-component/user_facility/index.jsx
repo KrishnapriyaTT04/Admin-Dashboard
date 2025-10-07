@@ -27,6 +27,7 @@ import TableRows from 'utils/TableRows';
 import styles from '../common/style';
 import UpdateForm from './addFacility';
 import ViewFacilityDetail from './viewFacilityDetail';
+import UploadBulkFile from './exportFileUpload';
 import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
 
@@ -44,7 +45,8 @@ export default function Facility() {
   const [open, setOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showXSLModal, setshowXSLModal] = useState(false);
+  const [showXSLUploadModal, setshowXSLUploadModal] = useState(false);
+  const [showXSLModal, setShowXSLModal] = useState(false);
 
    const facilityList = useSelector((state) => state.facility?.list || []);
 
@@ -123,7 +125,7 @@ const searchHandler = (e) => {
 };
 
   function handleDownloadExcel() {
-    setshowXSLModal(true);
+    setShowXSLModal(true);
     // dispatch(fetchEmissionFactorTypeXSL({ limit: count }));
   }
 
@@ -144,7 +146,7 @@ const searchHandler = (e) => {
   }
 
   const closeXSLModal = () => {
-    setshowXSLModal(false);
+    setShowXSLModal(false);
   };
 
   const handleViewModal = (item) => {
@@ -162,6 +164,12 @@ const searchHandler = (e) => {
   const handleAddFormModal = (item) => {
     setFormOpen(true);
     setSelectedItem({});
+  };
+
+    const handleExcelModal = (item) => {
+        setShowXSLModal(true);
+    // showXSLUploadModal(true);
+    // setSelectedItem({});
   };
 
   const handlePageClick = (e) => {
@@ -246,7 +254,7 @@ const searchHandler = (e) => {
             <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
               <Button
                 variant="outlined"
-                onClick={handleDownloadExcel}
+                onClick={handleExcelModal}
                 startIcon={<FileDownloadOutlinedIcon />}
                 sx={{
                   color: '#242121',
@@ -302,7 +310,11 @@ const searchHandler = (e) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
+        {/* {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />} */}
+        {/* {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setOpen} item={selectedItem} />} */}
         {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
+
+        {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem} />}
         {formOpen && <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />}
         {showDeleteModal && (
           <ConfirmModal

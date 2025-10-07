@@ -14,7 +14,11 @@ const facilitySlice = createSlice({
         operationSuccess: false,
 
         listcountLoading:false,
-        listCount:0
+        listCount:0,
+
+        bulkLoading: false,
+        bulkError: null,
+        bulkSuccess: false,
     },
     reducers: {
         // === FETCH LIST ACTIONS ===
@@ -140,6 +144,30 @@ const facilitySlice = createSlice({
 
         // === UTILITY/RESET ACTIONS ===
 
+
+    uploadBulkFacilities: (state) => {
+            state.bulkLoading = true;
+            state.bulkError = null;
+            state.bulkSuccess = false;
+            // state.bulkResult = null;
+        },
+        uploadBulkFacilitiesSuccess: (state, action) => {
+            state.bulkLoading = false;
+            state.bulkSuccess = true;
+            // Optional: Store detailed response if the API provides it
+            // state.bulkResult = action.payload;
+            
+            // NOTE: If the bulk update impacts the list, the Saga should dispatch 
+            // getFacilities() next, which will refill state.list
+        },
+        uploadBulkFacilitiesFail: (state, action) => {
+            state.bulkLoading = false;
+            state.bulkError = {
+                message: action.payload.message || 'Bulk upload failed',
+                status: action.payload.status || 500
+            };
+        },
+
         resetFacilityOperationState: (state) => {
             state.operationLoading = false;
             state.operationError = null;
@@ -165,7 +193,11 @@ export const {
     resetFacilityOperationState,
     getFacilitiesCount,
     getFacilitiesCountSuccess,
-    getFacilitiesCountFail
+    getFacilitiesCountFail,
+
+    uploadBulkFacilities,
+    uploadBulkFacilitiesSuccess,
+    uploadBulkFacilitiesFail,
 } = facilitySlice.actions;
 
 // Selectors for easy access to state
@@ -177,6 +209,10 @@ export const selectOperationSuccess = (state) => state.facility.operationSuccess
 export const selectOperationError = (state) => state.facility.operationError;
 export const selectListcountLoading = (state) => state.facility.listcountLoading;
 export const selectListCount = (state) => state.facility.listCount;
+
+export const selectBulkLoading = (state) => state.facility.bulkLoading;
+export const selectBulkSuccess = (state) => state.facility.bulkSuccess;
+export const selectBulkError = (state) => state.facility.bulkError;
 
 
 export default facilitySlice.reducer;

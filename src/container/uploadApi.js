@@ -1,13 +1,24 @@
 import { put } from 'redux-saga/effects';
 import { Base64 } from 'js-base64';
+// import appConfig from '../config';
+import appConfig from '../config';
+
 
 function* uploadApi(value) {
   const token = appConfig.token;
   let authorization = value.authourization
-    ? value.authourization === 'Basic'
-      ? 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password)
-      : token
-    : token;
+    // ? value.authourization === 'Basic'
+    //   ? 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password)
+    //   : token
+    // : token;
+     if (value.authorization == 'Basic') {
+        authorization = 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password);
+      } else if (value.authorization == 'Bearer') {
+        authorization = 'Bearer ' + value.token;
+      } else {
+        authorization = token;
+      }
+    
 
   const authHeader = {
     Authorization: authorization

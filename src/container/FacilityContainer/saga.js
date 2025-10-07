@@ -2,7 +2,10 @@ import { takeEvery, call, put } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import commonApi from '../api'; // Your common API utility
+import commonApi from '../api'; 
+
+import uploadApi from 'container/uploadApi';  
+
 import appConfig from '../../config';
 import * as actionType from './slice'; // Assuming this imports all the facility actions
 
@@ -176,13 +179,63 @@ function* getFacilitiesCount(action) {
   }
 }
 
+
+function* uploadBulkFacilitiesSaga(action) {
+    const file = action.payload; // This is the File object from the UI
+    const token = JSON.parse(localStorage.getItem('klooToken'));
+    
+    // 1. Prepare FormData
+    const formData = new FormData();
+    // The key 'file' must match the field name your backend expects for the file
+    formData.append('file', file); 
+    
+    // 2. Prepare API parameters
+    const params = {
+      api: `${FACILITY_API_BASE}/facilities/import`,
+      method: 'POST', // Or 'PUT'/'PATCH', depending on your backend
+      body: formData,
+      // IMPORTANT: commonApi MUST NOT set 'Content-Type: application/json' 
+      // when 'body' is FormData. The browser handles 'multipart/form-data'.
+      successAction: actionType.uploadBulkFacilitiesSuccess(),
+      failAction: actionType.uploadBulkFacilitiesFail(),
+      authorization: 'Bearer',
+      token: `${token.accessToken}`,
+      // You might add a flag for file upload if your commonApi needs it
+      isFileUpload: true, 
+    };
+
+    try {
+        // 3. Call the API
+        const res = yield call(uploadApi, params);
+
+        // 4. Dispatch success
+        yield put(actionType.uploadBulkFacilitiesSuccess(res));
+        
+        // 5. Show notification and refresh the list
+        yield call(toast.success, 'Bulk facility update initiated successfully!', { autoClose: 3000 });
+        
+        // CRITICAL: After a bulk update, you must refetch the list to show the changes
+        // yield put(actionType.getFacilities()); 
+        
+    } catch (error) {
+        console.error("Bulk upload failed:", error);
+        
+        // 6. Dispatch failure and show error toast
+        yield put(actionType.uploadBulkFacilitiesFail({ 
+            message: error.message || 'Failed to upload and update facilities.', 
+            status: error.response?.status || 500 
+        }));
+        yield call(toast.error, `Bulk update failed: ${error.message || 'Server error.'}`, { autoClose: 5000 });
+    }
+}
 // --- Watcher Saga ---
 
 export default function* facilityActionWatcher() {
-  yield takeEvery(actionType.getFacilities.type, getFacilitiesSaga);
+   yield takeEvery(actionType.getFacilities.type, getFacilitiesSaga);
    yield takeEvery(actionType.createFacility.type, createFacilitySaga);
-  yield takeEvery(actionType.updateFacility.type, updateFacilitySaga);
-    yield takeEvery(actionType.getFacilitiesCount.type, getFacilitiesCount);
+   yield takeEvery(actionType.updateFacility.type, updateFacilitySaga);
+   yield takeEvery(actionType.getFacilitiesCount.type, getFacilitiesCount);
+   yield takeEvery(actionType.uploadBulkFacilities.type, uploadBulkFacilitiesSaga);
 
   
 }
