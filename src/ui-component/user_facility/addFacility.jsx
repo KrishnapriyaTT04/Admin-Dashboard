@@ -46,18 +46,21 @@ const validationSchema = Yup.object({
   seatCapacity: Yup.number().integer().min(0, 'Capacity cannot be negative'),
   remarks: Yup.string().max(500, 'Remarks must be under 500 characters'),
   status: Yup.string().required('Status is required'),
-  frequency: Yup.array().of(Yup.string())
+  frequency: Yup.array().of(Yup.string()),
 //   .min(1, 'Select at least one day'),
-  ,contactInfo: Yup.object({
-    name: Yup.string().required('Contact name is required'),
-    email: Yup.string().email('Invalid email format'),
-    phone: Yup.string().matches(/^[0-9]+$/, 'Phone must be only digits'),
-  }),
+//   ,contactInfo: Yup.object({
+//     name: Yup.string().required('Contact name is required'),
+//     email: Yup.string().email('Invalid email format'),
+//     phone: Yup.string().matches(/^[0-9]+$/, 'Phone must be only digits'),
+//   }),
+   contactName: Yup.string().required('Contact name is required'),
+    contactEmail: Yup.string().email('Invalid email format'),
+    contactPhone: Yup.string().matches(/^[0-9]+$/, 'Phone must be only digits'),
   city: Yup.string().required('City is required'),
   state: Yup.string().required('State is required'),
   stateId: Yup.string().required('State Id is required'),
   district: Yup.string(),
-  pinCode: Yup.string().matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
+  pinCode: Yup.string().required('Pin code  is required').matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
   landmark: Yup.string(),
   isIndianType:Yup.boolean(),
@@ -80,11 +83,14 @@ const getInitialValues = (item) => (
     remarks: item?.remarks || baseInitialValues.remarks,
     status: item?.status || baseInitialValues.status,
     frequency: item?.frequency || baseInitialValues.frequency,
-    contactInfo: {
-      name: item?.contactInfo?.name || baseInitialValues.contactInfo.name,
-      email: item?.contactInfo?.email || baseInitialValues.contactInfo.email,
-      phone: item?.contactInfo?.phone || baseInitialValues.contactInfo.phone,
-    },
+    // contactInfo: {
+    //   name: item?.contactInfo?.name || baseInitialValues.contactInfo.name,
+    //   email: item?.contactInfo?.email || baseInitialValues.contactInfo.email,
+    //   phone: item?.contactInfo?.phone || baseInitialValues.contactInfo.phone,
+    // },
+     contactName: item?.contactName || baseInitialValues.contactName,
+      contactEmail: item?.contactEmail || baseInitialValues.contactEmail,
+      contactPhone: item?.contactPhone || baseInitialValues.contactPhone,
     city: item?.city || baseInitialValues.city,
     state: item?.state || baseInitialValues.state,
     stateId: item?.stateId || baseInitialValues.stateId,
@@ -379,7 +385,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
     {/* contactInfo.name */}
     <Grid item xs={12} sm={6}>
-        <Field name="contactInfo.name">
+        <Field name="contactName">
             {({ field, meta }) => (
                 <TextField
                     {...field}
@@ -394,7 +400,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
     {/* contactInfo.email */}
     <Grid item xs={12} sm={6}>
-        <Field name="contactInfo.email">
+        <Field name="contactEmail">
             {({ field, meta }) => (
                 <TextField
                     {...field}
@@ -408,7 +414,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         </Field>
     </Grid>
        <Grid item xs={12} sm={6}>
-        <Field name="contactInfo.phone">
+        <Field name="contactPhone">
             {({ field, meta }) => (
                 <TextField
                     {...field}

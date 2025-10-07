@@ -65,14 +65,29 @@ const facilitySlice = createSlice({
             state.operationSuccess = false;
         },
         updateFacilitySuccess: (state, action) => {
-            state.operationLoading = false;
-            // IMPLEMENTED: Find the updated facility and replace it in the list
-            const index = state.list.findIndex(f => f.id === action.payload.id);
-            if (index !== -1) {
-                 // Redux Toolkit uses Immer, so direct mutation is safe
-                state.list[index] = action.payload;
-            }
-            state.operationSuccess = true;
+            // state.operationLoading = false;
+            // // IMPLEMENTED: Find the updated facility and replace it in the list
+            // const index = state.list.findIndex(f => f.id === action.payload.id);
+            // if (index !== -1) {
+            //      // Redux Toolkit uses Immer, so direct mutation is safe
+            //     state.list[index] = action.payload;
+            // }
+            // state.operationSuccess = true;
+
+             state.operationLoading = false;
+    
+    const index = state.list.findIndex(f => f.id === action.payload.id);
+    
+    if (index !== -1) {
+        // ✅ FIX: Force a new array reference using the spread operator
+        state.list = [
+            ...state.list.slice(0, index),        // Elements before the updated item
+            action.payload,                       // The new, updated item
+            ...state.list.slice(index + 1)        // Elements after the updated item
+        ];
+    }
+    
+    state.operationSuccess = true;
         },
         updateFacilityFail: (state, action) => {
             state.operationLoading = false;
