@@ -67,14 +67,27 @@ const TableRows = ({
   const style = styles(theme);
 
   const user = JSON.parse(localStorage.getItem('PsbUser'));
+  // Inside your TableRows component
+
   const cellContent = (keyItem, index, row) => {
+    // Check if the column key is 'starRating'
+    if (keyItem === 'starRating' && config[keyItem].type === 'number') {
+      return renderItem(
+        row[keyItem], // Use the raw value without +1 or padding
+        config[keyItem].type,
+        config[keyItem].res,
+        keyItem
+      );
+    } // Original logic for all other cells, including the problematic number formatting
+
     return renderItem(
       config[keyItem]?.label === 'Status'
         ? row.status
         : config[keyItem].type === 'number' && (row[keyItem] === undefined || row[keyItem] === '')
           ? '00'
           : config[keyItem].type === 'number' && (row[keyItem] !== undefined || row[keyItem] !== '')
-            ? String(Number(row[keyItem]) + 1).padStart(2, '0')
+            ? // If it's not starRating, apply the existing (and possibly intentional) +1 and padding logic
+              String(Number(row[keyItem]) + 1).padStart(2, '0')
             : config[keyItem].type === 'custom'
               ? row[config[keyItem].res]
               : row[keyItem],
@@ -109,11 +122,9 @@ const TableRows = ({
               padding: '10px !important'
             }}
           >
-         {slNo ? (
-        <TableCell sx={{ width: '23px', padding: '10px !important' }}>
-            {tableLimit * (currentPage - 1) + i + 1}
-        </TableCell>
-    ) : null}
+            {slNo ? (
+              <TableCell sx={{ width: '23px', padding: '10px !important' }}>{tableLimit * (currentPage - 1) + i + 1}</TableCell>
+            ) : null}
             {/* {slNo ? <TableCell sx={{ width: '23px', padding: '10px !important' }}>{10 * (currentPage - 1) + i + 1}</TableCell> : null} */}
             {keys.map((keyItem, index) => {
               if (!config[keyItem] || hideArray.includes(config[keyItem].label)) {
@@ -126,13 +137,10 @@ const TableRows = ({
                     textTransform: 'capitalize',
                     ...(keyItem === 'projectId' ? {} : { maxWidth: '155px' }),
                     padding: '10px !important',
-                    textAlign:config[keyItem]?.align==='right'?'right':'left'
+                    textAlign: config[keyItem]?.align === 'right' ? 'right' : 'left'
                   }}
                 >
-
-                      {
-              
-            }
+                  {}
                   <Tooltip
                     title={keyItem === 'status' || keyItem === 'revision' ? '' : String(cellContent(keyItem, index, row)) || ''}
                     placement="top"

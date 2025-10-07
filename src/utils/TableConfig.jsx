@@ -18,6 +18,7 @@ export const userFeedback = {
     }
   }
 };
+
 export const userRating = {
   keys: ['createdOn', 'createdUser', 'comments', 'starRating'],
   config: {
@@ -37,7 +38,7 @@ export const userRating = {
       class: 'cmn_Cap commonDesc'
     },
     starRating: {
-      label: 'Count', // The column title
+      label: 'Rating', 
       type: 'number',
       class: 'cmn_Cap commonDesc'
     }
