@@ -29,6 +29,7 @@ import styles from '../common/style';
 // import UpdateEfTypeForm from './updateForm';
 // import UpdateForm from './addFacility'
 import UpdateForm from './addFacility';
+import ViewFacilityDetail from './viewFacilityDetail';
 import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
 
@@ -304,7 +305,7 @@ const searchHandler = (e) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
-        {/* {open && <EFTypeView drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />} */}
+        {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
         {formOpen && <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />}
         {showDeleteModal && (
           <ConfirmModal
