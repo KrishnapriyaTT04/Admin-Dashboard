@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  TableBody, // MUI TableBody
-  TableRow, // MUI TableRow
-  TableCell, // MUI TableCell
-  IconButton, // For action buttons
-  Tooltip, // MUI Tooltip
-  Box, // For flex container
+  TableBody, 
+  TableRow, 
+  TableCell, 
+  IconButton,
+  Tooltip,
+  Box,
   Typography,
   useTheme
 } from '@mui/material';
@@ -67,18 +67,17 @@ const TableRows = ({
   const style = styles(theme);
 
   const user = JSON.parse(localStorage.getItem('PsbUser'));
-  // Inside your TableRows component
-
+ 
   const cellContent = (keyItem, index, row) => {
-    // Check if the column key is 'starRating'
+   
     if (keyItem === 'starRating' && config[keyItem].type === 'number') {
       return renderItem(
-        row[keyItem], // Use the raw value without +1 or padding
+        row[keyItem], 
         config[keyItem].type,
         config[keyItem].res,
         keyItem
       );
-    } // Original logic for all other cells, including the problematic number formatting
+    } 
 
     return renderItem(
       config[keyItem]?.label === 'Status'
@@ -86,7 +85,7 @@ const TableRows = ({
         : config[keyItem].type === 'number' && (row[keyItem] === undefined || row[keyItem] === '')
           ? '00'
           : config[keyItem].type === 'number' && (row[keyItem] !== undefined || row[keyItem] !== '')
-            ? // If it's not starRating, apply the existing (and possibly intentional) +1 and padding logic
+            ? 
               String(Number(row[keyItem]) + 1).padStart(2, '0')
             : config[keyItem].type === 'custom'
               ? row[config[keyItem].res]
@@ -116,7 +115,7 @@ const TableRows = ({
           <TableRow
             key={i}
             sx={{
-              backgroundColor: i % 2 === 0 ? '#f5f5f5' : '#ffffff', // Light gray for even, white for odd
+              backgroundColor: i % 2 === 0 ? '#f5f5f5' : '#ffffff', 
               whiteSpace: 'nowrap',
               overflow: 'ellipsis',
               padding: '10px !important'
@@ -148,13 +147,13 @@ const TableRows = ({
                     componentsProps={{
                       tooltip: {
                         sx: {
-                          textTransform: 'capitalize' // Apply capitalize directly to the tooltip content
+                          textTransform: 'capitalize' 
                         }
                       }
                     }}
                   >
                     <Typography
-                      variant="body1" // Or 'body1', 'caption', etc., depending on desired text style
+                      variant="body1" 
                       sx={style.tableRowLabel}
                     >
                       {cellContent(keyItem, index, row)}
@@ -294,7 +293,7 @@ const TableRows = ({
               </TableCell>
             )}
           </TableRow>
-        )) /* No whitespace here */
+        )) 
       ) : (
         <>
           {' '}

@@ -28,8 +28,8 @@ export default function UserRating() {
   const cmnstyle = cmnStyles(theme);
   const dispatch = useDispatch();
 
-  const [page, setPage] = useState(0); // 0-based index
-  const [limit, setLimit] = useState(10); // items per page
+  const [page, setPage] = useState(0); 
+  const [limit, setLimit] = useState(10); 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
@@ -73,7 +73,7 @@ export default function UserRating() {
   const displayedData = paginatedData.map((item) => {
     return {
       ...item,
-      starRating: item.starRating, // keep as number, do not pad
+      starRating: item.starRating, 
     };
   });
    paginatedData.forEach((item, index) => {
