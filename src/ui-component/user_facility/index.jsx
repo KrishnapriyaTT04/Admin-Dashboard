@@ -90,15 +90,7 @@ let countPagination = Math.ceil(count / limit);
     }
 };
 
-  // useEffect(() => {
-  //   // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
-    
-  //   dispatch(getFacilities())
-
  
-  // }, [searchQuery]);
-
-// const facilityList = useSelector(selectFacilityList);
   useEffect(() => {
    //deleted false
    let reqUrl =`facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`

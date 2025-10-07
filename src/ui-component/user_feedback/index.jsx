@@ -36,6 +36,8 @@ export default function Type() {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
+      const [limit, setLimit] = useState(5);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
@@ -226,6 +228,7 @@ export default function Type() {
               keys={keys}
               config={config}
               currentPage={page + 1}
+              tableLimit={limit} 
               hasView={true}
               hasEdit={false}
               hasDelete={false}
