@@ -32,7 +32,7 @@ const baseInitialValues = {
 //   contactInfo: { name: '', email: '', phone: '' },
   contactName:'',contactEmail:'',contactPhone:'',
   city: '', state: 'kerala',stateId: 'kl', district: '', pinCode: '', geoLoc: ['', ''], landmark: '',
-  indianType:false, europeanType:false,
+  indianType:false, europeanType:false,address1:'',address2:''
 };
 
 // --- Validation Schema (Correct as is) ---
@@ -66,6 +66,8 @@ const validationSchema = Yup.object({
   landmark: Yup.string(),
   indianType:Yup.boolean(),
   europeanType:Yup.boolean(),
+  address1:Yup.string().required('address is required'),
+  address2:Yup.string(),
 });
 
 // --- Function to Map Item Data to Formik Values (Correct as is) ---
@@ -104,6 +106,8 @@ const getInitialValues = (item) => (
     europeanType:item?.europeanType ?? baseInitialValues.europeanType,
     ratingCount: item?.ratingCount ?? baseInitialValues.ratingCount,
     reviewCount:item?.reviewCount ?? baseInitialValues.reviewCount,
+    address1:item?.address1 || baseInitialValues.address1,
+     address2:item?.address2 || baseInitialValues.address2,
     id: item?.id || '', 
 });
 
@@ -439,6 +443,41 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                     label="Phone"
                     // type="number"
                     type="tel" 
+                    fullWidth
+                    error={meta.touched && !!meta.error}
+                    helperText={meta.touched && meta.error}
+                />
+            )}
+        </Field>
+    </Grid>
+
+    {/* Address Information  */}
+    <Grid item xs={12}>
+        <Box sx={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginTop: '10px' }}>
+            <Typography variant="h5">Address</Typography>
+        </Box>
+    </Grid>
+
+    {/* contactInfo.name */}
+    <Grid item xs={12} sm={6}>
+        <Field name="address1">
+            {({ field, meta }) => (
+                <TextField
+                    {...field}
+                    label="Address 1"
+                    fullWidth
+                    error={meta.touched && !!meta.error}
+                    helperText={meta.touched && meta.error}
+                />
+            )}
+        </Field>
+    </Grid>
+        <Grid item xs={12} sm={6}>
+        <Field name="address2">
+            {({ field, meta }) => (
+                <TextField
+                    {...field}
+                    label="Address 2"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}

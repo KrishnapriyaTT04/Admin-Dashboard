@@ -51,13 +51,20 @@ const UploadBulkFile = ({ drawerOpen, setDrawerOpen }) => {
     //   onClose={() => setOpen(false)} 
             onClose={() => setDrawerOpen(false)}
 
-      // ... (PaperProps)
+      PaperProps={{
+            sx: {
+              width: { xs: '100%', sm: '80%', md: '60%', lg: '1100px' },
+              maxWidth: '70vw',
+              backgroundColor: '#f5f5f5',
+              color:'gray'
+            }
+          }}
     >
       <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
         
         {/* Header */}
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+          <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.text.secondary }}>
             Bulk Facility Update
           </Typography>
           <IconButton onClick={() => setDrawerOpen(false)}  size="large">
