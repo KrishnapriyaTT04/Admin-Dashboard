@@ -36,7 +36,7 @@ function* commonApi(value) {
       headers: value.authourization !== null ? authHeader : noauthHeader,
       body: value.body ? value.body : null
     });
-        console.log("--------------------response----cmn-------------",response.ok);
+        console.log("--------------------response----cmn-------------",response);
         
     if (!response.ok) {
       throw response;
@@ -44,8 +44,18 @@ function* commonApi(value) {
       
         console.log("------------1--------response----cmn--else-----------");
 
-      const resJSON = yield response.json();
-        console.log("--------------------response----cmn--ok-----------",resJSON);
+ let resJSON = null;
+
+    // ✅ FIX: Check for 204 No Content
+    if (response.status === 204) {
+        // Successful update with no body. Set payload to null or a success marker.
+        resJSON = {}; 
+        
+    } else {
+        // Standard success (200, 201, etc.). Read the JSON body.
+        resJSON = yield response.json(); 
+    }
+         console.log("--------------------response----cmn--ok-----------",resJSON);
 
       yield put({
         type: `${value.successAction.type}`,

@@ -29,9 +29,10 @@ const dayMap = [
 const baseInitialValues = {
   title: '', category: '', isPaid: false, facilityType: '', openingTime: '', closingTime: '', is24H: false,
   seatCapacity: 0,ratingCount:0,reviewCount:0, remarks: '', status: 'active', frequency: [],
-  contactInfo: { name: '', email: '', phone: '' },
+//   contactInfo: { name: '', email: '', phone: '' },
+  contactName:'',contactEmail:'',contactPhone:'',
   city: '', state: 'kerala',stateId: 'kl', district: '', pinCode: '', geoLoc: ['', ''], landmark: '',
-  isIndianType:false
+  indianType:false, europeanType:false,
 };
 
 // --- Validation Schema (Correct as is) ---
@@ -63,7 +64,8 @@ const validationSchema = Yup.object({
   pinCode: Yup.string().required('Pin code  is required').matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
   landmark: Yup.string(),
-  isIndianType:Yup.boolean(),
+  indianType:Yup.boolean(),
+  europeanType:Yup.boolean(),
 });
 
 // --- Function to Map Item Data to Formik Values (Correct as is) ---
@@ -73,7 +75,7 @@ const getInitialValues = (item) => (
     
     ...baseInitialValues, 
     title: item?.title || baseInitialValues.title,
-    category: item?.category || baseInitialValues.category,
+    category: (item?.category ? String(item.category).toLowerCase() : baseInitialValues.category),
     isPaid: item?.isPaid ?? baseInitialValues.isPaid,
     facilityType: item?.facilityType || baseInitialValues.facilityType,
     openingTime: item?.openingTime || baseInitialValues.openingTime,
@@ -98,7 +100,8 @@ const getInitialValues = (item) => (
     pinCode: item?.pinCode || baseInitialValues.pinCode,
     geoLoc: item?.geoLoc?.length === 2 ? item.geoLoc : baseInitialValues.geoLoc,
     landmark: item?.landmark || baseInitialValues.landmark,
-    isIndianType:item?.isIndianType ?? baseInitialValues.isIndianType,
+    indianType:item?.indianType ?? baseInitialValues.indianType,
+    europeanType:item?.europeanType ?? baseInitialValues.europeanType,
     ratingCount: item?.ratingCount ?? baseInitialValues.ratingCount,
     reviewCount:item?.reviewCount ?? baseInitialValues.reviewCount,
     id: item?.id || '', 
@@ -121,7 +124,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                     
 
 
-   values.contactInfo.phone=  values.contactInfo.phone.toString()
+//    values.contactInfo.phone=  values.contactInfo.phone.toString()
    values.geoLoc = values.geoLoc.map(str => parseFloat(str)); 
 
 
@@ -253,7 +256,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
 
     {/* isPaid Checkbox */}
- <Grid item xs={4}>
+ <Grid item xs={3}>
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
         <FormikSwitch name="isPaid" /> 
         <Typography 
@@ -268,7 +271,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
     {/* is24H Checkbox */}
 
-     <Grid item xs={4}>
+     <Grid item xs={3}>
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
         <FormikSwitch name="is24H" /> 
         <Typography 
@@ -284,15 +287,30 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
        {/* isIndian */}
 
-     <Grid item xs={4}>
+     <Grid item xs={3}>
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-        <FormikSwitch name="isIndianType" /> 
+        <FormikSwitch name="indianType" /> 
         <Typography 
             variant="body1" 
             component="label" 
-            htmlFor="isIndianType"
-            sx={{color:values.isIndianType?'green':'gray'}}
+            htmlFor="indianType"
+            sx={{color:values.indianType?'green':'gray'}}
         >Indian?
+        </Typography>
+    </Box>
+</Grid>
+
+       {/* european */}
+
+     <Grid item xs={3}>
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+        <FormikSwitch name="europeanType" /> 
+        <Typography 
+            variant="body1" 
+            component="label" 
+            htmlFor="europeanType"
+            sx={{color:values.europeanType?'green':'gray'}}
+        >European?
         </Typography>
     </Box>
 </Grid>

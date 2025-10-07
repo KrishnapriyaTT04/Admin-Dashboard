@@ -25,9 +25,6 @@ import TableHead from 'utils/TableHead';
 import TableRows from 'utils/TableRows';
 // import ConfirmModal from 'views/common/ConfirmModal';
 import styles from '../common/style';
-// import EFTypeView from './efTypeView';
-// import UpdateEfTypeForm from './updateForm';
-// import UpdateForm from './addFacility'
 import UpdateForm from './addFacility';
 import ViewFacilityDetail from './viewFacilityDetail';
 import { Add as AddIcon } from '@mui/icons-material';
@@ -66,15 +63,15 @@ export default function Facility() {
 let countPagination = Math.ceil(count / limit); 
   const { config, keys } = facilityHeads;
 
-  if(facilityList.length)
+  // if(facilityList.length)
     
-     flattenedFacilityList = facilityList.map(facility => ({
-    id: facility.id,
-    title: facility.title,
-    email: facility.contactInfo?.email || 'N/A',
-    phone: facility.contactInfo?.phone || 'N/A',
-    // include other fields you need
-  }));
+  //    flattenedFacilityList = facilityList.map(facility => ({
+  //   id: facility.id,
+  //   title: facility.title,
+  //   email: facility.contactInfo?.email || 'N/A',
+  //   phone: facility.contactInfo?.phone || 'N/A',
+  //   // include other fields you need
+  // }));
 
 
   const searchfilterObject = {
@@ -283,7 +280,7 @@ const searchHandler = (e) => {
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
-              data={flattenedFacilityList}
+              data={facilityList}
               keys={keys}
               config={config}
               currentPage={page + 1}
