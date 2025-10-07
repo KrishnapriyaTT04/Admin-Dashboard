@@ -148,7 +148,7 @@ function* updateFacilitySaga(action,facilityId) {
 
 function* getFacilitiesCount(action) {
 
-    console.log("----------------------SSSS-------------------",action);
+    console.log("===SSSS===",action);
   try {
     const params = {
       api: `${FACILITY_API_BASE}/${action.payload}`, 
@@ -159,8 +159,7 @@ function* getFacilitiesCount(action) {
     };
     
     const res = yield call(commonApi, params);
-    console.log("---------------res----------------------",res);
-    
+    console.log("===resCount===",res);
     if (res) {
       yield put(actionType.getFacilitiesSuccess(res)); 
     } else {

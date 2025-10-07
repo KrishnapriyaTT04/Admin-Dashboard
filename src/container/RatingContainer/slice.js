@@ -5,7 +5,8 @@ const ratingSlice = createSlice({
     initialState: {
         list: [],          // Stores the list of ratings
         listLoading: false, // Tracks loading state
-        listError: null,    // Stores any errors
+        listError: null,
+        listCount: 0
     },
     reducers: {
 
@@ -44,7 +45,19 @@ const ratingSlice = createSlice({
          */
         resetRatingListError: (state) => {
             state.listError = null;
-        }
+        },
+
+        getRatingCount: (state) => {
+            state.listLoading = true;
+            
+        },
+        getRatingCountSuccess: (state, action) => {
+            state.listLoading = false;
+            state.listCount = action.payload.count;
+        },
+        getRatingCountFail: (state, action) => {
+            state.listLoading = false;
+        },
     }
 });
 
@@ -53,7 +66,10 @@ export const {
     getRatings,
     getRatingsSuccess,
     getRatingsFail,
-    resetRatingListError
+    resetRatingListError,
+    getRatingCount,
+    getRatingCountSuccess,
+    getRatingCountFail
 } = ratingSlice.actions;
 
 // Export selectors for accessing state

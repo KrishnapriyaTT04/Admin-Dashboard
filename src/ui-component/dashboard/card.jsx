@@ -26,7 +26,7 @@ const Card = ({ color, bgTheme, title, count, percentage, isLoss, icon }) => {
           {title}
         </Typography>
         <Grid item>
-          <Typography variant="h4" color="inherit">
+          <Typography variant="h4" sx={{ color: 'black', fontWeight: 'bold' }}>
             {count}
           </Typography>
         </Grid>

@@ -6,7 +6,7 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/authGuard';
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/index')));
+const DashboardDefault = Loadable(lazy(() => import('ui-component/dashboard')));
 const NopageFound = Loadable(lazy(() => import('ui-component/common/no-page/NoPage')));
 const UserManagementPage = Loadable(lazy(() => import('ui-component/user_management/index')));
 const UserFeedbackPage = Loadable(lazy(() => import('ui-component/user_feedback/index')));

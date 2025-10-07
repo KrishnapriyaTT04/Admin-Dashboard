@@ -6,6 +6,7 @@ const reportIssueSlice = createSlice({
         list: [],
         listLoading: false,
         listError: null,
+        listCount:0
     },
     reducers: {
       
@@ -44,7 +45,20 @@ const reportIssueSlice = createSlice({
          */
         resetIssueReportListError: (state) => {
             state.listError = null;
-        }
+        },
+
+
+        getIssuesCount: (state) => {
+            state.listLoading = true;
+            
+        },
+        getIssuesCountSuccess: (state, action) => {
+            state.listLoading = false;
+            state.listCount = action.payload.count;
+        },
+        getIssuesCountFail: (state, action) => {
+            state.listLoading = false;
+        },
         
     }
 });
@@ -54,7 +68,10 @@ export const {
     getIssueReports, 
     getIssueReportsSuccess, 
     getIssueReportsFail,
-    resetIssueReportListError
+    resetIssueReportListError,
+    getIssuesCount,
+    getIssuesCountSuccess,
+    getIssuesCountFail
 } = reportIssueSlice.actions;
 
 // Export selectors for easily accessing state in components

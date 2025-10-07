@@ -6,6 +6,7 @@ const userSlice = createSlice({
         list: [],
         listLoading: false,
         listError: null,
+         listCount:0
     },
     reducers: {
       
@@ -38,7 +39,19 @@ const userSlice = createSlice({
 
         resetUserListError: (state) => {
             state.listError = null;
-        }
+        },
+
+        getUserCount: (state) => {
+            state.listLoading = true;
+            
+        },
+        getUserCountSuccess: (state, action) => {
+            state.listLoading = false;
+            state.listCount = action.payload.count; 
+        },
+        getUserCountFail: (state, action) => {
+            state.listLoading = false;
+        },
         
     }
 });
@@ -47,7 +60,10 @@ export const {
     getUsers, 
     getUsersSuccess, 
     getUsersFail,
-    resetUserListError
+    resetUserListError,
+    getUserCount,
+    getUserCountSuccess,
+    getUserCountFail
 } = userSlice.actions;
 
 export const selectUserList = (state) => state.user.list;

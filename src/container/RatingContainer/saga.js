@@ -59,10 +59,41 @@ function* getRatingsSaga() {
     }
 }
 
-/**
- * Watcher Saga
- */
+
+function* getRatingCount() {
+
+  try {
+    const params = {
+      api: `${RATING_API_BASE}/feedbacks/count`, 
+      method: 'GET',
+      successAction: actionType.getRatingCountSuccess(),
+      failAction: actionType.getRatingCountFail(),
+      authourization: `Bearer`
+    };    
+    
+    const res = yield call(commonApi, params);
+    
+    console.log("==res", res);
+    
+   
+    if (res) {
+      yield put(actionType.getRatingCountSuccess(res)); 
+    } else {
+      throw new Error('Invalid response data structure for feedback list.');
+    }
+  } catch (error) {
+    console.error('Fetch Feedback failed:', error);
+    yield put(actionType.getRatingCountFail({ 
+      message: error.message || 'Failed to fetch Feedback.', 
+      status: error.response?.status || 500 
+    }));
+    yield call(toast.error, 'Failed to load feedback list.', { autoClose: 3000 });
+  }
+}
+
+
 export default function* ratingWatcher() {
     // Watches for getRatings action and triggers getRatingsSaga
     yield takeEvery(actionType.getRatings.type, getRatingsSaga);
+    yield takeEvery(actionType.getRatingCount.type, getRatingCount);
 }

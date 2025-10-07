@@ -1,7 +1,7 @@
-import { IconLayoutDashboard, IconScale, IconReceipt2, IconShieldCheck, IconClockHour1, IconFileImport, IconUserExclamation } from '@tabler/icons-react';
+import { IconLayoutDashboard, IconScale, IconReceipt2, IconMessageCircle , IconStar, IconAlertTriangle, IconShieldCheck, IconClockHour1, IconFileImport, IconUserExclamation } from '@tabler/icons-react';
 
 // constant
-const icons = { IconLayoutDashboard, IconScale, IconReceipt2, IconShieldCheck, IconClockHour1, IconFileImport, IconUserExclamation };
+const icons = { IconLayoutDashboard, IconScale, IconReceipt2, IconStar,  IconMessageCircle, IconAlertTriangle, IconShieldCheck, IconClockHour1, IconFileImport, IconUserExclamation };
 
 const RoleMenu = {
   id: 'dashboard',
@@ -16,31 +16,6 @@ const RoleMenu = {
       icon: icons.IconLayoutDashboard,
       breadcrumbs: false
     },
-    // {
-    //   id: 'rfq',
-    //   title: 'RFQ',
-    //   type: 'item',
-    //   url: '/rfq',
-    //   icon: icons.IconLayoutDashboard,
-    //   breadcrumbs: false
-    // },
-    // {
-    //   id: 'jobOrder',
-    //   title: 'Job Orders',
-    //   type: 'item',
-    //   url: '/jobOrder',
-    //   icon: icons.IconScale,
-    //   breadcrumbs: false
-    // },
-
-    // {
-    //   id: 'myCustomers',
-    //   title: 'My Customers',
-    //   type: 'item',
-    //   url: '/myCustomers',
-    //   icon: icons.IconClockHour1,
-    //   breadcrumbs: false
-    // },
     {
       id: 'facility',
       title: 'Facility',
@@ -63,7 +38,7 @@ const RoleMenu = {
       title: 'User Reported',
       type: 'item',
       url: '/reportedIssues',
-      icon: icons.IconReceipt2,
+      icon: icons.IconAlertTriangle,
       breadcrumbs: false
     },
     {
@@ -71,7 +46,7 @@ const RoleMenu = {
       title: 'User Feedback',
       type: 'item',
       url: '/userfeedback',
-      icon: icons.IconReceipt2,
+      icon: icons.IconMessageCircle ,
       breadcrumbs: false
     },
         {
@@ -79,7 +54,7 @@ const RoleMenu = {
       title: 'User Rating',
       type: 'item',
       url: '/rating',
-      icon: icons.IconReceipt2,
+      icon: icons.IconStar,
       breadcrumbs: false
     },
     
