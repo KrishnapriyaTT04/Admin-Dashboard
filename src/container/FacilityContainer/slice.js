@@ -25,7 +25,7 @@ const facilitySlice = createSlice({
         },
         getFacilitiesSuccess: (state, action) => {
             state.listLoading = false;
-            state.list = action.payload; // Payload is the array of facilities
+            state.list = action.payload; 
             state.listError = null;
         },
         getFacilitiesFail: (state, action) => {
@@ -35,6 +35,8 @@ const facilitySlice = createSlice({
                 status: action.payload.status || 500
             };
         },
+
+
 
         // === CREATE (ADD) ACTIONS ===
 

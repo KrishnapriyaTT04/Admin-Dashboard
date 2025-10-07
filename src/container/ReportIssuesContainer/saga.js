@@ -52,6 +52,37 @@ function* getIssueReportsSaga(action) {
 }
 
 
+function* getIssuesCount() {
+    const token = JSON.parse(localStorage.getItem('klooToken'));
+    
+  try {
+    const params = {
+      api: `${ISSUE_API_BASE}/issues/count`, 
+      method: 'GET',
+      successAction: actionType.getIssuesCountSuccess(),
+      failAction: actionType.getIssuesCountFail(),
+      authourization: `Bearer`,
+      token: `${token?.accessToken}`
+
+    };
+    
+    const res = yield call(commonApi, params);
+    console.log("===resCount===",res);
+    if (res) {
+      yield put(actionType.getIssuesCountSuccess(res)); 
+    } else {
+      throw new Error('Invalid response data structure for issue list.');
+    }
+  } catch (error) {
+    console.error('Fetch Issues failed:', error);
+    yield put(actionType.getIssuesCountFail({ 
+      message: error.message || 'Failed to fetch Issues.', 
+      status: error.response?.status || 500 
+    }));
+    yield call(toast.error, 'Failed to load issue list.', { autoClose: 3000 });
+  }
+}
+
 // ====================================================================
 // Watcher Saga
 // ====================================================================
@@ -59,5 +90,6 @@ function* getIssueReportsSaga(action) {
 export default function* issueReportActionWatcher() {
   // Listen for the action types defined in your reportIssueSlice.js
   yield takeEvery(actionType.getIssueReports.type, getIssueReportsSaga);
+  yield takeEvery(actionType.getIssuesCount.type, getIssuesCount);
  
 }
