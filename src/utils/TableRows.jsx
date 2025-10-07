@@ -32,6 +32,7 @@ const TableRows = ({
   keys = [],
   config,
   currentPage,
+  tableLimit,
   handleViewModel,
   handleFormModal,
   handleDeleteModal,
@@ -108,8 +109,12 @@ const TableRows = ({
               padding: '10px !important'
             }}
           >
-        
-            {slNo ? <TableCell sx={{ width: '23px', padding: '10px !important' }}>{10 * (currentPage - 1) + i + 1}</TableCell> : null}
+         {slNo ? (
+        <TableCell sx={{ width: '23px', padding: '10px !important' }}>
+            {tableLimit * (currentPage - 1) + i + 1}
+        </TableCell>
+    ) : null}
+            {/* {slNo ? <TableCell sx={{ width: '23px', padding: '10px !important' }}>{10 * (currentPage - 1) + i + 1}</TableCell> : null} */}
             {keys.map((keyItem, index) => {
               if (!config[keyItem] || hideArray.includes(config[keyItem].label)) {
                 return null;

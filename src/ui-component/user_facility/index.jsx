@@ -66,6 +66,7 @@ let countPagination = Math.ceil(count / limit);
   const { config, keys } = facilityHeads;
 
   if(facilityList.length)
+    
      flattenedFacilityList = facilityList.map(facility => ({
     id: facility.id,
     title: facility.title,
@@ -174,20 +175,10 @@ const searchHandler = (e) => {
   };
 
   const handlePageClick = (e) => {
-    // e.selected is typically the 0-based index of the new page (0, 1, 2, ...)
     const selectedPage = e.selected; 
-    
-    // 1. Calculate the new skip value based on the current limit
-    // If limit is 5: Page 0 (0*5=0), Page 1 (1*5=5), Page 2 (2*5=10)
     const newSkip = selectedPage * limit;
-
-    // 2. Set the new page index in the state
     setPage(selectedPage); 
-
-    // 3. Construct the URL with the correct, calculated values
     let reqUrl = `facilities?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
-    
-    // 4. Dispatch the action
     dispatch(getFacilities(reqUrl));
 };
 
@@ -303,6 +294,7 @@ const searchHandler = (e) => {
               keys={keys}
               config={config}
               currentPage={page + 1}
+              tableLimit={limit} 
               hasView={true}
               hasEdit={true}
               hasDelete={true}
