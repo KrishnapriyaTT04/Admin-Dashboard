@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  TableBody, // MUI TableBody
-  TableRow, // MUI TableRow
-  TableCell, // MUI TableCell
-  IconButton, // For action buttons
-  Tooltip, // MUI Tooltip
-  Box, // For flex container
+  TableBody, 
+  TableRow, 
+  TableCell, 
+  IconButton,
+  Tooltip,
+  Box,
   Typography,
   useTheme
 } from '@mui/material';
@@ -67,14 +67,26 @@ const TableRows = ({
   const style = styles(theme);
 
   const user = JSON.parse(localStorage.getItem('PsbUser'));
+ 
   const cellContent = (keyItem, index, row) => {
+   
+    if (keyItem === 'starRating' && config[keyItem].type === 'number') {
+      return renderItem(
+        row[keyItem], 
+        config[keyItem].type,
+        config[keyItem].res,
+        keyItem
+      );
+    } 
+
     return renderItem(
       config[keyItem]?.label === 'Status'
         ? row.status
         : config[keyItem].type === 'number' && (row[keyItem] === undefined || row[keyItem] === '')
           ? '00'
           : config[keyItem].type === 'number' && (row[keyItem] !== undefined || row[keyItem] !== '')
-            ? String(Number(row[keyItem]) + 1).padStart(2, '0')
+            ? 
+              String(Number(row[keyItem]) + 1).padStart(2, '0')
             : config[keyItem].type === 'custom'
               ? row[config[keyItem].res]
               : row[keyItem],
@@ -103,17 +115,15 @@ const TableRows = ({
           <TableRow
             key={i}
             sx={{
-              backgroundColor: i % 2 === 0 ? '#f5f5f5' : '#ffffff', // Light gray for even, white for odd
+              backgroundColor: i % 2 === 0 ? '#f5f5f5' : '#ffffff', 
               whiteSpace: 'nowrap',
               overflow: 'ellipsis',
               padding: '10px !important'
             }}
           >
-         {slNo ? (
-        <TableCell sx={{ width: '23px', padding: '10px !important' }}>
-            {tableLimit * (currentPage - 1) + i + 1}
-        </TableCell>
-    ) : null}
+            {slNo ? (
+              <TableCell sx={{ width: '23px', padding: '10px !important' }}>{tableLimit * (currentPage - 1) + i + 1}</TableCell>
+            ) : null}
             {/* {slNo ? <TableCell sx={{ width: '23px', padding: '10px !important' }}>{10 * (currentPage - 1) + i + 1}</TableCell> : null} */}
             {keys.map((keyItem, index) => {
               if (!config[keyItem] || hideArray.includes(config[keyItem].label)) {
@@ -126,13 +136,10 @@ const TableRows = ({
                     textTransform: 'capitalize',
                     ...(keyItem === 'projectId' ? {} : { maxWidth: '155px' }),
                     padding: '10px !important',
-                    textAlign:config[keyItem]?.align==='right'?'right':'left'
+                    textAlign: config[keyItem]?.align === 'right' ? 'right' : 'left'
                   }}
                 >
-
-                      {
-              
-            }
+                  {}
                   <Tooltip
                     title={keyItem === 'status' || keyItem === 'revision' ? '' : String(cellContent(keyItem, index, row)) || ''}
                     placement="top"
@@ -140,13 +147,13 @@ const TableRows = ({
                     componentsProps={{
                       tooltip: {
                         sx: {
-                          textTransform: 'capitalize' // Apply capitalize directly to the tooltip content
+                          textTransform: 'capitalize' 
                         }
                       }
                     }}
                   >
                     <Typography
-                      variant="body1" // Or 'body1', 'caption', etc., depending on desired text style
+                      variant="body1" 
                       sx={style.tableRowLabel}
                     >
                       {cellContent(keyItem, index, row)}
@@ -286,7 +293,7 @@ const TableRows = ({
               </TableCell>
             )}
           </TableRow>
-        )) /* No whitespace here */
+        )) 
       ) : (
         <>
           {' '}

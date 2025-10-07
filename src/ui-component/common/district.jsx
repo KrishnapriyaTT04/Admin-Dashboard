@@ -20,7 +20,7 @@ export const districtsData = [
     },
     {
       "id": 4,
-      "label": "Kozhikkode",
+      "label": "Kozhikode",
       "district": "Kozhikode",
       "districtId": "kkd"
     },
