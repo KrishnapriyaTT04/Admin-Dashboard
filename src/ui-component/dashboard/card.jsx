@@ -3,6 +3,8 @@ import { Box, Chip, Grid, Stack, Typography } from '@mui/material';
 // import { RiseOutlined, FallOutlined } from '@ant-design/icons';
 
 const Card = ({ color, bgTheme, title, count, percentage, isLoss, icon }) => {
+
+
   return (
     <Box sx={{ background: bgTheme, padding: '20px', borderRadius: '10px' }}>
       <Stack spacing={0.5}>

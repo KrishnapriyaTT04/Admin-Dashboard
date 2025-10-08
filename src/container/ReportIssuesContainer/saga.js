@@ -17,11 +17,10 @@ const ISSUE_API_BASE = `${appConfig.ip}`;
 
 function* getIssueReportsSaga(action) {
   const token = JSON.parse(localStorage.getItem('klooToken'));
-  
   try {
     const params = {
       // API endpoint for fetching all issue reports
-      api: `${ISSUE_API_BASE}//issues`, 
+      api: `${ISSUE_API_BASE}/issues`, 
       method: 'GET',
       successAction: actionType.getIssueReportsSuccess(),
       failAction: actionType.getIssueReportsFail(),
@@ -61,13 +60,12 @@ function* getIssuesCount() {
       method: 'GET',
       successAction: actionType.getIssuesCountSuccess(),
       failAction: actionType.getIssuesCountFail(),
-      authourization: `Bearer`,
+      authorization: `Bearer`,
       token: `${token?.accessToken}`
 
     };
     
     const res = yield call(commonApi, params);
-    console.log("===resCount===",res);
     if (res) {
       yield put(actionType.getIssuesCountSuccess(res)); 
     } else {
