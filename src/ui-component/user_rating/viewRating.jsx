@@ -24,7 +24,6 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       hour12: false
     });
   };
-  console.log('starRating:', item?.starRating, typeof item?.starRating);
   return (
     <Drawer
       anchor="right"
@@ -77,16 +76,26 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
             </Box>
 
             {/* Attachments */}
-            {item?.attachments?.length > 0 && (
+            {/* {item?.attachments?.length > 0 && (
               <Box sx={{ mt: 2 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.5 }}>
                   Attachments:
                 </Typography>
                 {item.attachments.map((file, index) => (
-                  <Chip key={index} icon={<AttachFileIcon />} label={file} sx={{ mr: 1, mb: 1 }} color="primary" variant="outlined" />
+                  <Chip
+                    key={index}
+                    icon={<AttachFileIcon />}
+                    label={file.attachmentName || 'Unnamed file'}
+                    sx={{ mr: 1, mb: 1 }}
+                    color="primary"
+                    variant="outlined"
+                    component="a"
+                    href={file.attachmentUrl || '#'}
+                    clickable
+                  />
                 ))}
               </Box>
-            )}
+            )} */}
           </Paper>
 
           {/* User Info Section */}
@@ -112,7 +121,7 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                   Created By
                 </Typography>
                 <Typography variant="body1">{item?.createdUser || item?.createdBy || 'N/A'}</Typography>
-              </Grid>   
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle2" color="text.secondary">
                   Created On
@@ -121,10 +130,8 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                   {item?.createdOn ? `${formatDate(item.createdOn)} ${formatTime(item.createdOn)}` : 'N/A'}
                 </Typography>
               </Grid>
-             
             </Grid>
           </Paper>
-
         </Box>
       </Box>
     </Drawer>
