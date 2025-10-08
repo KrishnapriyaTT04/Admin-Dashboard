@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import FormikSwitch from '../common/toggleSwitch';
+import MapPickerComponent from '../common/locationMapPicker'
 
  import { createFacility ,updateFacility} from 'container/FacilityContainer/slice'; 
 
@@ -64,10 +65,10 @@ const validationSchema = Yup.object({
   districtCode:Yup.string(),
   pinCode: Yup.string().required('Pin code  is required').matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
-  landmark: Yup.string(),
+  landmark: Yup.string().required('Landmark is required'),
   indianType:Yup.boolean(),
   europeanType:Yup.boolean(),
-  address1:Yup.string().required('address is required'),
+  address1:Yup.string().required('Address is required'),
   address2:Yup.string(),
 });
 
@@ -100,6 +101,7 @@ const getInitialValues = (item) => (
     state: item?.state || baseInitialValues.state,
     stateId: item?.stateId || baseInitialValues.stateId,
     district: item?.district || baseInitialValues.district,
+    
     districtCode:item?.districtCode || baseInitialValues.districtCode,
     pinCode: item?.pinCode || baseInitialValues.pinCode,
     geoLoc: item?.geoLoc?.length === 2 ? item.geoLoc : baseInitialValues.geoLoc,
@@ -153,9 +155,10 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
       validationSchema={validationSchema} 
       onSubmit={submit}
       enableReinitialize={true}
+      setFieldValue
     >
       {/* 🎯 FIX: This is the correct single render function for the Formik context 🎯 */}
-      {({ values, isSubmitting, isValid, dirty }) => (
+      {({ values, isSubmitting, isValid, dirty,setFieldValue }) => (
         <Drawer
           anchor="right"
           open={drawerOpen}
@@ -495,6 +498,31 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         </Box>
     </Grid>
 
+       <Grid item xs={12}>
+    <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
+       
+       <MapPickerComponent
+            // 💡 FIX: Use key to force map component re-initialization when geoLoc changes
+            key={values.geoLoc.join(',')} 
+            
+            // 1. Pass the current geoLoc array
+            initialLocation={values.geoLoc} 
+            
+            // 2. Pass the handler to update the form fields (This part is correct)
+            onLocationSelect={(newCoords) => {
+
+                console.log("----------------------------------------");
+                
+                if (newCoords && newCoords.length === 2) {
+                    setFieldValue('geoLoc[0]', String(newCoords[0]));
+                    setFieldValue('geoLoc[1]', String(newCoords[1]));
+                }
+            }} 
+        />
+        
+        <Typography variant="h6" sx={{ mt: 2 }}>Location</Typography>
+    </Box>
+</Grid>
     {/* geoLoc */}
     <Grid item xs={12} sm={6}>
         <Field name="geoLoc[0]">
@@ -582,7 +610,9 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                 {/* 2. Map over the districtsData to create dynamic options */}
                 {districtsData && districtsData.map((district) => (
                     <MenuItem 
-                     key={district.districtCode} value={Number(district.districtCode)}
+                     key={district.districtCode} 
+                     value={district.label} 
+                    //   value={district.districtCode} 
                         // key={district.districtId} 
                         // value={district.districtId} 
                     >
