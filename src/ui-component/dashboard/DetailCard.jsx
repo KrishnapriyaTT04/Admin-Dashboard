@@ -132,7 +132,7 @@ export const DetailCard = ({ title, data = [], loading = false, fields = [], pat
           ) : (
             <Box
               component={Link}
-              to={`/${title.toLowerCase().replace(/\s+/g, '-')}`}
+              to={path}
               sx={{
                 fontSize: '13px',
                 textDecoration: 'none',

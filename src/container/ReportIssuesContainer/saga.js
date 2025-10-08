@@ -66,6 +66,8 @@ function* getIssuesCount() {
     };
     
     const res = yield call(commonApi, params);
+    console.log("==res",res);
+    
     if (res) {
       yield put(actionType.getIssuesCountSuccess(res)); 
     } else {
