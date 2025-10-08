@@ -218,6 +218,44 @@ ${res.failedRecords
         yield call(toast.error, `Bulk update failed: ${error.message || 'Server error.'}`, { autoClose: 5000 });
     }
 }
+
+
+
+function* getMasterFacilitiesSaga(action) {
+  const token = JSON.parse(localStorage.getItem('klooToken'));
+  
+  try {
+    const params = {
+      // API endpoint for fetching all issue reports
+      api: `${FACILITY_API_BASE}${action.payload}`,  
+      method: 'GET',
+      successAction: actionType.getMasterFacilitiesSuccess(),
+      failAction: actionType.getMasterFacilitiesFail(),
+      authorization: 'Bearer',
+      token: `${token?.accessToken}` // Use optional chaining for safer access
+    };
+    
+    const res = yield call(commonApi, params);
+    
+    // Assuming the API returns an array or an object containing the list
+    if (res && Array.isArray(res.data)) {
+      yield put(actionType.getMasterFacilitiesSuccess(res.data)); 
+    } else if (res) {
+      // Handle case where API response is valid but not the expected array structure
+      yield put(actionType.getMasterFacilitiesSuccess(res)); 
+    } else {
+      throw new Error('Invalid response data structure for issue report list.');
+    }
+  } catch (error) {
+    console.error('Fetch Issue Reports failed:', error);
+    
+    yield put(actionType.getMasterFacilitiesFail({ 
+      message: error.message || 'Failed to fetch issue reports.', 
+      status: error.response?.status || 500 
+    }));
+    yield call(toast.error, 'Failed to load issue report list.', { autoClose: 3000 });
+  }
+}
 // --- Watcher Saga ---
 
 export default function* facilityActionWatcher() {
@@ -226,6 +264,8 @@ export default function* facilityActionWatcher() {
    yield takeEvery(actionType.updateFacility.type, updateFacilitySaga);
    yield takeEvery(actionType.getFacilitiesCount.type, getFacilitiesCount);
    yield takeEvery(actionType.uploadBulkFacilities.type, uploadBulkFacilitiesSaga);
+   yield takeEvery(actionType.getMasterFacilities.type, getMasterFacilitiesSaga);
+
 
   
 }

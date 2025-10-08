@@ -19,6 +19,10 @@ const facilitySlice = createSlice({
         bulkLoading: false,
         bulkError: null,
         bulkSuccess: false,
+
+        masterList: [], 
+        masterListLoading: false,
+        masterListError: null,
     },
     reducers: {
         // === FETCH LIST ACTIONS ===
@@ -168,6 +172,23 @@ const facilitySlice = createSlice({
             };
         },
 
+        getMasterFacilities: (state) => {
+            state.masterListLoading = true;
+            state.masterListError = null;
+        },
+        getMasterFacilitiesSuccess: (state, action) => {
+            state.masterListLoading = false;
+            state.masterList = action.payload; 
+            state.masterListError = null;
+        },
+        getMasterFacilitiesFail: (state, action) => {
+            state.masterListLoading = false;
+            state.masterListError = {
+                message: action.payload.message || 'Failed to fetch master facilities',
+                status: action.payload.status || 500
+            };
+        },
+
         resetFacilityOperationState: (state) => {
             state.operationLoading = false;
             state.operationError = null;
@@ -180,16 +201,19 @@ export const {
     getFacilities, 
     getFacilitiesSuccess, 
     getFacilitiesFail,
+
     createFacility,
     createFacilitySuccess,
     createFacilityFail,
+
     updateFacility,
     updateFacilitySuccess,
     updateFacilityFail,
-    // NEW EXPORTS
+
     deleteFacility,
     deleteFacilitySuccess,
     deleteFacilityFail,
+
     resetFacilityOperationState,
     getFacilitiesCount,
     getFacilitiesCountSuccess,
@@ -198,6 +222,11 @@ export const {
     uploadBulkFacilities,
     uploadBulkFacilitiesSuccess,
     uploadBulkFacilitiesFail,
+    
+    getMasterFacilities, 
+    getMasterFacilitiesSuccess, 
+    getMasterFacilitiesFail 
+
 } = facilitySlice.actions;
 
 // Selectors for easy access to state
@@ -213,6 +242,10 @@ export const selectListCount = (state) => state.facility.listCount;
 export const selectBulkLoading = (state) => state.facility.bulkLoading;
 export const selectBulkSuccess = (state) => state.facility.bulkSuccess;
 export const selectBulkError = (state) => state.facility.bulkError;
+
+export const selectMasterList = (state) => state.facility.masterList;
+export const selectMasterListLoading = (state) => state.facility.masterListLoading;
+export const selectMasterListError = (state) => state.facility.masterListError;
 
 
 export default facilitySlice.reducer;
