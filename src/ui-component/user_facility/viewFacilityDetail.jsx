@@ -1,24 +1,69 @@
-
-
-import { Box, Typography, IconButton, Grid, useTheme, Divider, Paper } from '@mui/material';
+import { Box, Typography, IconButton, Grid, useTheme, Divider, Paper, Chip } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import CloseIcon from '@mui/icons-material/Close';
-import PersonIcon from '@mui/icons-material/Person';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import CommentIcon from '@mui/icons-material/Comment';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import PublicIcon from '@mui/icons-material/Public';
+import PaidIcon from '@mui/icons-material/Paid';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+import PeopleIcon from '@mui/icons-material/People';
+import BusinessIcon from '@mui/icons-material/Business'; 
 
 const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
 
+  const formatFrequency = (frequency) => {
+  
+    if (!frequency || frequency.length === 0) {
+      return 'Not specified';
+    }
 
-  const formatTime = (dateString) => {
-  if (!dateString) return 'N/A';
-  return new Date(dateString).toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
-};
+    let arrayToJoin = frequency; 
+
+   
+    if (Array.isArray(frequency[0])) {
+      arrayToJoin = frequency[0]; 
+    } 
+
+    if (Array.isArray(arrayToJoin) && arrayToJoin.length > 0) {
+      return arrayToJoin.join(', ');
+    }
+    
+
+    return 'Not specified';
+  };
+
+
+  const TrueFalseText = ({ label, value }) => (
+    <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+      <Typography component="span" variant="subtitle2" color="text.secondary">{label}:</Typography>
+      <Typography 
+        component="span" 
+        sx={{ 
+          color: theme.palette.text.primary,
+          fontWeight: 'bold' 
+        }}
+      >
+        {value ? 'Yes' : 'No'}
+      </Typography>
+    </Typography>
+  );
+  const DetailText = ({ label, value, isSubtitle = false }) => (
+    <>
+      <Typography variant="subtitle2" color="text.secondary">{label}</Typography>
+      <Typography 
+        variant={isSubtitle ? "subtitle1" : "body1"} 
+        sx={{ 
+          fontWeight: isSubtitle ? 600 : 500, 
+          color: theme.palette.text.primary
+        }}
+      >
+        {value || 'N/A'}
+      </Typography>
+    </>
+  );
+
 
   return (
     <Drawer
@@ -29,7 +74,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
         sx: {
           width: { xs: '100%', sm: '80%', md: '60%', lg: '900px' },
           maxWidth: '100vw',
-          backgroundColor: '#fafafa',
+          backgroundColor: theme.palette.common.white,
         }
       }}
     >
@@ -37,7 +82,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
         {/* Header */}
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
           <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
-            User facility Details
+            User Facility Details
           </Typography>
           <IconButton onClick={() => setDrawerOpen(false)} size="large">
             <CloseIcon />
@@ -46,167 +91,190 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
 
         <Divider sx={{ mb: 3 }} />
 
-<Grid container spacing={3}>
-    
-    {/* Facility Details */}
-    <Grid item xs={12}>
-        <Typography variant="h5" sx={{mb:2}}>Facility Details</Typography>
-    </Grid>
-    
-    {/* Title (Full Width) */}
-    <Grid item xs={12}>
-        <Typography variant="subtitle2" color="text.secondary">Title</Typography>
-        <Typography variant="body1">{item.title || 'N/A'}</Typography>
-    </Grid>
+        <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+          <Grid container spacing={3}>
 
-    {/* Facility Type */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Facility Type</Typography>
-        <Typography variant="body1">{item.facilityType || 'N/A'}</Typography>
-    </Grid>
-
-    {/* Category */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Category</Typography>
-        <Typography variant="body1">{item.category || 'N/A'}</Typography>
-    </Grid>
-    
-    {/* Checkbox Statuses (Displayed as text) */}
-    <Grid item xs={12}>
-        <Box sx={{ display: 'flex', gap: 4, mt: 1 }}>
-            {/* Is Paid? */}
-            <Typography variant="body1">
-                <Typography component="span" variant="subtitle2" color="text.secondary">Is Paid: </Typography>
-                <Typography component="span" sx={{ color: item.isPaid ? 'green' : 'gray', fontWeight: 'bold' }}>
-                    {item.isPaid ? 'Yes' : 'No'}
-                </Typography>
-            </Typography>
-
-            {/* Open 24 Hours? */}
-            <Typography variant="body1">
-                <Typography component="span" variant="subtitle2" color="text.secondary">Open 24 Hours: </Typography>
-                <Typography component="span" sx={{ color: item.is24H ? 'green' : 'gray', fontWeight: 'bold' }}>
-                    {item.is24H ? 'Yes' : 'No'}
-                </Typography>
-            </Typography>
-
-            {/* Is Indian? */}
-            <Typography variant="body1">
-                <Typography component="span" variant="subtitle2" color="text.secondary">Indian Type: </Typography>
-                <Typography component="span" sx={{ color: item.isIndianType ? 'green' : 'gray', fontWeight: 'bold' }}>
-                    {item.isIndianType ? 'Yes' : 'No'}
-                </Typography>
-            </Typography>
-        </Box>
-    </Grid>
-    
-    {/* Conditional Time Display */}
-    {!item.is24H && (
-        <>
-            <Grid item xs={6}>
-                <Typography variant="subtitle2" color="text.secondary">Opening Time</Typography>
-                <Typography variant="body1">{item.openingTime || 'N/A'}</Typography>
+            {/* --- Facility Details --- */}
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <BusinessIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h6" fontWeight={600} color="text.primary">Facility Details</Typography>
+              </Box>
             </Grid>
-            <Grid item xs={6}>
-                <Typography variant="subtitle2" color="text.secondary">Closing Time</Typography>
-                <Typography variant="body1">{item.closingTime || 'N/A'}</Typography>
+
+            {/* Title (Full Width) */}
+            <Grid item xs={12}>
+                <DetailText label="Title" value={item.title} isSubtitle={true} />
             </Grid>
-        </>
-    )}
 
-    {/* Seat Capacity */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Seat Capacity</Typography>
-        <Typography variant="body1">{item.seatCapacity || 'N/A'}</Typography>
-    </Grid>
+            {/* Facility Type & Category */}
+            <Grid item xs={12} sm={6}>
+              <DetailText label="Facility Type" value={item.facilityType} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailText label="Category" value={item.category} />
+            </Grid>
 
-    {/* Frequency (Days Available) */}
-    <Grid item xs={12}>
-        <Typography variant="subtitle2" gutterBottom color="text.secondary">Frequency (Days Available)</Typography>
-        <Typography variant="body1">
-            {item.frequency && item.frequency.length > 0
-                ? item.frequency.join(', ') // Display selected days comma-separated
-                : 'Not specified'}
-        </Typography>
-    </Grid>
+            {/* Statuses (Is Paid, Is 24H, etc.) */}
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mt: 1 }}>
+                <TrueFalseText label="Is Paid" value={item.isPaid} />
+                <TrueFalseText label="Open 24 Hours" value={item.is24H} />
+                <TrueFalseText label="Indian Type" value={item.indianType} /> 
+                <TrueFalseText label="European Type" value={item.europeanType} />
+                <TrueFalseText label="Is Favourite" value={item.isFavourite} />
+              </Box>
+            </Grid>
+
+            {/* Conditional Time Display */}
+            {!item.is24H && (
+              <>
+                <Grid item xs={6} sm={6}>
+                  <DetailText label="Opening Time" value={item.openingTime} />
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <DetailText label="Closing Time" value={item.closingTime} />
+                </Grid>
+              </>
+            )}
+
+            {/* Seat Capacity */}
+            <Grid item xs={12} sm={6}>
+              <DetailText label="Seat Capacity" value={item.seatCapacity} />
+            </Grid>
+            
+            {/* Facility Status */}
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle2" color="text.secondary">Status</Typography>
+              <Chip 
+                label={item.status || 'N/A'} 
+                color={item.status === 'active' ? 'success' : 'default'} 
+                size="small" 
+                sx={{ color: item.status === 'active' ? 'white' : 'black' }} 
+              />
+            </Grid>
 
 
-    {/* --- Contact Information Divider --- */}
-    <Grid item xs={12}>
-        <Box sx={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginTop: '10px' }}>
-            <Typography variant="h5">Contact Information</Typography>
+            {/* Frequency (Days Available) */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle2" gutterBottom color="text.secondary">Frequency (Days Available)</Typography>
+              <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.text.primary }}>
+                {formatFrequency(item.frequency)}
+              </Typography>
+            </Grid>
+
+            {/* --- Contact Information Divider --- */}
+            <Grid item xs={12}>
+              <Divider sx={{ my: 2 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <ContactMailIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h6" fontWeight={600} color="text.primary">Contact Information</Typography>
+              </Box>
+            </Grid>
+
+            {/* Contact Name */}
+            <Grid item xs={12} sm={4}>
+              <DetailText label="Contact Name" value={item.contactName} />
+            </Grid>
+
+            {/* Contact Email */}
+            <Grid item xs={12} sm={4}>
+              <DetailText label="Contact Email" value={item.contactEmail} />
+            </Grid>
+
+            {/* Contact Phone */}
+            <Grid item xs={12} sm={4}>
+              <DetailText label="Phone" value={item.contactPhone} />
+            </Grid>
+
+            {/* --- Location Divider --- */}
+            <Grid item xs={12}>
+              <Divider sx={{ my: 2 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <LocationOnIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h6" fontWeight={600} color="text.primary">Location</Typography>
+              </Box>
+            </Grid>
+
+            {/* Address 1 & Address 2 */}
+            <Grid item xs={12} sm={6}>
+              <DetailText label="Address Line 1" value={item.address1} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailText label="Address Line 2" value={item.address2} />
+            </Grid>
+
+            {/* City & State */}
+            <Grid item xs={12} sm={6}>
+              <DetailText label="City" value={item.city} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailText label="State" value={item.state} />
+            </Grid>
+
+            {/* District & Pin Code */}
+            <Grid item xs={12} sm={6}>
+              <DetailText label="District" value={`${item.district || 'N/A'} (${item.districtCode || 'N/A'})`} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailText label="Pin Code" value={item.pinCode} />
+            </Grid>
+
+            {/* Landmark */}
+            <Grid item xs={12} sm={12}>
+              <DetailText label="Landmark" value={item.landmark} />
+            </Grid>
+
+            {/* Latitude & Longitude */}
+            <Grid item xs={12} sm={6}>
+              <DetailText label="Latitude" value={item.geoLoc?.[0]} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DetailText label="Longitude" value={item.geoLoc?.[1]} />
+            </Grid>
+            
+            {/* --- Attachments & Remarks --- */}
+            <Grid item xs={12}>
+              <Divider sx={{ my: 2 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <AttachFileIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h6" fontWeight={600} color="text.primary">Other Information</Typography>
+              </Box>
+            </Grid>
+
+            {/* Remarks */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle2" color="text.secondary">Remarks</Typography>
+              <Typography variant="body1" sx={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap', color: theme.palette.text.primary }}>{item.remarks || 'N/A'}</Typography>
+            </Grid>
+
+            {/* Attachments */}
+            <Grid item xs={12}>
+              <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>Attachments ({item.attachments?.length || 0})</Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {item.attachments && item.attachments.length > 0 ? (
+                  item.attachments.map((file, index) => (
+                    <Chip
+                      key={index}
+                      icon={<AttachFileIcon />}
+                      label={file.attachmentName || `Attachment ${index + 1}`}
+                      sx={{ mr: 1, mb: 1 }}
+                      color="primary"
+                      variant="outlined"
+                      component="a"
+                      href={file.attachmentUrl || '#'}
+                      clickable
+                      target="_blank" 
+                    />
+                  ))
+                ) : (
+                  <Typography variant="body2" color="text.secondary">No attachments found.</Typography>
+                )}
+              </Box>
+            </Grid>
+
+          </Grid>
         </Box>
-    </Grid>
-
-    {/* contactInfo.name */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Contact Name</Typography>
-        <Typography variant="body1">{item.contactInfo?.name || 'N/A'}</Typography>
-    </Grid>
-
-    {/* contactInfo.email */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Contact Email</Typography>
-        <Typography variant="body1">{item.contactInfo?.email || 'N/A'}</Typography>
-    </Grid>
-       
-    {/* contactInfo.phone */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Phone</Typography>
-        <Typography variant="body1">{item.contactInfo?.phone || 'N/A'}</Typography>
-    </Grid>
-    
-    {/* --- Location Divider --- */}
-    <Grid item xs={12}>
-        <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
-            <Typography variant="h5">Location</Typography>
-        </Box>
-    </Grid>
-
-    {/* geoLoc[0] - Latitude */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Latitude</Typography>
-        <Typography variant="body1">{item.geoLoc?.[0] || 'N/A'}</Typography>
-    </Grid>
-    
-    {/* geoLoc[1] - Longitude */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Longitude</Typography>
-        <Typography variant="body1">{item.geoLoc?.[1] || 'N/A'}</Typography>
-    </Grid>
-
-    {/* state */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">State</Typography>
-        <Typography variant="body1">{item.state || 'N/A'}</Typography>
-    </Grid>
-    
-    {/* district */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">District</Typography>
-        {/* Note: If item.district is a code (e.g., 'kkd'), you'll need logic here to look up the full label. */}
-        <Typography variant="body1">{item.district || 'N/A'}</Typography>
-    </Grid>
-
-    {/* city */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">City</Typography>
-        <Typography variant="body1">{item.city || 'N/A'}</Typography>
-    </Grid>
-
-      {/* pin */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Pin Code</Typography>
-        <Typography variant="body1">{item.pinCode || 'N/A'}</Typography>
-    </Grid>
-
-    {/* landmark */}
-    <Grid item xs={6}>
-        <Typography variant="subtitle2" color="text.secondary">Landmark</Typography>
-        <Typography variant="body1">{item.landmark || 'N/A'}</Typography>
-    </Grid>
-    
-</Grid>
       </Box>
     </Drawer>
   );

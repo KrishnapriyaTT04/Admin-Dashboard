@@ -24,7 +24,6 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       hour12: false
     });
   };
-  console.log('starRating:', item?.starRating, typeof item?.starRating);
   return (
     <Drawer
       anchor="right"
