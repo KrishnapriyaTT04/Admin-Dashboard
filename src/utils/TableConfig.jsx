@@ -48,19 +48,19 @@ export const userRating = {
 
 
 export const facilityHeads = {
-  keys: ['title', 'email', 'phone'],
+  keys: ['title', 'contactEmail', 'contactPhone'],
   config: {
     title: {
       label: 'Title',
       type: 'string',
       class: ' commonDesc'
     },
-    email: {
+    contactEmail: {
       label: 'Email',
       type: 'string',
       class: ' cmn_Cap commonDesc'
     },
-    phone: {
+    contactPhone: {
       label: 'Phone',
       type: 'string',
       class: ' cmn_Cap commonDesc'

@@ -31,7 +31,7 @@ const baseInitialValues = {
   seatCapacity: 0,ratingCount:0,reviewCount:0, remarks: '', status: 'active', frequency: [],
 //   contactInfo: { name: '', email: '', phone: '' },
   contactName:'',contactEmail:'',contactPhone:'',
-  city: '', state: 'kerala',stateId: 'kl', district: '', pinCode: '', geoLoc: ['', ''], landmark: '',
+  city: '', state: 'kerala',stateId: 'kl', district: '',districtCode: '', pinCode: '', geoLoc: ['', ''], landmark: '',
   indianType:false, europeanType:false,address1:'',address2:''
 };
 
@@ -61,6 +61,7 @@ const validationSchema = Yup.object({
   state: Yup.string().required('State is required'),
   stateId: Yup.string().required('State Id is required'),
   district: Yup.string(),
+  districtCode:Yup.string(),
   pinCode: Yup.string().required('Pin code  is required').matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
   landmark: Yup.string(),
@@ -99,6 +100,7 @@ const getInitialValues = (item) => (
     state: item?.state || baseInitialValues.state,
     stateId: item?.stateId || baseInitialValues.stateId,
     district: item?.district || baseInitialValues.district,
+    districtCode:item?.districtCode || baseInitialValues.districtCode,
     pinCode: item?.pinCode || baseInitialValues.pinCode,
     geoLoc: item?.geoLoc?.length === 2 ? item.geoLoc : baseInitialValues.geoLoc,
     landmark: item?.landmark || baseInitialValues.landmark,
@@ -580,10 +582,11 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                 {/* 2. Map over the districtsData to create dynamic options */}
                 {districtsData && districtsData.map((district) => (
                     <MenuItem 
-                        key={district.districtId} 
-                        value={district.districtId} // Use the short code (e.g., 'kkd') as the value
+                     key={district.districtCode} value={Number(district.districtCode)}
+                        // key={district.districtId} 
+                        // value={district.districtId} 
                     >
-                        {district.label} {/* Display the full name (e.g., 'Kozhikkode') */}
+                        {district.label} 
                     </MenuItem>
                 ))}
             </TextField>
