@@ -22,15 +22,10 @@ export const userFeedback = {
 export const userRating = {
   keys: ['createdOn', 'createdUser', 'comments', 'starRating'],
   config: {
-    createdOn: {
-      label: 'Created Date',
-      type: 'date',
-      class: 'commonDesc'
-    },
-    createdUser: {
-      label: 'Created By',
+     title: {
+      label: 'Title',
       type: 'string',
-      class: 'cmn_Cap commonDesc'
+      class: ' commonDesc'
     },
     comments: {
       label: 'Comment',

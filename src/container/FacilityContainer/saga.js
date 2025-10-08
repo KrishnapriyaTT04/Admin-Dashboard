@@ -27,7 +27,7 @@ function* getFacilitiesSaga(action) {
     };
     
     const res = yield call(commonApi, params);
-    console.log("---------------res----------------------",res);
+    console.log("==res==",res);
     
     if (res) {
       yield put(actionType.getFacilitiesSuccess(res)); 
@@ -150,8 +150,6 @@ function* updateFacilitySaga(action,facilityId) {
 
 
 function* getFacilitiesCount(action) {
-
-    console.log("===SSSS===",action);
   try {
     const params = {
       api: `${FACILITY_API_BASE}/${action.payload}`, 
@@ -160,9 +158,7 @@ function* getFacilitiesCount(action) {
       failAction: actionType.getFacilitiesCountFail(),
       authourization: `Bearer`
     };
-    
     const res = yield call(commonApi, params);
-    console.log("===resCount===",res);
     if (res) {
       yield put(actionType.getFacilitiesSuccess(res)); 
     } else {
@@ -170,7 +166,6 @@ function* getFacilitiesCount(action) {
     }
   } catch (error) {
     console.error('Fetch Facilities failed:', error);
-    // Dispatch failure action
     yield put(actionType.getFacilitiesCountFail({ 
       message: error.message || 'Failed to fetch facilities.', 
       status: error.response?.status || 500 

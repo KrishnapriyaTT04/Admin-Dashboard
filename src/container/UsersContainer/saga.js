@@ -2,9 +2,9 @@ import { takeEvery, call, put } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import commonApi from '../api'; // Assuming this is your common API utility
+import commonApi from '../api'; 
 import appConfig from '../../config';
-// Import user actions from the userSlice
+
 import * as actionType from './slice'; 
 
 
@@ -70,27 +70,26 @@ function* getUsersSaga(action) {
 
 
 function* getUserCount() {
-  const token = JSON.parse(localStorage.getItem('klooToken'));
+  const tokenData = JSON.parse(localStorage.getItem('klooToken'));
+  const accessToken = tokenData?.accessToken;
   try {
     const params = {
       api: `${USER_API_BASE}/users/count`, 
       method: 'GET',
       successAction: actionType.getUserCountSuccess(),
       failAction: actionType.getUserCountFail(),
-      authourization: `Bearer`,
-      token: `${token?.accessToken}`
+      authorization: `Bearer`,
+      token: accessToken,
     };
-    
     const res = yield call(commonApi, params);
-    console.log("===resCount===",res);
     if (res) {
       yield put(actionType.getUserCountSuccess(res)); 
     } else {
       throw new Error('Invalid response data structure for user list.');
     }
+    
   } catch (error) {
     console.error('Fetch Users  failed:', error);
-    // Dispatch failure action
     yield put(actionType.getUserCountFail({ 
       message: error.message || 'Failed to fetch user.', 
       status: error.response?.status || 500 

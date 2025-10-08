@@ -12,7 +12,7 @@ const facilitySlice = createSlice({
         operationLoading: false,
         operationError: null,
         operationSuccess: false,
-
+facilityLoading: false,
         listcountLoading:false,
         listCount:0,
 
@@ -130,11 +130,11 @@ const facilitySlice = createSlice({
 
 
        getFacilitiesCount: (state) => {
-            state.listcountLoading = true;
+            state.facilityLoading = true;
             
         },
         getFacilitiesCountSuccess: (state, action) => {
-            state.listcountLoading = false;
+            state.facilityLoading = false;
             state.listCount = action.payload.count; // Payload is the array of facilities
         },
         getFacilitiesCountFail: (state, action) => {

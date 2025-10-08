@@ -41,17 +41,17 @@ const RoleMenu = {
       icon: icons.IconAlertTriangle,
       breadcrumbs: false
     },
-    {
-      id: 'userfeedback',
-      title: 'User Feedback',
-      type: 'item',
-      url: '/userfeedback',
-      icon: icons.IconMessageCircle ,
-      breadcrumbs: false
-    },
+    // {
+    //   id: 'userfeedback',
+    //   title: 'User Feedback',
+    //   type: 'item',
+    //   url: '/userfeedback',
+    //   icon: icons.IconMessageCircle ,
+    //   breadcrumbs: false
+    // },
         {
       id: 'rating',
-      title: 'User Rating',
+      title: 'User Feedback & Ratings',
       type: 'item',
       url: '/rating',
       icon: icons.IconStar,

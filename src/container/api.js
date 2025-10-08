@@ -4,10 +4,10 @@ import { Base64 } from 'js-base64';
 
 function* commonApi(value) {
 
-  console.log("-------------value.authourization-----------",value.token);
+  console.log("===value.authourization===",value);
   
   const token = appConfig.token;
-  let authorization = value.authorization
+  let authorization = value.authorization;
     // ? value.authourization === 'Basic'
     //   ? 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password)
     //   : token
@@ -23,20 +23,27 @@ function* commonApi(value) {
     authorization = token;
   }
 
+  console.log(authorization, '==auauthorization');
+  
 
-  const authHeader = { Accept: 'application/json', 'Content-Type': 'application/json', Authorization: authorization };
+  const authHeader = { 
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: authorization };
   const noauthHeader = {
     Accept: 'application/json',
     'Content-Type': 'application/json'
   };
 
+  console.log("authHeader==", authHeader);
+  
   try {
     const response = yield fetch(`${value.api}`, {
       method: `${value.method}`,
       headers: value.authourization !== null ? authHeader : noauthHeader,
       body: value.body ? value.body : null
     });
-        console.log("--------------------response----cmn-------------",response);
+        console.log("====response----cmn===",response);
         
     if (!response.ok) {
       throw response;

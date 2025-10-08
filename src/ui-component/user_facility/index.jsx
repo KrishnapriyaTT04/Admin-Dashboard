@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
- import { getFacilities, selectFacilityList,getFacilitiesCount } from 'container/FacilityContainer/slice';
+ import { getFacilities, selectFacilityList, getFacilitiesCount } from 'container/FacilityContainer/slice';
 
  import { facilityHeads } from 'utils/TableConfig';
 
@@ -49,6 +49,8 @@ export default function Facility() {
   const [showXSLModal, setShowXSLModal] = useState(false);
 
    const facilityList = useSelector((state) => state.facility?.list || []);
+
+   
 
       let flattenedFacilityList =  [];
 
