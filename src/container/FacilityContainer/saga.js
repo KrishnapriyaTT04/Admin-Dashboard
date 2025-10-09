@@ -105,13 +105,18 @@ function* createFacilitySaga(action) {
 }
 
 // 3. Update Facility
-function* updateFacilitySaga(action,getUrl) {
-        console.log("----------------------saga-res------------------",getUrl);
+function* updateFacilitySaga(action) {
+        console.log("----------------------saga-res------------------",action.payload);
+
 
 
    const token = JSON.parse(localStorage.getItem('klooToken'));
   try {
-    const facilityData = action.payload;    
+
+     const payload = action.payload; 
+    const facilityData = payload.values; // Assuming 'values' holds the form data
+    const getUrl = payload.getReqestUrl;
+    // const facilityData = action.payload.values;    
     
   if (!facilityData.id) { 
       return
@@ -132,7 +137,9 @@ function* updateFacilitySaga(action,getUrl) {
     const res = yield call(commonApi, params);
 
  yield call(toast.success, 'Facility updated successfully!', { autoClose: 3000 });
-
+       if (getUrl) {
+             yield put(actionType.getFacilities(getUrl)); 
+        }
 
   } catch (error) {
     console.error('Update Facility failed:', error);

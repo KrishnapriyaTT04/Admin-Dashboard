@@ -47,6 +47,7 @@ export default function Facility() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLUploadModal, setshowXSLUploadModal] = useState(false);
   const [showXSLModal, setShowXSLModal] = useState(false);
+  const [getReqUrl, setGetReqUrl] = useState('');
 
    const facilityList = useSelector((state) => state.facility?.list || []);
 
@@ -97,7 +98,7 @@ let countPagination = Math.ceil(count / limit);
    //deleted false
    let reqUrl =`facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
    let countUrl =`facilities/count`
-   
+       setGetReqUrl(reqUrl)
        dispatch(getFacilitiesCount(countUrl));
 
   dispatch(getFacilities(reqUrl));
@@ -179,6 +180,7 @@ const searchHandler = (e) => {
     const newSkip = selectedPage * limit;
     setPage(selectedPage); 
     let reqUrl = `facilities?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
+     setGetReqUrl(reqUrl)
     dispatch(getFacilities(reqUrl));
 };
 
@@ -316,8 +318,8 @@ const searchHandler = (e) => {
         {/* {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setOpen} item={selectedItem} />} */}
         {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
 
-        {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem} />}
-        {formOpen && <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />}
+        {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem}  />}
+        {formOpen && <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} getReqestUrl={getReqUrl}/>}
         {showDeleteModal && (
           <ConfirmModal
             show={showDeleteModal}

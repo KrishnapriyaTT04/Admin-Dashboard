@@ -105,17 +105,18 @@ const getInitialValues = (item) => (
 
 
 
-const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
+const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
    const featureOptions = useSelector((state) => state.facility?.masterList || []);
+       console.log("---------------------2-----facilityList--",getReqestUrl);
 
 
     useEffect(() => {
    let reqUrl =`/master-facility-features`
        dispatch(getMasterFacilities(reqUrl));
 
-       console.log("--------------------------facilityList--",featureOptions);
+       console.log("--------------------------facilityList--",getReqestUrl);
        
 }, [dispatch]); 
 
@@ -133,8 +134,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
     if (values.id) { 
          delete values.ratingCount
          delete values.reviewCount
-         getUrl = "facilities?"
-      dispatch(updateFacility(values,getUrl)); 
+      dispatch(updateFacility({values,getReqestUrl})); 
       console.log('Updating Facility:', values);
     } else {
          delete values.id; 
