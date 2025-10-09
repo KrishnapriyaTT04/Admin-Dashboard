@@ -41,6 +41,7 @@ export default function userReportedIssues() {
   const [formOpen, setFormOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
+   const [limit, setLimit] = useState(5);
 
   // const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
   const issueList = useSelector((state) =>state?.reportIssue?.list);
@@ -188,6 +189,7 @@ console.log("==count", count);
               data={issueList}
               keys={keys}
               config={config}
+               tableLimit={limit} 
               currentPage={page + 1}
               hasView={true}
               hasEdit={false}

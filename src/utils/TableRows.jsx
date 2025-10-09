@@ -95,6 +95,9 @@ const  TableRows = ({
       keyItem
     );
   };
+
+
+  
   const visibleColumnCount = React.useMemo(() => {
     let count = 0;
     if (slNo) count++;
@@ -106,6 +109,7 @@ const  TableRows = ({
     if (hasActionRow) count++;
     return count;
   }, [slNo, keys, config, hideArray, hasActionRow]);
+
 
   return (
     <TableBody>
