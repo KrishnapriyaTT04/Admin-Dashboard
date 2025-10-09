@@ -23,6 +23,7 @@ import { userLogin } from 'container/LoginContainer/slice';
 // import logo from "C:/Users/DELL/Desktop/kloo_admin_react_v2/src/assets/images/auth/kloo-icon.svg";
 
 import logo from "assets/images/auth/kloo-icon.svg";
+const AppVersion = import.meta.env.VITE_APP_VERSION; 
 
 
 const AuthLogin = (props) => {
@@ -196,8 +197,12 @@ const AuthLogin = (props) => {
                 Sign Up
               </Typography>
             </Link>
+            
           </Stack>
         </Stack>
+         <Typography  color="primary.main" fontWeight="100">
+               Version : {AppVersion}
+              </Typography>
       </Card>
     </Box>
   );
