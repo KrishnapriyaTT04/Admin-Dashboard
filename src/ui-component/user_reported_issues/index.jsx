@@ -13,7 +13,7 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
  import { getIssueReports }from 'container/ReportIssuesContainer/slice';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
- import { userFeedback } from 'utils/TableConfig';
+ import { userReport } from 'utils/TableConfig';
 
 
 import MainCard from 'ui-component/cards/MainCard';
@@ -23,6 +23,7 @@ import TableRows from 'utils/TableRows';
 // import ConfirmModal from 'views/common/ConfirmModal';
 import styles from '../common/style';
 // import EFTypeView from './efTypeView';
+import ViewReport from './viewReport';
 // import UpdateEfTypeForm from './updateForm';
 import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
@@ -40,6 +41,7 @@ export default function userReportedIssues() {
   const [formOpen, setFormOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
+   const [limit, setLimit] = useState(5);
 
   // const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
   const issueList = useSelector((state) =>state?.reportIssue?.list);
@@ -51,7 +53,7 @@ export default function userReportedIssues() {
     desc: item.desc
   }));
   let countPagination = Math.ceil(count / 10);
-  const { config, keys } = userFeedback;
+  const { config, keys } = userReport;
 
 console.log("==count", count);
 
@@ -187,10 +189,11 @@ console.log("==count", count);
               data={issueList}
               keys={keys}
               config={config}
+               tableLimit={limit} 
               currentPage={page + 1}
               hasView={true}
-              hasEdit={true}
-              hasDelete={true}
+              hasEdit={false}
+              hasDelete={false}
               hasStatusChange={false}
               hasMore={false}
               handleViewModel={handleViewModal}
@@ -205,7 +208,7 @@ console.log("==count", count);
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 1 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
-        {/* {open && <EFTypeView drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />} */}
+         {open && <ViewReport drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
         {/* {formOpen && <UpdateEfTypeForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />} */}
         {showDeleteModal && (
           <ConfirmModal

@@ -27,7 +27,7 @@ import { renderItem } from './ItemDisplay';
 import NoDataMsg from './NodataMsg';
 import styles from './style';
 
-const TableRows = ({
+const  TableRows = ({
   data = [],
   keys = [],
   config,
@@ -95,6 +95,9 @@ const TableRows = ({
       keyItem
     );
   };
+
+
+  
   const visibleColumnCount = React.useMemo(() => {
     let count = 0;
     if (slNo) count++;
@@ -106,6 +109,7 @@ const TableRows = ({
     if (hasActionRow) count++;
     return count;
   }, [slNo, keys, config, hideArray, hasActionRow]);
+
 
   return (
     <TableBody>
@@ -168,7 +172,7 @@ const TableRows = ({
                   {hasView && (
                     <Tooltip title="View">
                       <IconButton color="primary" size="small" sx={{ ...style.cmnIcon, ...style.cmnViewIcon }}>
-                        <VisibilityIcon sx={style.cmnSvg} onClick={() => handleViewModel(row, modal)} />
+                        <VisibilityIcon sx={style.cmnSvg} onClick={() =>{handleViewModel(row, modal)}} />
                       </IconButton>
                     </Tooltip>
                   )}

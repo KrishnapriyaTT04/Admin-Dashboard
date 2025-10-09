@@ -1,24 +1,51 @@
-
-
 import { Box, Typography, IconButton, Grid, useTheme, Divider, Paper } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import CommentIcon from '@mui/icons-material/Comment';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import BadgeIcon from '@mui/icons-material/Badge'; 
 
-const ViewFeedbackDetail = ({ drawerOpen, setDrawerOpen, item }) => {
-  const theme = useTheme();
+// Component for viewing individual user details in a side drawer
+const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
+  const theme = useTheme(); 
 
+  // Helper function to safely format dates
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      // Use a consistent, readable format
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return 'Invalid Date';
+    }
+  };
+  
+  // Helper function to display the full name
+  const getFullName = () => {
+    return item?.fullName || (item?.firstName && item?.lastName ? `${item.firstName} ${item.lastName}` : 'N/A');
+  };
 
-  const formatTime = (dateString) => {
-  if (!dateString) return 'N/A';
-  return new Date(dateString).toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
-};
+  const DetailItem = ({ icon: Icon, title, value }) => (
+    <Grid item xs={12} sm={6}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+        {Icon && <Icon fontSize="small" sx={{ mr: 0.5, color: theme.palette.text.secondary }} />}
+        <Typography variant="subtitle2" color="text.secondary">
+          {title}
+        </Typography>
+      </Box>
+      <Typography variant="body1" sx={{ wordBreak: 'break-word', textTransform: title === 'Role' || title === 'User Type' || title === 'Status' ? 'capitalize' : 'none' }}>
+        {value || 'N/A'}
+      </Typography>
+    </Grid>
+  );
 
   return (
     <Drawer
@@ -27,13 +54,15 @@ const ViewFeedbackDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       onClose={() => setDrawerOpen(false)}
       PaperProps={{
         sx: {
-          width: { xs: '100%', sm: '80%', md: '60%', lg: '900px' },
+          // Responsive width adjusted
+          width: { xs: '100%', sm: '80%', md: '450px' },
           maxWidth: '100vw',
-          backgroundColor: '#fafafa',
+          backgroundColor: theme.palette.background.default,
         }
       }}
     >
       <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+
         {/* Header */}
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
           <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
@@ -43,48 +72,71 @@ const ViewFeedbackDetail = ({ drawerOpen, setDrawerOpen, item }) => {
             <CloseIcon />
           </IconButton>
         </Grid>
-
+        
         <Divider sx={{ mb: 3 }} />
 
         {/* Content */}
         <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-          {/* Feedback Section */}
-          <Paper elevation={0} sx={{ p: 3, mb: 3, border: '1px solid #e0e0e0', borderRadius: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <CommentIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>Feedback</Typography>
-            </Box>
-            <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-              {item?.comments || 'No feedback provided.'}
-            </Typography>
-          </Paper>
 
-          {/* User Info Section */}
-          <Paper elevation={0} sx={{ p: 3, mb: 3, border: '1px solid #e0e0e0', borderRadius: 2 }}>
+          {/* User Name Header */}
+          <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
+            {getFullName()}
+          </Typography>
+
+          {/* Primary User Info Section */}
+          <Paper elevation={0} sx={{ p: 3, mb: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <PersonIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>User Information</Typography>
+              <Typography variant="h6" fontWeight={600}>
+                Contact & Account
+              </Typography>
             </Box>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">Created On</Typography>
-<Typography variant="body1">
-  {item?.createdOn
-    ? new Date(item.createdOn).toISOString().split('T')[0]
-    : 'N/A'}
-</Typography>              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">Created User</Typography>
-                <Typography variant="body1">{item?.createdUser || 'N/A'}</Typography>
-              </Grid>
+            
+            <Grid container spacing={3}>
+              <DetailItem title="Full Name" value={getFullName()} />
+              <DetailItem title="Username" value={item?.username} />
+              <DetailItem icon={EmailIcon} title="Email" value={item?.email} />
+              <DetailItem icon={PhoneIcon} title="Phone" value={item?.phone} />
             </Grid>
           </Paper>
 
+          {/* Status and Role Section */}
+          <Paper elevation={0} sx={{ p: 3, mb: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <BadgeIcon color="primary" sx={{ mr: 1 }} />
+              <Typography variant="h6" fontWeight={600}>
+                Role & Status
+              </Typography>
+            </Box>
+            
+            <Grid container spacing={3}>
+              <DetailItem title="User Type" value={item?.userType} />
+              <DetailItem title="Role" value={item?.role} />
+              <DetailItem title="Status" value={item?.status} />
+              {/* Add more relevant fields if necessary */}
+            </Grid>
+          </Paper>
 
+          {/* Audit Trail Section */}
+          <Paper elevation={0} sx={{ p: 3, mb: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <CalendarTodayIcon color="primary" sx={{ mr: 1 }} />
+              <Typography variant="h6" fontWeight={600}>
+                Audit Trail
+              </Typography>
+            </Box>
+            
+            <Grid container spacing={3}>
+              <DetailItem title="Created On" value={formatDate(item?.createdOn)} />
+              <DetailItem title="Last Modified On" value={formatDate(item?.modifiedOn)} />
+            </Grid>
+          </Paper>
+          
         </Box>
+        
       </Box>
     </Drawer>
   );
 };
 
-export default ViewFeedbackDetail;
+export default ViewUserDetail;
