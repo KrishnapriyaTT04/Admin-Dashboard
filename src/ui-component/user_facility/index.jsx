@@ -290,9 +290,7 @@ const searchHandler = (e) => {
             </Box>
           </Grid>
         </Grid>
-{isLoading ? (
-  <Typography>Loading facilities...</Typography>
-) : facilityList.length > 0 ? (        <TableContainer>
+      <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
@@ -315,9 +313,7 @@ const searchHandler = (e) => {
             />
           </Table>
         </TableContainer>
-        ) : (
-  <Typography>No data found</Typography>
-)}
+       
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>

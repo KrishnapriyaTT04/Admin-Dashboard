@@ -27,12 +27,13 @@ function* login(action) {
        body: JSON.stringify(loginReq) 
     };
     let res = yield call(commonApi, params);
-   console.log("------------tkn---",res);
      if(res){
       localStorage.setItem('klooToken', JSON.stringify(res));
        yield call(toast.success, 'Login successful', { autoClose: 3000 });
       yield call(action.payload.navigate, '/dashboard');
      }else{
+         console.log("------------err---",res);
+      yield call(toast.error, 'Login failed. Please try again.', { autoClose: 3000 });
       //localStorage.setItem('userToken', JSON.stringify(null));
      }
         //     localStorage.setItem('userDtls', JSON.stringify(res));

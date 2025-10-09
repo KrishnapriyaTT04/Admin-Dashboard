@@ -129,7 +129,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
        console.log("--------------------------facilityList--",masterFacilityTypeList);
          const timer = setTimeout(() => {
       setShouldRender(true);
-    }, 50);
+    }, 3000);
     
     return () => clearTimeout(timer);
 }, [dispatch]); 
@@ -193,10 +193,12 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             {/* Form */}
             <Form 
               className="form-container" 
-              style={{ display: 'grid', gap: '20px', margin: '0 auto' }}
+              style={{ display: 'grid', gap: '20px', 
+                margin: '0 auto' 
+            }}
             >
 
-               <Box sx={{ p: 3, flexGrow: 1, overflowY: 'auto', maxHeight: '78vh',
+               <Box sx={{ p: 3, flexGrow: 1, overflowY: 'auto', maxHeight: '72vh',
 
                 '&::-webkit-scrollbar': {
                 width: '6px', // Make the scrollbar thin
@@ -670,7 +672,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
        
        {/* 🔑 FIX: Only render the MapPickerComponent when the drawer is open */}
-       {drawerOpen && (
+       {shouldRender && (
            <MapPickerComponent
                 key={values.geoLoc.join(',')} 
                 initialLocation={values.geoLoc} 

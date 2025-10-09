@@ -15,7 +15,9 @@ import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import Logo from 'assets/images/logov2.svg';
 import { Box } from '@mui/material';
-import styles from '../authentication/auth-forms/style';
+//  import styles from './authentication/auth-forms/style';
+import styles from '../../../utils/style';
+
 
 // Role selection images
 import ClaimantIcon from 'assets/images/claimant.png';
