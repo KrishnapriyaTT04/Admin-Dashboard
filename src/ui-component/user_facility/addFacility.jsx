@@ -34,7 +34,7 @@ const dayMap = [
 
 const baseInitialValues = {
   title: '', category: '', isPaid: false, facilityType: '', openingTime: '', closingTime: '', is24H: false,
-  seatCapacity: 0,ratingCount:0,reviewCount:0, remarks: '', status: 'active', frequency: [],
+  seatCapacity: 1,ratingCount:0,reviewCount:0, remarks: '', status: 'active', frequency: [],
   contactName:'',contactEmail:'',contactPhone:'',
   city: '', state: 'kerala',stateId: 'kl', district: '',districtCode: '', pinCode: '', geoLoc: ['', ''], landmark: ''
   ,address1:'',address2:'',features: []
@@ -133,7 +133,8 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
     if (values.id) { 
          delete values.ratingCount
          delete values.reviewCount
-      dispatch(updateFacility(values,values.id)); 
+         getUrl = "facilities?"
+      dispatch(updateFacility(values,getUrl)); 
       console.log('Updating Facility:', values);
     } else {
          delete values.id; 
@@ -368,9 +369,20 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
           }
         >
           {featureOptions.map((option) => (
-            <MenuItem key={option.featureId} value={option.featureId}>
-              <Checkbox checked={(field.value || []).some(f => f.featureId === option.featureId)} />
-              <ListItemText primary={option.featureName} />
+            <MenuItem   key={option.featureId} value={option.featureId}>
+              <Checkbox checked={(field.value || []).some(f => f.featureId === option.featureId)}
+              
+              />
+              <ListItemText  
+              
+              primary={option.featureName}
+                 primaryTypographyProps={{ 
+                sx: {
+                    // Force the color override
+                    color: `${theme.palette.primary.dark} !important`, 
+                }
+            }}
+              />
             </MenuItem>
           ))}
         </Select>
@@ -423,7 +435,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Contact Name"
+                    label="Name"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
@@ -438,7 +450,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Contact Email"
+                    label="Email"
                     type="email"
                     fullWidth
                     error={meta.touched && !!meta.error}

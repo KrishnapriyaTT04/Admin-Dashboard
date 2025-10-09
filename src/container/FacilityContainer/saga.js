@@ -105,7 +105,9 @@ function* createFacilitySaga(action) {
 }
 
 // 3. Update Facility
-function* updateFacilitySaga(action,facilityId) {
+function* updateFacilitySaga(action,getUrl) {
+        console.log("----------------------saga-res------------------",getUrl);
+
 
    const token = JSON.parse(localStorage.getItem('klooToken'));
   try {
@@ -118,7 +120,6 @@ function* updateFacilitySaga(action,facilityId) {
 
     delete updateBody.id;
     const params = {
-      // Example API call for updating a facility
       api: `${FACILITY_API_BASE}/facilities/${facilityData.id}`, 
       method: 'PATCH',
       body: JSON.stringify(updateBody),
@@ -129,15 +130,10 @@ function* updateFacilitySaga(action,facilityId) {
     };
 
     const res = yield call(commonApi, params);
-      console.log("----------------------saga-res------------------",res);
 
-    if (res?.message === 'success') {
-      yield call(toast.success, 'Facility updated successfully!', { autoClose: 3000 });
-      yield put(actionType.updateFacilitySuccess(res.data)); 
-      yield put(actionType.getFacilities());
-    } else {
-      // throw new Error(res?.message || 'Facility update failed.');
-    }
+ yield call(toast.success, 'Facility updated successfully!', { autoClose: 3000 });
+
+
   } catch (error) {
     console.error('Update Facility failed:', error);
     yield put(actionType.updateFacilityFail({ 
