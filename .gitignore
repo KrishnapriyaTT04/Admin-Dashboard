@@ -67,5 +67,7 @@ yarn-error.log*
 
 package-lock.json
 yarn.lock
+release-notes.md
+
 
 
