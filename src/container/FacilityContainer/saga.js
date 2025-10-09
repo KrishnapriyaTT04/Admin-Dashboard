@@ -233,6 +233,46 @@ function* getMasterFacilitiesSaga(action) {
   }
 }
 
+
+function* getMasterFacilityTypeSaga(action) {
+  const token = JSON.parse(localStorage.getItem('klooToken'));
+  
+  try {
+    const params = {
+      // API endpoint for fetching facility types (uses payload for the URL)
+      api: `${FACILITY_API_BASE}${action.payload}`,  
+      method: 'GET',
+      // 🔑 Use the new action creators for facility types
+      successAction: actionType.getMasterFacilityTypeSuccess(),
+      failAction: actionType.getMasterFacilityTypeFail(),
+      authorization: 'Bearer',
+      token: `${token?.accessToken}` 
+    };
+    
+    const res = yield call(commonApi, params);
+    
+    // Assuming the API returns an array or an object containing the list
+    if (res && Array.isArray(res.data)) {
+      // 🔑 Dispatch success with the data
+      yield put(actionType.getMasterFacilityTypeSuccess(res.data)); 
+    } else if (res) {
+      // Handle case where API response is valid but not the expected array structure
+      yield put(actionType.getMasterFacilityTypeSuccess(res)); 
+    } else {
+      throw new Error('Invalid response data structure for master facility types.');
+    }
+  } catch (error) {
+    console.error('Fetch Master Facility Types failed:', error);
+    
+    // 🔑 Dispatch fail action
+    yield put(actionType.getMasterFacilityTypeFail({ 
+      message: error.message || 'Failed to fetch facility types.', 
+      status: error.response?.status || 500 
+    }));
+    yield call(toast.error, 'Failed to load master facility types.', { autoClose: 3000 });
+  }
+}
+
 export default function* facilityActionWatcher() {
    yield takeEvery(actionType.getFacilities.type, getFacilities);
    yield takeEvery(actionType.createFacility.type, createFacilitySaga);
@@ -240,6 +280,9 @@ export default function* facilityActionWatcher() {
    yield takeEvery(actionType.getFacilitiesCount.type, getFacilitiesCount);
    yield takeEvery(actionType.uploadBulkFacilities.type, uploadBulkFacilitiesSaga);
    yield takeEvery(actionType.getMasterFacilities.type, getMasterFacilitiesSaga);
+   yield takeEvery(actionType.getMasterFacilityType.type, getMasterFacilityTypeSaga);
+
+   
 
 
   

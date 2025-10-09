@@ -65,7 +65,7 @@ const UploadBulkFile = ({ drawerOpen, setDrawerOpen }) => {
         {/* Header */}
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
           <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.text.secondary }}>
-            Bulk Facility Update
+            Import Facilities
           </Typography>
           <IconButton onClick={() => setDrawerOpen(false)}  size="large">
             <CloseIcon />

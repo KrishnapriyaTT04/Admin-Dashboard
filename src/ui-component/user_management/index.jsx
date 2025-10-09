@@ -1,300 +1,173 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { TableContainer, Table, TextField, InputAdornment, Button } from '@mui/material';
+import { TableContainer, Table, TextField, InputAdornment, Button, Grid, Typography, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-// import { downloadExcel } from 'react-export-table-to-excel';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
-import ViewFeedbackDetail from './viewUserDetail';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import { Add as AddIcon, FileDownloadOutlined as FileDownloadOutlinedIcon } from '@mui/icons-material';
 
-// import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
-
- import { getUsers } from 'container/UsersContainer/slice';
-
- import { usersHeads } from 'utils/TableConfig';
-
-const users = [
-  { id: 1, name: 'Alice', age: 30, city: 'New York' },
-  { id: 2, name: 'Bob', age: 24, city: 'London' },
-  { id: 3, name: 'Charlie', age: 45, city: 'Paris' },
-];
 import MainCard from 'ui-component/cards/MainCard';
 import Pagination from 'utils/TablePagination';
 import TableHead from 'utils/TableHead';
 import TableRows from 'utils/TableRows';
+import ViewFeedbackDetail from './viewUserDetail';
 // import ConfirmModal from 'views/common/ConfirmModal';
+
+import { getUsers ,getUserCount} from 'container/UsersContainer/slice';
+import { usersHeads } from 'utils/TableConfig';
 import styles from '../common/style';
-// import EFTypeView from './efTypeView';
-// import UpdateEfTypeForm from './updateForm';
-import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
 
-export default function Type() {
+export default function Users() {
   const theme = useTheme();
   const style = styles(theme);
   const cmnstyle = cmnStyles(theme);
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
-      const [limit, setLimit] = useState(5);
-  
+  const [limit, setLimit] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedItem, setSelectedItem] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false);
-  const [formOpen, setFormOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showXSLModal, setshowXSLModal] = useState(false);
 
+  const usersList = useSelector((state) => state.user?.list || []);
+  const count = useSelector((state) => state.user?.listCount || 0);
 
-     const usersList = useSelector((state) => state.user?.list || []);
-  
-  const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
-  const count = useSelector((state) => state.emission?.efTypeListCount || 0);
-  const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
-  let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
-    slno: index + 1,
-    name: item.name,
-    desc: item.desc
-  }));
-  let countPagination = Math.ceil(count / 10);
   const { config, keys } = usersHeads;
+  const countPagination = Math.ceil(count / limit);
+ 
 
+  // Fetch users on mount and on page/search changes
   useEffect(() => {
-       let reqUrl =`users?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
-
-    dispatch(getUsers(reqUrl))
-    //  dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
-  }, [searchQuery]);
-
-
-  const searchHandler = (e) => {
-
-      const value = e.target.value; 
-      console.log("--**********************************-",value);
-      
-      setSearchQuery(value);
-          const filterObject = {
-          limit: limit,
-          skip: 0,
-          order: ["createdOn DESC"],
-          where: {
-              fullName: {
-                  like: value, 
-                  options: "i"
-              }
+    const filterObject = {
+      limit,
+      skip: page * limit,
+      order: ['createdOn DESC'],
+      where: searchQuery
+        ? {
+            fullName: { like: searchQuery, options: 'i' },
           }
-      };
-      
-      const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
-      let reqUrl = `users?filter=${encodedFilter}`;
-      dispatch(getUsers(reqUrl));
-      setPage(0);
+        : {},
+    };
+    const reqUrl = `users?filter=${encodeURIComponent(JSON.stringify(filterObject))}`;
+    dispatch(getUsers(reqUrl));
+    dispatch(getUserCount());
+  }, [dispatch, page, limit, searchQuery]);
+
+  // Search handler
+  const searchHandler = (e) => {
+    setSearchQuery(e.target.value);
+    setPage(0); // Reset page when searching
   };
 
-
-  function handleDownloadExcel() {
-    setshowXSLModal(true);
-    // dispatch(fetchEmissionFactorTypeXSL({ limit: count }));
-  }
-
-  const XSLHandler = () => {
-    excelExport();
-    closeXSLModal();
-  };
-  const header = ['SL.NO', 'Name', 'Description'];
-  function excelExport() {
-    downloadExcel({
-      fileName: 'Emission Factor Type',
-      sheet: 'Emission Factor Type',
-      tablePayload: {
-        header,
-        body: tableDataFilter
-      }
-    });
-  }
-
-  const closeXSLModal = () => {
-    setshowXSLModal(false);
-  };
-
-  const handleViewModal = (item) => {
-    setOpen(true);
-    setSelectedItem(item);
-  };
-
-  const handleFormModal = (item) => {
-    setFormOpen(true);
-    setSelectedItem(item);
-  };
-
-  const handleAddFormModal = (item) => {
-    setFormOpen(true);
-    setSelectedItem({});
-  };
-
+  // Pagination handler
   const handlePageClick = (e) => {
-    const selectedPage = e.selected;
-    setPage(selectedPage);
-    // dispatch(
-    //   getEfType({
-    //     page: selectedPage + 1,
-    //     searchVal: searchQuery
-    //   })
-    // );
+    setPage(e.selected);
+  };
+
+  // View modal
+  const handleViewModal = (item) => {
+    setSelectedItem(item);
+    setOpen(true);
+  };
+
+  // Delete modal
+  const handleDeleteModal = (item) => {
+    setSelectedItem(item);
+    setShowDeleteModal(true);
   };
 
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
   };
 
-  const handleDeleteModal = (item) => {
-    setShowDeleteModal(true);
-    setSelectedItem(item);
-  };
-
   const deleteHandler = () => {
-    // dispatch(deleteEfType(selectedItem));
+    // dispatch(deleteUser(selectedItem.id)); // Implement your delete API call
+    setShowDeleteModal(false);
     setPage(0);
-    closeDeleteModal();
   };
-
-
-
 
   return (
-    <>
-      <MainCard>
-        <Grid container direction={'row'} justifyContent={'space-between'} alignItems={'center'} spacing={1}>
-          <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
-            Users
-          </Typography>
-        </Grid>
-        <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
-          {/* Left Button */}
-          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-            {/* <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' }, alignItems: 'center' }}>
-              <Button
-                variant="outlined"
-                startIcon={<AddIcon />}
-                sx={{ ...cmnstyle.cmnBtn, ...cmnstyle.cmnBtnOutline, px: 3 }}
-                onClick={handleAddFormModal}
-              >
-                Add
-              </Button>
-            </Box> */}
-          </Grid>
+  <MainCard>
+  {/* Header */}
+  <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+    <Typography variant="h2" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
+      Users
+    </Typography>
+  </Grid>
 
-          {/* Search Box */}
-          <Grid item xs={12} sm={4} md={6} lg={6} xl={6}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                size="small"
-                placeholder="Search by name"
-                sx={{ maxWidth: 300, width: '100%' }}
-                value={searchQuery}
-                onChange={searchHandler}
-               npm run build
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                  sx: style.searchBox
-                }}
-              />
-            </Box>
-          </Grid>
+  {/* Search */}
+  <Grid container sx={{ width: '100%', alignItems: 'center', justifyContent: 'center', mt: 1 }}>
+    <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          size="small"
+          placeholder="Search by name"
+          value={searchQuery}
+          onChange={searchHandler}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+            sx: style.searchBox,
+          }}
+        />
+      </Box>
+    </Grid>
+  </Grid>
 
-          {/* Export Button */}
-          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-            {/* <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
-              <Button
-                variant="outlined"
-                onClick={handleDownloadExcel}
-                startIcon={<FileDownloadOutlinedIcon />}
-                sx={{
-                  color: '#242121',
-                  backgroundColor: 'white',
-                  borderColor: '#3dcd58',
-                  width: '180px',
-                  py: 1,
-                  borderRadius: '30px',
-                  whiteSpace: 'nowrap', // 🚀 keeps text in one line
-                  textOverflow: 'ellipsis', // optional, trims if overflowing
-                  overflow: 'hidden', // optional, prevents bulge
-                  '&:hover': {
-                    color: '#fcf9f9 !important',
-                    backgroundColor: '#3dcd58',
-                    borderColor: '#3dcd58'
-                  },
-                  '&:active': {
-                    color: '#fcf9f9 !important',
-                    backgroundColor: '#3dcd58',
-                    borderColor: '#3dcd58'
-                  }
-                }}
-              >
-                Export to Excel
-              </Button>
-            </Box> */}
-          </Grid>
-        </Grid>
+  {/* Table */}
+  <TableContainer sx={{ mt: 1 }}>
+    <Table sx={{ minWidth: 650 }} aria-label="users table">
+      <TableHead
+        keys={keys}
+        config={config}
+        sx={{
+          '& th': {
+            textAlign: 'center !important',
+            paddingLeft: '0px',
+            paddingRight: '0px',
+          },
+        }}
+      />
+      <TableRows
+        data={usersList}
+        keys={keys}
+        config={config}
+        currentPage={page + 1}
+        tableLimit={limit}
+        hasView
+        hasEdit={false}
+        hasDelete
+        handleViewModel={handleViewModal}
+        handleDeleteModal={handleDeleteModal}
+        tableData={usersList}
+        filter={searchQuery || ''}
+        sx={{
+          '& td': {
+            textAlign: 'center !important',
+            paddingLeft: '0px',
+            paddingRight: '0px',
+          },
+        }}
+      />
+    </Table>
+  </TableContainer>
 
-        <TableContainer>
-          <Table sx={{ minWidth: 650 }} aria-label="project table">
-            <TableHead keys={keys} config={config} />
-            <TableRows
-              data={usersList}
-              keys={keys}
-              config={config}
-              currentPage={page + 1}
-              tableLimit={limit} 
-              hasView={true}
-              hasEdit={false}
-              hasDelete={true}
-              hasStatusChange={false}
-              hasMore={false}
-              handleViewModel={handleViewModal}
-              handleDeleteModal={handleDeleteModal}
-              handleFormModal={handleFormModal}
-              msg="Projects"
-              tableData={usersList}
-              filter={searchQuery || ''}
-            />
-          </Table>
-        </TableContainer>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
-          {countPagination > 1 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
-        </Box>
-        {open && <ViewFeedbackDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
-        {/* {formOpen && <UpdateEfTypeForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />} */}
-        {showDeleteModal && (
-          <ConfirmModal
-            show={showDeleteModal}
-            handleCloseModal={closeDeleteModal}
-            submitHandler={deleteHandler}
-            modalTitle={'Delete Confirmation'}
-            modalText={'Are you sure you want to delete?'}
-            btnsubmitText={'DELETE'}
-          />
-        )}
-        {/* {showXSLModal && (
-          <ConfirmModal
-            show={showXSLModal}
-            handleCloseModal={closeXSLModal}
-            submitHandler={XSLHandler}
-            modalTitle={'Download Confirmation'}
-            modalText={'Are you sure you want to download?'}
-            btnsubmitText={'DOWNLOAD'}
-          />
-        )} */}
-      </MainCard>
-    </>
+  {/* Pagination */}
+  {countPagination > 1 && (
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
+      <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />
+    </Box>
+  )}
+
+  {/* View Modal */}
+  {open && <ViewFeedbackDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
+</MainCard>
+
   );
 }

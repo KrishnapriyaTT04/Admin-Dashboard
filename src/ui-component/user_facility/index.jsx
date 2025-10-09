@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import { FileUploadOutlined } from '@mui/icons-material';
+
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
 import { getFacilities, selectFacilityList, getFacilitiesCount} from 'container/FacilityContainer/slice';
@@ -254,7 +256,7 @@ export default function Facility() {
               <Button
                 variant="outlined"
                 onClick={handleExcelModal}
-                startIcon={<FileDownloadOutlinedIcon />}
+                startIcon={<FileUploadOutlined />}
                 sx={{
                   color: '#242121',
                   backgroundColor: 'white',
@@ -277,7 +279,7 @@ export default function Facility() {
                   }
                 }}
               >
-                Export to Excel
+                Import Facilities
               </Button>
             </Box>
           </Grid>
