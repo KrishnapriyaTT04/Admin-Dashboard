@@ -90,15 +90,15 @@ export const usersHeads = {
 };
 
 export const userReport = {
-  keys: ['issueId', 'assignedName', 'topic', 'priority', 'status'],
+  keys: ['issueId', 'reportedByName', 'topic', 'priority', 'status'],
   config: {
     issueId: {
       label: 'Issue ID',
       type: 'string',
       class: ' commonDesc'
     },
-    assignedName: {
-      label: 'Name',
+    reportedByName: {
+      label: 'Reported By',
       type: 'string',
       class: ' cmn_Cap commonDesc'
     },

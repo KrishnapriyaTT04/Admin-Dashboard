@@ -82,17 +82,7 @@ function* getRatingCount() {
       failAction: actionType.getRatingCountFail(),
       authourization: `Bearer`
     };    
-    
-    const res = yield call(commonApi, params);
-    
-    console.log("==res", res);
-    
-   
-    if (res) {
-      yield put(actionType.getRatingCountSuccess(res)); 
-    } else {
-      throw new Error('Invalid response data structure for feedback list.');
-    }
+
   } catch (error) {
     console.error('Fetch Feedback failed:', error);
     yield put(actionType.getRatingCountFail({ 

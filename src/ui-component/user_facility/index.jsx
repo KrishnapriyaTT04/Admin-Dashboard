@@ -10,14 +10,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
- import { getFacilities, selectFacilityList, getFacilitiesCount } from 'container/FacilityContainer/slice';
+import { getFacilities, selectFacilityList, getFacilitiesCount} from 'container/FacilityContainer/slice';
 
- import { facilityHeads } from 'utils/TableConfig';
+import { facilityHeads } from 'utils/TableConfig';
 
 const users = [
   { id: 1, name: 'Alice', age: 30, city: 'New York' },
   { id: 2, name: 'Bob', age: 24, city: 'London' },
-  { id: 3, name: 'Charlie', age: 45, city: 'Paris' },
+  { id: 3, name: 'Charlie', age: 45, city: 'Paris' }
 ];
 import MainCard from 'ui-component/cards/MainCard';
 import Pagination from 'utils/TablePagination';
@@ -38,7 +38,7 @@ export default function Facility() {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
-    const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(5);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
@@ -49,16 +49,15 @@ export default function Facility() {
   const [showXSLModal, setShowXSLModal] = useState(false);
   const [getReqUrl, setGetReqUrl] = useState('');
 
-   const facilityList = useSelector((state) => state.facility?.list || []);
+  const facilityList = useSelector((state) => state.facility?.list || []);
 
-   
 
-      let flattenedFacilityList =  [];
+  let flattenedFacilityList = [];
 
-    // const facilityList = useSelector(selectFacilityList);
+  // const facilityList = useSelector(selectFacilityList);
 
-    const count = useSelector((state) => state.facility?.listCount || 0);
-    const isLoading = useSelector((state) => state.facility?.loading || false);
+  const count = useSelector((state) => state.facility?.listCount || 0);
+  const isLoading = useSelector((state) => state.facility?.loading || false);
   // const count = useSelector((state) => state.emission?.efTypeListCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
@@ -66,11 +65,11 @@ export default function Facility() {
     name: item.name,
     desc: item.desc
   }));
-let countPagination = Math.ceil(count / limit); 
+  let countPagination = Math.ceil(count / limit);
   const { config, keys } = facilityHeads;
 
   // if(facilityList.length)
-    
+
   //    flattenedFacilityList = facilityList.map(facility => ({
   //   id: facility.id,
   //   title: facility.title,
@@ -79,54 +78,50 @@ let countPagination = Math.ceil(count / limit);
   //   // include other fields you need
   // }));
 
-
   const searchfilterObject = {
     limit: limit,
     skip: page,
-    order: ["createdOn DESC"],
+    order: ['createdOn DESC'],
     where: {
-        title: {
-            // Note: The 'like' value must be escaped if it contains special characters, 
-            // but JSON.stringify handles basic string quoting.
-            like: searchQuery, 
-            options: "i" // Case-insensitive search
-        }
+      title: {
+        // Note: The 'like' value must be escaped if it contains special characters,
+        // but JSON.stringify handles basic string quoting.
+        like: searchQuery,
+        options: 'i' // Case-insensitive search
+      }
     }
-};
+  };
 
- 
   useEffect(() => {
-   //deleted false
-   let reqUrl =`facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
-   let countUrl =`facilities/count`
-       setGetReqUrl(reqUrl)
-       dispatch(getFacilitiesCount(countUrl));
+    //deleted false
+    let reqUrl = `facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
+    let countUrl = `facilities/count`;
+    setGetReqUrl(reqUrl);
+    dispatch(getFacilitiesCount(countUrl));
 
-  dispatch(getFacilities(reqUrl));
+    dispatch(getFacilities(reqUrl));
+  }, [dispatch]);
 
-    console.log("Facilities in component:", facilityList);
-}, [dispatch]); 
-
-const searchHandler = (e) => {
-    const value = e.target.value; 
+  const searchHandler = (e) => {
+    const value = e.target.value;
     setSearchQuery(value);
-        const filterObject = {
-        limit: limit,
-        skip: 0,
-        order: ["createdOn DESC"],
-        where: {
-            title: {
-                like: value, 
-                options: "i"
-            }
+    const filterObject = {
+      limit: limit,
+      skip: 0,
+      order: ['createdOn DESC'],
+      where: {
+        title: {
+          like: value,
+          options: 'i'
         }
+      }
     };
-    
+
     const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
     let reqUrl = `facilities?filter=${encodedFilter}`;
     dispatch(getFacilities(reqUrl));
     setPage(0);
-};
+  };
 
   function handleDownloadExcel() {
     setShowXSLModal(true);
@@ -159,8 +154,8 @@ const searchHandler = (e) => {
   };
 
   const handleFormModal = (item) => {
-    facilityList
-    const foundItem = facilityList.find(items => items.id === item.id);
+    facilityList;
+    const foundItem = facilityList.find((items) => items.id === item.id);
     setFormOpen(true);
     setSelectedItem(foundItem);
   };
@@ -170,20 +165,20 @@ const searchHandler = (e) => {
     setSelectedItem({});
   };
 
-    const handleExcelModal = (item) => {
-        setShowXSLModal(true);
+  const handleExcelModal = (item) => {
+    setShowXSLModal(true);
     // showXSLUploadModal(true);
     // setSelectedItem({});
   };
 
   const handlePageClick = (e) => {
-    const selectedPage = e.selected; 
+    const selectedPage = e.selected;
     const newSkip = selectedPage * limit;
-    setPage(selectedPage); 
+    setPage(selectedPage);
     let reqUrl = `facilities?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
-     setGetReqUrl(reqUrl)
+    setGetReqUrl(reqUrl);
     dispatch(getFacilities(reqUrl));
-};
+  };
 
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
@@ -200,8 +195,7 @@ const searchHandler = (e) => {
     closeDeleteModal();
   };
 
-    // console.log("Current facility list:", facilityList);
-
+  // console.log("Current facility list:", facilityList);
 
   return (
     <>
@@ -288,34 +282,35 @@ const searchHandler = (e) => {
             </Box>
           </Grid>
         </Grid>
-{isLoading ? (
-  <Typography>Loading facilities...</Typography>
-) : facilityList.length > 0 ? (        <TableContainer>
-          <Table sx={{ minWidth: 650 }} aria-label="project table">
-            <TableHead keys={keys} config={config} />
-            <TableRows
-              data={facilityList}
-              keys={keys}
-              config={config}
-              currentPage={page + 1}
-              tableLimit={limit} 
-              hasView={true}
-              hasEdit={true}
-              hasDelete={true}
-              hasStatusChange={false}
-              hasMore={false}
-              handleViewModel={handleViewModal}
-              handleDeleteModal={handleDeleteModal}
-              handleFormModal={handleFormModal}
-              msg="Projects"
-              tableData={facilityList}
-              filter={searchQuery || ''}
-            />
-          </Table>
-        </TableContainer>
+        {isLoading ? (
+          <Typography>Loading facilities...</Typography>
+        ) : facilityList.length > 0 ? (
+          <TableContainer>
+            <Table sx={{ minWidth: 650 }} aria-label="project table">
+              <TableHead keys={keys} config={config} />
+              <TableRows
+                data={facilityList}
+                keys={keys}
+                config={config}
+                currentPage={page + 1}
+                tableLimit={limit}
+                hasView={true}
+                hasEdit={true}
+                hasDelete={true}
+                hasStatusChange={false}
+                hasMore={false}
+                handleViewModel={handleViewModal}
+                handleDeleteModal={handleDeleteModal}
+                handleFormModal={handleFormModal}
+                msg="Projects"
+                tableData={facilityList}
+                filter={searchQuery || ''}
+              />
+            </Table>
+          </TableContainer>
         ) : (
-  <Typography>No data found</Typography>
-)}
+          <Typography>No data found</Typography>
+        )}
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
@@ -323,8 +318,10 @@ const searchHandler = (e) => {
         {/* {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setOpen} item={selectedItem} />} */}
         {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
 
-        {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem}  />}
-        {formOpen && <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} getReqestUrl={getReqUrl}/>}
+        {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem} />}
+        {formOpen && (
+          <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} getReqestUrl={getReqUrl} />
+        )}
         {showDeleteModal && (
           <ConfirmModal
             show={showDeleteModal}

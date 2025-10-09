@@ -16,7 +16,7 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
-    // Use 'en-US' or locale appropriate for your app
+
     return new Date(dateString).toLocaleDateString('en-US');
   };
 

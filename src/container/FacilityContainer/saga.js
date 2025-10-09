@@ -12,7 +12,7 @@ import * as actionType from './slice';
 // Base API endpoint for facilities 
 const FACILITY_API_BASE = `${appConfig.ip}`; 
 
-function* getFacilitiesSaga(action) {
+function* getFacilities(action) {
   try {
     const params = {
       api: `${FACILITY_API_BASE}/${action.payload}`, 
@@ -146,11 +146,7 @@ function* getFacilitiesCount(action) {
       authourization: `Bearer`
     };
     const res = yield call(commonApi, params);
-    if (res) {
-      yield put(actionType.getFacilitiesSuccess(res)); 
-    } else {
-      throw new Error('Invalid response data structure for facility list.');
-    }
+ 
   } catch (error) {
     console.error('Fetch Facilities failed:', error);
     yield put(actionType.getFacilitiesCountFail({ 
@@ -238,7 +234,7 @@ function* getMasterFacilitiesSaga(action) {
 }
 
 export default function* facilityActionWatcher() {
-   yield takeEvery(actionType.getFacilities.type, getFacilitiesSaga);
+   yield takeEvery(actionType.getFacilities.type, getFacilities);
    yield takeEvery(actionType.createFacility.type, createFacilitySaga);
    yield takeEvery(actionType.updateFacility.type, updateFacilitySaga);
    yield takeEvery(actionType.getFacilitiesCount.type, getFacilitiesCount);
