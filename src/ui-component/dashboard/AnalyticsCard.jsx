@@ -9,15 +9,14 @@ import { useSelector } from 'react-redux';
 const AnalyticsCard = () => {
   const facilityList = useSelector((state) => state.facility?.list || []);
   const issueList = useSelector((state) => state?.reportIssue?.list || []);
-  const feedbackList = useSelector((state) => state.rating?.list || []);
+  const feedbackList = useSelector((state) => state.feedback?.list || []);
   const usersList = useSelector((state) => state.user?.list || []);
 
   const facilitycount = useSelector((state) => state.facility?.listCount || 0);
   const issuecount = useSelector((state) => state.reportIssue?.listCount || 0);
-  const feedbackcount = useSelector((state) => state?.rating?.listCount || 0);
+  const feedbackcount = useSelector((state) => state.feedback?.listCount || 0);
   const usercount = useSelector((state) => state?.user?.listCount || 0);
 
-  console.log('==issueList', issueList);
 
   return (
     <Grid container alignItems="stretch">
@@ -41,7 +40,7 @@ const AnalyticsCard = () => {
         </Grid>
 
         <Grid item xs={12} sm={3}>
-          <Link to="/userfeedback" style={{ textDecoration: 'none' }}>
+          <Link to="/rating" style={{ textDecoration: 'none' }}>
             <Card title="Feedback" count={feedbackcount} color="#e83766" bgTheme="#e837661c" icon={<MessageOutlined />} />
           </Link>
         </Grid>
@@ -74,13 +73,13 @@ const AnalyticsCard = () => {
         <Grid item xs={12} sm={4}>
           <DetailCard
             title="Feedback"
-            path="/userfeedback"
+            path="/rating"
             data={feedbackList}
             count={feedbackcount}
             fields={[
               { name: 'createdUser', bold: true },
               { name: 'comments', color: '#444', size: '12px' },
-              { name: 'starRating', color: '#f4b400', size: '12px' },
+              // { name: 'starRating', color: '#f4b400', size: '12px' },
             ]}
           />
         </Grid>

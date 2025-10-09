@@ -89,3 +89,34 @@ export const usersHeads = {
   }
 };
 
+export const userReport = {
+  keys: ['issueId', 'assignedName', 'topic', 'priority', 'status'],
+  config: {
+    issueId: {
+      label: 'Issue ID',
+      type: 'string',
+      class: ' commonDesc'
+    },
+    assignedName: {
+      label: 'Name',
+      type: 'string',
+      class: ' cmn_Cap commonDesc'
+    },
+    topic: {
+      label: 'Issue',
+      type: 'string',
+      class: ' cmn_Cap commonDesc'
+    },
+    priority: {
+      label: 'Priority',
+      type: 'string',
+      class: ' cmn_Cap commonDesc'
+    },
+    status:{
+      label: 'Status',
+      type: 'string',
+      class: ' cmn_Cap commonDesc'
+    }
+  }
+};
+

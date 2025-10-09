@@ -3,34 +3,32 @@ import { UserOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { getFacilitiesCount, getFacilities} from 'container/FacilityContainer/slice';
-import { getIssuesCount, getIssueReports  } from 'container/ReportIssuesContainer/slice';
-import { getRatingCount, getRatings} from 'container/RatingContainer/slice';
-import { getUserCount, getUsers} from 'container/UsersContainer/slice';
-
+import { getFacilitiesCount, getFacilities } from 'container/FacilityContainer/slice';
+import { getIssuesCount, getIssueReports } from 'container/ReportIssuesContainer/slice';
+import { getUserFeedback, getUserFeedbackCount } from 'container/UserFeedbackContainer/slice';
+import { getUserCount, getUsers } from 'container/UsersContainer/slice';
 
 import AnalyticsCard from './AnalyticsCard';
 
 const DashboardDefault = () => {
-
   const dispatch = useDispatch();
 
-   const [limit, setLimit] = useState(5);
-   const [page, setPage] = useState(0);
+  const [limit, setLimit] = useState(5);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     let countUrl = `facilities/count`;
-    let reqUrl =`facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
-    let userUrl =`users?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
+    let reqUrl = `facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
+    let userUrl = `users?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
     dispatch(getFacilitiesCount(countUrl));
     dispatch(getFacilities(reqUrl));
     dispatch(getIssuesCount());
-    dispatch(getRatingCount());
-    dispatch(getRatings());
+    dispatch(getUserFeedback());
+    dispatch(getUserFeedbackCount());
     dispatch(getUserCount());
     dispatch(getUserCount());
     dispatch(getIssueReports());
-    dispatch(getUsers(userUrl))
+    dispatch(getUsers(userUrl));
   }, [dispatch]);
 
   return (
