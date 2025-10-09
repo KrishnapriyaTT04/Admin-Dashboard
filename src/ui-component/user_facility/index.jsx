@@ -58,6 +58,7 @@ export default function Facility() {
     // const facilityList = useSelector(selectFacilityList);
 
     const count = useSelector((state) => state.facility?.listCount || 0);
+    const isLoading = useSelector((state) => state.facility?.loading || false);
   // const count = useSelector((state) => state.emission?.efTypeListCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
@@ -287,8 +288,9 @@ const searchHandler = (e) => {
             </Box>
           </Grid>
         </Grid>
-
-        <TableContainer>
+{isLoading ? (
+  <Typography>Loading facilities...</Typography>
+) : facilityList.length > 0 ? (        <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
@@ -311,6 +313,9 @@ const searchHandler = (e) => {
             />
           </Table>
         </TableContainer>
+        ) : (
+  <Typography>No data found</Typography>
+)}
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
