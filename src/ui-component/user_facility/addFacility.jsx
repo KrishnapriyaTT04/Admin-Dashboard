@@ -9,7 +9,12 @@ import * as Yup from 'yup';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import FormikSwitch from '../common/toggleSwitch';
-import MapPickerComponent from '../common/locationMapPicker'
+import MapPickerComponent from '../common/locationMapPicker';
+
+import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
  import { createFacility ,updateFacility, getMasterFacilities} from 'container/FacilityContainer/slice'; 
  
@@ -150,7 +155,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
       validationSchema={validationSchema} 
       onSubmit={submit}
       enableReinitialize={true}
-      setFieldValue
+      setFieldValuegetFacilitiesSuccess
     >
       {({ values, isSubmitting, isValid, dirty,setFieldValue }) => (
         <Drawer
@@ -286,7 +291,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
    
 
     {/* Conditional Time Inputs */}
-    {!values.is24H && (
+    {/* {!values.is24H && (
         <>
             <Grid item xs={12} sm={6}>
                 <Field name="openingTime">
@@ -321,7 +326,68 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
 
 
         </>
-    )}
+    )} */}
+
+
+{!values.is24H && (
+  <LocalizationProvider 
+    dateAdapter={AdapterDayjs} 
+    adapterLocale="en" // Explicitly set locale
+  >
+    <Grid item xs={12} sm={6}>
+      <Field name="openingTime">
+        {({ field, form, meta }) => (
+          <MobileTimePicker
+            label="Opening Time (HH:mm)"
+            value={field.value ? dayjs(field.value, 'HH:mm') : null}
+            onChange={(newValue) => {
+              const timeString = newValue ? newValue.format('HH:mm') : '';
+              form.setFieldValue('openingTime', timeString);
+            }}
+            // 🔥 Force 24-hour format with multiple props
+            ampm={false}
+            views={['hours', 'minutes']}
+            format="HH:mm"
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                error: meta.touched && !!meta.error,
+                helperText: meta.touched && meta.error,
+                placeholder: "00:00", // 24-hour format placeholder
+              },
+            }}
+          />
+        )}
+      </Field>
+    </Grid>
+    <Grid item xs={12} sm={6}>
+      <Field name="closingTime">
+        {({ field, form, meta }) => (
+          <MobileTimePicker
+            label="Closing Time (HH:mm)"
+            value={field.value ? dayjs(field.value, 'HH:mm') : null}
+            onChange={(newValue) => {
+              const timeString = newValue ? newValue.format('HH:mm') : '';
+              form.setFieldValue('closingTime', timeString);
+            }}
+            // 🔥 Force 24-hour format with multiple props
+            ampm={false}
+            views={['hours', 'minutes']}
+            format="HH:mm"
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                error: meta.touched && !!meta.error,
+                helperText: meta.touched && meta.error,
+                placeholder: "23:59", // 24-hour format placeholder
+              },
+            }}
+          />
+        )}
+      </Field>
+    </Grid>
+  </LocalizationProvider>
+)}
 
                <Grid item xs={6} sm={6}>
         <Field name="seatCapacity">

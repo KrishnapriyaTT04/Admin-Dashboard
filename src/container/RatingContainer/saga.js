@@ -12,52 +12,64 @@ const RATING_API_BASE = `${appConfig.ip}`;
 /**
  * Fetch Ratings Saga
  */
-function* getRatingsSaga() {
-    try {
-        // Retrieve token from local storage
-        const tokenData = JSON.parse(localStorage.getItem('klooToken'));
-        const accessToken = tokenData?.accessToken;
+function* getRatingsSaga(action) {
+  try {
+    // Retrieve token
+    const tokenData = JSON.parse(localStorage.getItem('klooToken'));
+    const accessToken = tokenData?.accessToken;
 
-        if (!accessToken) {
-            yield put(actionType.getRatingsFail({
-                message: 'Authentication failed: No token found.',
-                status: 401
-            }));
-            yield call(toast.error, 'Please log in to load ratings.', { autoClose: 3000 });
-            return;
-        }
-
-        // API request parameters
-        const params = {
-            api: `${RATING_API_BASE}/feedbacks`, // Your Ratings endpoint
-            method: 'GET',
-            successAction: actionType.getRatingsSuccess(),
-            failAction: actionType.getRatingsFail(),
-            authorization: `Bearer`,
-            token: accessToken,
-        };
-
-        // Call API
-        const res = yield call(commonApi, params);
-
-        // Validate response
-        const ratingData = res?.data || res;
-        if (!Array.isArray(ratingData)) {
-            throw new Error('Invalid response structure for rating list.');
-        }
-
-        // Dispatch success action
-        yield put(actionType.getRatingsSuccess(ratingData));
-
-    } catch (error) {
-        // Dispatch fail action and show toast
-        yield put(actionType.getRatingsFail({
-            message: error.message || 'Failed to fetch ratings.',
-            status: error.response?.status || 500
-        }));
-        yield call(toast.error, 'Failed to load ratings.', { autoClose: 3000 });
+    if (!accessToken) {
+      yield put(actionType.getRatingsFail({
+        message: 'Authentication failed: No token found.',
+        status: 401
+      }));
+      yield call(toast.error, 'Please log in to load ratings.', { autoClose: 3000 });
+      return;
     }
+
+    // Extract search query (if provided)
+    const searchQuery = action.payload?.searchQuery || '';
+
+    // 🔍 Build API URL dynamically
+    let apiUrl = `${RATING_API_BASE}/feedbacks`;
+    if (searchQuery.trim() !== '') {
+      // Create filter object to search by title (case insensitive)
+      const filter = {
+        where: { facilityTitle: { like: searchQuery, options: 'i' } },
+        order: ['createdOn DESC']
+      };
+      apiUrl += `?filter=${encodeURIComponent(JSON.stringify(filter))}`;
+    }
+
+    const params = {
+      api: apiUrl,
+      method: 'GET',
+      successAction: actionType.getRatingsSuccess(),
+      failAction: actionType.getRatingsFail(),
+      authorization: `Bearer`,
+      token: accessToken,
+    };
+
+    // API call
+    const res = yield call(commonApi, params);
+    const ratingData = res?.data || res;
+
+    if (!Array.isArray(ratingData)) {
+      throw new Error('Invalid response structure for rating list.');
+    }
+
+    // Success dispatch
+    yield put(actionType.getRatingsSuccess(ratingData));
+
+  } catch (error) {
+    yield put(actionType.getRatingsFail({
+      message: error.message || 'Failed to fetch ratings.',
+      status: error.response?.status || 500
+    }));
+    yield call(toast.error, 'Failed to load ratings.', { autoClose: 3000 });
+  }
 }
+
 
 
 function* getRatingCount() {

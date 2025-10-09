@@ -3,17 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const ratingSlice = createSlice({
     name: 'rating',
     initialState: {
-        list: [],          // Stores the list of ratings
-        listLoading: false, // Tracks loading state
+        list: [], 
+        listLoading: false, 
         listError: null,
-        listCount: 0
+        listCount: 0 
     },
     reducers: {
-
         /**
          * Triggered when fetching ratings starts.
+         * @param {string} action.payload - The full API filter URL
          */
-        getRatings: (state) => {
+        getRatings: (state, action) => {
             state.listLoading = true;
             state.listError = null;
         },
@@ -47,17 +47,19 @@ const ratingSlice = createSlice({
             state.listError = null;
         },
 
-        getRatingCount: (state) => {
+        getRatingCount: (state, action) => {
             state.listLoading = true;
-            
         },
         getRatingCountSuccess: (state, action) => {
             state.listLoading = false;
-            state.listCount = action.payload.count;
+            // Assumes action.payload is { count: N }
+            state.listCount = action.payload.count; 
         },
         getRatingCountFail: (state, action) => {
             state.listLoading = false;
-        },
+            // Note: Error details for count can be handled here if needed, 
+            // but is omitted for simplicity based on original structure.
+        }
     }
 });
 

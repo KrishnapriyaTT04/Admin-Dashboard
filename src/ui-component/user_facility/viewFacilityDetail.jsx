@@ -106,6 +106,9 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
             <Grid item xs={12}>
                 <DetailText label="Title" value={item.title} isSubtitle={true} />
             </Grid>
+            <Grid item xs={12}>
+                <DetailText label="Facility Id" value={item.id} isSubtitle={true} />
+            </Grid>
 
             {/* Facility Type & Category */}
             <Grid item xs={12} sm={6}>
