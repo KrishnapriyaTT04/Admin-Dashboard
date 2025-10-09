@@ -3,20 +3,16 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import commonApi from '../api'; 
-
 import uploadApi from 'container/uploadApi';  
-
 import appConfig from '../../config';
-import * as actionType from './slice'; // Assuming this imports all the facility actions
+import * as actionType from './slice';
 
 
 
-// Base API endpoint for facilities (adjust as needed for your specific API)
+// Base API endpoint for facilities 
 const FACILITY_API_BASE = `${appConfig.ip}`; 
 
 function* getFacilitiesSaga(action) {
-
-    console.log("----------------------SSSS-------------------",action);
   try {
     const params = {
       api: `${FACILITY_API_BASE}/${action.payload}`, 
@@ -27,7 +23,6 @@ function* getFacilitiesSaga(action) {
     };
     
     const res = yield call(commonApi, params);
-    console.log("==res==",res);
     
     if (res) {
       yield put(actionType.getFacilitiesSuccess(res)); 
@@ -36,7 +31,6 @@ function* getFacilitiesSaga(action) {
     }
   } catch (error) {
     console.error('Fetch Facilities failed:', error);
-    // Dispatch failure action
     yield put(actionType.getFacilitiesFail({ 
       message: error.message || 'Failed to fetch facilities.', 
       status: error.response?.status || 500 
@@ -45,7 +39,7 @@ function* getFacilitiesSaga(action) {
   }
 }
 
-// 2. Create Facility
+
 function* createFacilitySaga(action) {
      const token = JSON.parse(localStorage.getItem('klooToken'));
       console.log("----------------------saga-------------------",token);
@@ -62,13 +56,6 @@ function* createFacilitySaga(action) {
     // action.payload.district='kozhikkode',
     // action.payload.pinCode="673525"
     // action.payload.landmark="Library"
-
-
-
-              
-
-       
-       
 
     const facilityData = action.payload;
 
@@ -104,7 +91,6 @@ function* createFacilitySaga(action) {
   }
 }
 
-// 3. Update Facility
 function* updateFacilitySaga(action,facilityId) {
 
    const token = JSON.parse(localStorage.getItem('klooToken'));
@@ -213,7 +199,6 @@ ${res.failedRecords
         yield call(toast.error, `Bulk update failed: ${error.message || 'Server error.'}`, { autoClose: 5000 });
     }
 }
-// --- Watcher Saga ---
 
 export default function* facilityActionWatcher() {
    yield takeEvery(actionType.getFacilities.type, getFacilitiesSaga);
