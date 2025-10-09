@@ -7,9 +7,7 @@ import { DetailCard } from './DetailCard';
 import { useSelector } from 'react-redux';
 
 const AnalyticsCard = () => {
-  
-    const facilityList = useSelector((state) => state.facility?.list || []);
-    const facilityLoading = useSelector((state) => state.facility?.facilityLoading || false);
+  const facilityList = useSelector((state) => state.facility?.list || []);
   const issueList = useSelector((state) => state?.reportIssue?.list || []);
   const feedbackList = useSelector((state) => state.rating?.list || []);
   const usersList = useSelector((state) => state.user?.list || []);
@@ -19,15 +17,10 @@ const AnalyticsCard = () => {
   const feedbackcount = useSelector((state) => state?.rating?.listCount || 0);
   const usercount = useSelector((state) => state?.user?.listCount || 0);
 
-  // const isLoading = !facilityList.length && !issueList.length && !feedbackList.length && !usersList.length;
-  const isLoading = facilityLoading;
-  console.log('==feedbackList', isLoading);
-    console.log('==feedbackList1', facilityList);
-
-
+  console.log('==issueList', issueList);
 
   return (
-    <Grid container>
+    <Grid container alignItems="stretch">
       <Grid rowSpacing={2.5} columnSpacing={1.75} container xs={12} md={9}>
         <Grid item xs={12} sm={3}>
           <Link to="/userManagment" style={{ textDecoration: 'none' }}>
@@ -55,46 +48,54 @@ const AnalyticsCard = () => {
 
         <Grid item xs={12} sm={4}>
           <DetailCard
-          path="/facility"
             title="Facilities"
+            path="/facility"
+            count={facilitycount}
             data={facilityList}
-            loading={isLoading}
-            fields={[{ name: 'title', bold: true }, { name: 'status' }]}
+            fields={[
+              { name: 'title', bold: true },
+              { name: 'facilityType' },
+              { name: 'city' },
+              { name: 'status', color: '#008000', size: '12px' }
+            ]}
           />
         </Grid>
 
         <Grid item xs={12} sm={4}>
-          {/* <DetailCard title="Issues" data={issueList} loading={isLoading} /> */}
           <DetailCard
             title="Issues"
-            path = "/reportedIssues"
+            path="/reportedIssues"
             data={issueList}
-            loading={isLoading}
-            fields={[{ name: 'title', bold: true }, { name: 'contactPhone' }]}
+            count={issuecount}
+            fields={[{ name: 'assignedName', bold: true }, { name: 'topic' }]}
           />
         </Grid>
+
         <Grid item xs={12} sm={4}>
-          {/* <DetailCard title="Feedback" data={feedbackList} loading={isLoading} /> */}
-           <DetailCard
-              title="Feedback"
-              path = "/userfeedback"
-              data={feedbackList}
-              loading={isLoading}
-              fields={[{ name: 'createdUser', bold: true }, { name: 'comments' }]}
-            />
+          <DetailCard
+            title="Feedback"
+            path="/userfeedback"
+            data={feedbackList}
+            count={feedbackcount}
+            fields={[
+              { name: 'createdUser', bold: true },
+              { name: 'comments', color: '#444', size: '12px' },
+              { name: 'starRating', color: '#f4b400', size: '12px' },
+            ]}
+          />
         </Grid>
       </Grid>
 
       <Grid sx={{ pl: 2 }} container xs={12} md={3}>
         <Grid item xs={12}>
-          {/* <DetailCard title="Users" data={usersList} feilds={[{val1 : usersList?.firstName, val2 : usersList?.phone}]} loading={isLoading} /> */}
           <Grid item xs={12}>
             <DetailCard
               title="Users"
-              path = "/userManagment"
+              path="/userManagment" 
+              count={usercount}
               data={usersList}
-              loading={isLoading}
-              fields={[{ name: 'firstName', bold: true }, { name: 'phone' }]}
+              fields={[{ name: 'firstName', bold: true }, { name: 'phone' }, { name: 'userType' }]}
+              sx={{ minHeight: '75vh' }}
             />
           </Grid>
         </Grid>

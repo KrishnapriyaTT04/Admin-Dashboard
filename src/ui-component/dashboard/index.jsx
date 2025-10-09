@@ -69,7 +69,7 @@ const DashboardDefault = () => {
             </Box>
             <Box>
               <Typography sx={{ fontSize: '14px', fontWeight: '600' }}>Platform Admin Dashboard</Typography>
-              <Typography sx={{ fontSize: '13px', fontWeight: 100 }}>Hello, KLOO Admin 👋</Typography>
+              <Typography sx={{ fontSize: '13px', fontWeight: 400 }}>Hello, KLOO Admin 👋</Typography>
             </Box>
           </Box>
         </Grid>

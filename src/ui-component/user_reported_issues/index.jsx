@@ -41,7 +41,8 @@ export default function userReportedIssues() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
 
-  const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
+  // const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
+  const issueList = useSelector((state) =>state?.reportIssue?.list);
   const count = useSelector((state) => state.emission?.efTypeListCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
@@ -51,6 +52,8 @@ export default function userReportedIssues() {
   }));
   let countPagination = Math.ceil(count / 10);
   const { config, keys } = userFeedback;
+
+console.log("==count", count);
 
   useEffect(() => {
     
@@ -181,7 +184,7 @@ export default function userReportedIssues() {
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
-              data={efTypeList}
+              data={issueList}
               keys={keys}
               config={config}
               currentPage={page + 1}
@@ -194,7 +197,7 @@ export default function userReportedIssues() {
               handleDeleteModal={handleDeleteModal}
               handleFormModal={handleFormModal}
               msg="Projects"
-              tableData={efTypeList}
+              tableData={issueList}
               filter={searchQuery || ''}
             />
           </Table>
