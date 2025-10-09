@@ -27,7 +27,7 @@ echo "Previous tag: $PREVIOUS_TAG"
 VERSION=${LATEST_TAG#v}
 
 # Generate commit messages, excluding merge commits
-echo "# Release Notes for CRM Portal version $VERSION" > $RELEASE_NOTES_FILE
+echo "# Release Notes for Kloo Admin version $VERSION" > $RELEASE_NOTES_FILE
 echo "" >> $RELEASE_NOTES_FILE
 
 # Get the commit messages, excluding merge commits and commits starting with "release"
