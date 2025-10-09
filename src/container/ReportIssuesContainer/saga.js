@@ -20,12 +20,12 @@ function* getIssueReportsSaga(action) {
   try {
     const params = {
       // API endpoint for fetching all issue reports
-      api: `${ISSUE_API_BASE}/issues`, 
+      api: `${ISSUE_API_BASE}/${action.payload}`,
       method: 'GET',
       successAction: actionType.getIssueReportsSuccess(),
       failAction: actionType.getIssueReportsFail(),
       authorization: 'Bearer',
-      token: `${token?.accessToken}` // Use optional chaining for safer access
+      token: `${token?.accessToken}` 
     };
     
     const res = yield call(commonApi, params);
@@ -67,12 +67,7 @@ function* getIssuesCount() {
     
     const res = yield call(commonApi, params);
     console.log("==res",res);
-    
-    if (res) {
-      yield put(actionType.getIssuesCountSuccess(res)); 
-    } else {
-      throw new Error('Invalid response data structure for issue list.');
-    }
+ 
   } catch (error) {
     console.error('Fetch Issues failed:', error);
     yield put(actionType.getIssuesCountFail({ 

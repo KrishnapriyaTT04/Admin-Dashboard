@@ -20,6 +20,7 @@ const DashboardDefault = () => {
     let countUrl = `facilities/count`;
     let reqUrl = `facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
     let userUrl = `users?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
+    let repUrl = `issues?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
     dispatch(getFacilitiesCount(countUrl));
     dispatch(getFacilities(reqUrl));
     dispatch(getIssuesCount());
@@ -27,7 +28,7 @@ const DashboardDefault = () => {
     dispatch(getUserFeedbackCount());
     dispatch(getUserCount());
     dispatch(getUserCount());
-    dispatch(getIssueReports());
+    dispatch(getIssueReports(repUrl));
     dispatch(getUsers(userUrl));
   }, [dispatch]);
 

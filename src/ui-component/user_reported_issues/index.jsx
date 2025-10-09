@@ -9,12 +9,10 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-
- import { getIssueReports }from 'container/ReportIssuesContainer/slice';
+import { getIssueReports } from 'container/ReportIssuesContainer/slice';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
- import { userReport } from 'utils/TableConfig';
-
+import { userReport } from 'utils/TableConfig';
 
 import MainCard from 'ui-component/cards/MainCard';
 import Pagination from 'utils/TablePagination';
@@ -41,10 +39,10 @@ export default function userReportedIssues() {
   const [formOpen, setFormOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
-   const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(5);
 
   // const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
-  const issueList = useSelector((state) =>state?.reportIssue?.list);
+  const issueList = useSelector((state) => state?.reportIssue?.list);
   const count = useSelector((state) => state.emission?.efTypeListCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
@@ -55,18 +53,31 @@ export default function userReportedIssues() {
   let countPagination = Math.ceil(count / 10);
   const { config, keys } = userReport;
 
-console.log("==count", count);
-
   useEffect(() => {
-    
-     dispatch(getIssueReports());
+     let reqUrl = `issues?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
+    dispatch(getIssueReports(reqUrl));
     // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
-  }, [searchQuery]);
+  }, []);
 
   const searchHandler = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-    setPage(0);
+    const filterObject = {
+      limit: limit,
+      skip: 0,
+      order: ['createdOn DESC'],
+      where: {
+        title: {
+          like: value,
+          options: 'i'
+        }
+      }
+    };
+
+        const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
+        let reqUrl = `issues?filter=${encodedFilter}`;
+        dispatch(getIssueReports(reqUrl));
+        setPage(0);
   };
 
   function handleDownloadExcel() {
@@ -143,44 +154,36 @@ console.log("==count", count);
             Report Issues
           </Typography>
         </Grid>
-       <Grid 
-  container 
-  sx={{ 
-    width: '100%', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
- 
-  }}
->
-  <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center' 
-      }}
-    >
-      <TextField
-        fullWidth
-        variant="outlined"
-        size="small"
-        placeholder="Search by name"
-        sx={{ maxWidth: 300, width: '100%' }}
-        value={searchQuery}
-        onChange={searchHandler}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-          sx: style.searchBox
-        }}
-      />
-    </Box>
-  </Grid>
-</Grid>
-
+        <Grid
+          container
+          sx={{
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
+           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                size="small"
+                placeholder="Search by name"
+                sx={{ maxWidth: 300, width: '100%' }}
+                value={searchQuery}
+                onChange={searchHandler}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                  sx: style.searchBox
+                }}
+              />
+            </Box>
+          </Grid>
+        </Grid>
 
         <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="project table">
@@ -189,7 +192,7 @@ console.log("==count", count);
               data={issueList}
               keys={keys}
               config={config}
-               tableLimit={limit} 
+              tableLimit={limit}
               currentPage={page + 1}
               hasView={true}
               hasEdit={false}
@@ -208,7 +211,7 @@ console.log("==count", count);
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 1 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
-         {open && <ViewReport drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
+        {open && <ViewReport drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
         {/* {formOpen && <UpdateEfTypeForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />} */}
         {showDeleteModal && (
           <ConfirmModal

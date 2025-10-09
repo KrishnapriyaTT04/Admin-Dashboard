@@ -82,11 +82,7 @@ function* getUserCount() {
       token: accessToken,
     };
     const res = yield call(commonApi, params);
-    if (res) {
-      yield put(actionType.getUserCountSuccess(res)); 
-    } else {
-      throw new Error('Invalid response data structure for user list.');
-    }
+ 
     
   } catch (error) {
     console.error('Fetch Users  failed:', error);

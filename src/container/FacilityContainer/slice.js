@@ -10,7 +10,6 @@ const facilitySlice = createSlice({
     operationLoading: false,
     operationError: null,
     operationSuccess: false,
-    facilityLoading: false,
     listcountLoading: false,
     listCount: 0,
 
@@ -46,6 +45,7 @@ const facilitySlice = createSlice({
             };
         },
 
+      
 
 
     // === CREATE (ADD) ACTIONS ===
@@ -131,18 +131,15 @@ const facilitySlice = createSlice({
     },
 
     getFacilitiesCount: (state) => {
-      state.facilityLoading = true;
+      state.listLoading = true;
     },
     getFacilitiesCountSuccess: (state, action) => {
-      state.facilityLoading = false;
-      state.listCount = action.payload.count; // Payload is the array of facilities
+      state.listLoading = false;
+      state.listCount = action.payload.count; 
     },
     getFacilitiesCountFail: (state, action) => {
       state.listcountLoading = false;
-      // state.listError = {
-      //     message: action.payload.message || 'Failed to fetch facilities',
-      //     status: action.payload.status || 500
-      // };
+
     },
 
     // === UTILITY/RESET ACTIONS ===

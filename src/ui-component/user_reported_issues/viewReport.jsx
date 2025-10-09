@@ -66,7 +66,7 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
       <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
+          <Typography variant="h2" sx={{ fontWeight: 600, color: '#019863' }}>
             Report Details
           </Typography>
           <IconButton onClick={() => setDrawerOpen(false)} size="large">
