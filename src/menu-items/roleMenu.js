@@ -18,7 +18,7 @@ const RoleMenu = {
     },
     {
       id: 'facility',
-      title: 'Facility',
+      title: 'Facilities',
       type: 'item',
       url: '/facility',
       icon: icons.IconShieldCheck,
@@ -35,7 +35,7 @@ const RoleMenu = {
     
         {
       id: 'reportedIssues',
-      title: 'User Reported',
+      title: 'Issues',
       type: 'item',
       url: '/reportedIssues',
       icon: icons.IconAlertTriangle,
@@ -51,7 +51,7 @@ const RoleMenu = {
     // },
         {
       id: 'rating',
-      title: 'User Feedback & Ratings',
+      title: 'Feedbacks & Ratings',
       type: 'item',
       url: '/rating',
       icon: icons.IconStar,

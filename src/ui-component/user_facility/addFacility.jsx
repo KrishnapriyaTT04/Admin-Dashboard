@@ -117,6 +117,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
   const masterFacilityTypeList = useSelector((state) => state.facility?.masterFacilityTypeList || []);
 
     const [shouldRender, setShouldRender] = useState(false);
+    
        console.log("---------------------2-----facilityList--",getReqestUrl);
 
 

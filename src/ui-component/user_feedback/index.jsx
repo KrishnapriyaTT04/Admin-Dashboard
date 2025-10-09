@@ -2,30 +2,26 @@ import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { TableContainer, Table, TextField, InputAdornment, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-// import { downloadExcel } from 'react-export-table-to-excel';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-// import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
  import { userFeedback } from 'utils/TableConfig';
  import { getUserFeedback,getUserFeedbackCount } from 'container/UserFeedbackContainer/slice';
 import ViewFeedbackDetail from './viewFeedback';
-const users = [
-  { id: 1, name: 'Alice', age: 30, city: 'New York' },
-  { id: 2, name: 'Bob', age: 24, city: 'London' },
-  { id: 3, name: 'Charlie', age: 45, city: 'Paris' },
-];
+// const users = [
+//   { id: 1, name: 'Alice', age: 30, city: 'New York' },
+//   { id: 2, name: 'Bob', age: 24, city: 'London' },
+//   { id: 3, name: 'Charlie', age: 45, city: 'Paris' },
+// ];
 import MainCard from 'ui-component/cards/MainCard';
 import Pagination from 'utils/TablePagination';
 import TableHead from 'utils/TableHead';
 import TableRows from 'utils/TableRows';
-// import ConfirmModal from 'views/common/ConfirmModal';
 import styles from '../common/style';
-// import EFTypeView from './efTypeView';
-// import UpdateEfTypeForm from './updateForm';
+
 import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
 
@@ -53,7 +49,7 @@ export default function Type() {
     name: item.name,
     desc: item.desc
   }));
-  let countPagination = Math.ceil(count / 10);
+  let countPagination = Math.ceil(count / limit);
   const { config, keys } = userFeedback;
 
   useEffect(() => {
@@ -244,7 +240,7 @@ export default function Type() {
           </Table>
         </TableContainer>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
-          {countPagination > 1 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
+          {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
         {open && <ViewFeedbackDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} setPage={setPage}/>}
         {/* {formOpen && <UpdateEfTypeForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />} */}

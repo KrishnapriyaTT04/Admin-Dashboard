@@ -151,7 +151,7 @@ export default function userReportedIssues() {
       <MainCard>
         <Grid container direction={'row'} justifyContent={'space-between'} alignItems={'center'} spacing={1}>
           <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
-            Report Issues
+            Reported Issues
           </Typography>
         </Grid>
         <Grid

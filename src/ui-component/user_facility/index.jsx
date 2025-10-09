@@ -313,7 +313,7 @@ export default function Facility() {
         ) : (
           <Typography>No data found</Typography>
         )}
-      <TableContainer>
+      {/* <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
@@ -335,7 +335,7 @@ export default function Facility() {
               filter={searchQuery || ''}
             />
           </Table>
-        </TableContainer>
+        </TableContainer> */}
        
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}

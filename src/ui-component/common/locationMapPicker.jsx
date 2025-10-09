@@ -15,7 +15,7 @@ const LocationMarker = ({ text }) => (
 
 export default function LocationMapPicker({ initialLocation, onLocationSelect }) {
     
-    const API_KEY = "YOUR_VALID_GOOGLE_MAPS_API_KEY"; // 🔑 Use your actual key
+    const API_KEY = "AIzaSyBqnXbn2rQvcrRE7FxtGnCk8CguV9ExDO8"; // 🔑 Use your actual key
 
     // 1. Initialize local state for the marker position
     // Parses initialLocation strings to numbers, defaulting to Kerala center if null
