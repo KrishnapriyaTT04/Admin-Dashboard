@@ -30,16 +30,6 @@ const dayMap = [
     { id: 'Sunday', label: 'Sun' },
 ];
 
-// const featureOptions = [
-//   { label: 'Parking', value: 'parking' },
-//   { label: 'Restroom', value: 'restroom' },
-//   { label: 'Food Court', value: 'food_court' },
-//   { label: 'Drinking Water', value: 'drinking_water' },
-//   { label: 'ATM', value: 'atm' },
-//   { label: 'WiFi', value: 'wifi' },
-//   { label: 'Security', value: 'security' },
-//   { label: 'Charging Point', value: 'charging_point' },
-// ];
 
 
 const baseInitialValues = {
@@ -61,7 +51,7 @@ const validationSchema = Yup.object({
   seatCapacity: Yup.number().integer().min(0, 'Capacity cannot be negative'),
   remarks: Yup.string().max(500, 'Remarks must be under 500 characters'),
   status: Yup.string().required('Status is required'),
-  frequency: Yup.array().of(Yup.string()),
+  frequency: Yup.array().of(Yup.string()).min(1, 'Please select at least one day or frequency.'), 
    contactName: Yup.string().required('Contact name is required'),
     contactEmail: Yup.string().email('Invalid email format'),
     contactPhone: Yup.string().matches(/^[0-9]+$/, 'Phone must be only digits'),
@@ -246,14 +236,12 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         {({ field, meta }) => (
             <TextField
                 {...field}
-                select // Tells TextField to render a Select component
+                select 
                 label="Category"
                 fullWidth
                 error={meta.touched && !!meta.error}
                 helperText={meta.touched && meta.error}
-                // Optional: set inputProps/SelectProps if needed, but usually not required here
             >
-                {/* FIX: Replace <option> with <MenuItem> */}
                 <MenuItem value="">Select Category</MenuItem>
                 <MenuItem value="public">Public</MenuItem>
                 <MenuItem value="private">Private</MenuItem>
@@ -517,7 +505,29 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         </Box>
     </Grid>
 
-       <Grid item xs={12}>
+
+    <Grid item xs={12}>
+    <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
+       
+       {/* 🔑 FIX: Only render the MapPickerComponent when the drawer is open */}
+       {drawerOpen && (
+           <MapPickerComponent
+                key={values.geoLoc.join(',')} 
+                initialLocation={values.geoLoc} 
+                onLocationSelect={(newCoords) => {                
+                    if (newCoords && newCoords.length === 2) {
+                        setFieldValue('geoLoc[0]', String(newCoords[0]));
+                        setFieldValue('geoLoc[1]', String(newCoords[1]));
+                    }
+                }} 
+            />
+       )}
+        
+        <Typography variant="h6" sx={{ mt: 2 }}>Location</Typography>
+    </Box>
+</Grid>
+
+       {/* <Grid item xs={12}>
     <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
        
        <MapPickerComponent
@@ -533,7 +543,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         
         <Typography variant="h6" sx={{ mt: 2 }}>Location</Typography>
     </Box>
-</Grid>
+</Grid> */}
     {/* geoLoc */}
     <Grid item xs={12} sm={6}>
         <Field name="geoLoc[0]">
