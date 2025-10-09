@@ -41,16 +41,15 @@ export default function UserRating() {
   // Table config
   const { config, keys } = userRating;
 
-  // Fetch ratings
   useEffect(() => {
-    dispatch(getRatings());
+      dispatch(getRatings({ searchQuery }));
   }, [searchQuery, page]);
 
   // Search handler
-  const searchHandler = (e) => {
-    setSearchQuery(e.target.value);
-    setPage(0);
-  };
+ const searchHandler = (e) => {
+  setSearchQuery(e.target.value);
+  setPage(0);
+};
 
   // Pagination handler
   const handlePageClick = (e) => {
@@ -100,7 +99,7 @@ export default function UserRating() {
               fullWidth
               variant="outlined"
               size="small"
-              placeholder="Search by name"
+              placeholder="Search by Title"
               value={searchQuery}
               onChange={searchHandler}
               InputProps={{
@@ -146,7 +145,7 @@ export default function UserRating() {
             tableData={displayedData}
             filter={searchQuery || ''}
             // *** MODIFICATION START ***
-           sx={{
+            sx={{
               '& td': {
                 // Change textAlign to center for table data cells
                 textAlign: 'center !important',
