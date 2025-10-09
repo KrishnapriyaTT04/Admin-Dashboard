@@ -20,10 +20,10 @@ export const userFeedback = {
 };
 
 export const userRating = {
-  keys: ['createdOn', 'createdUser', 'comments', 'starRating'],
+  keys: ['facilityTitle', 'comments', 'starRating'],
   config: {
-     title: {
-      label: 'Title',
+     facilityTitle: {
+      label: 'facilityTitle',
       type: 'string',
       class: ' commonDesc'
     },
