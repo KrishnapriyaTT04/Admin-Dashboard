@@ -91,12 +91,8 @@ function* createFacilitySaga(action) {
   }
 }
 
-// 3. Update Facility
+
 function* updateFacilitySaga(action) {
-        console.log("----------------------saga-res------------------",action.payload);
-
-
-function* updateFacilitySaga(action,facilityId) {
 
    const token = JSON.parse(localStorage.getItem('klooToken'));
   try {
