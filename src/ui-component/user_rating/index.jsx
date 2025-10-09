@@ -28,8 +28,8 @@ export default function UserRating() {
   const cmnstyle = cmnStyles(theme);
   const dispatch = useDispatch();
 
-  const [page, setPage] = useState(0); 
-  const [limit, setLimit] = useState(10); 
+  const [page, setPage] = useState(0);
+  const [limit, setLimit] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
@@ -73,22 +73,22 @@ export default function UserRating() {
   const displayedData = paginatedData.map((item) => {
     return {
       ...item,
-      starRating: item.starRating, 
+      starRating: item.starRating
     };
   });
-   paginatedData.forEach((item, index) => {
-  console.log(`Row ${index + 1}:`);
-  keys.forEach((key) => {
-    console.log(`  ${key}:`, item[key]);
+  paginatedData.forEach((item, index) => {
+    console.log(`Row ${index + 1}:`);
+    keys.forEach((key) => {
+      console.log(`  ${key}:`, item[key]);
+    });
   });
-});
 
   return (
     <MainCard>
       {/* Header */}
       <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
-          Ratings
+          Feedbacks & Ratings
         </Typography>
       </Grid>
 
@@ -124,8 +124,9 @@ export default function UserRating() {
             config={config}
             sx={{
               '& th': {
-                textAlign: 'left !important',
-                paddingLeft: '16px'
+                textAlign: 'center !important', // Change to center
+                paddingLeft: '0px', // Reset padding for better centering
+                paddingRight: '0px'
               }
             }}
           />
@@ -144,12 +145,16 @@ export default function UserRating() {
             msg="Ratings"
             tableData={displayedData}
             filter={searchQuery || ''}
-            sx={{
+            // *** MODIFICATION START ***
+           sx={{
               '& td': {
-                textAlign: 'left !important',
-                paddingLeft: '16px'
+                // Change textAlign to center for table data cells
+                textAlign: 'center !important',
+                paddingLeft: '0px', // Reset padding for better centering
+                paddingRight: '0px'
               }
             }}
+            // *** MODIFICATION END ***
           />
         </Table>
       </TableContainer>

@@ -14,29 +14,35 @@ const facilitySlice = createSlice({
     listcountLoading: false,
     listCount: 0,
 
-    bulkLoading: false,
-    bulkError: null,
-    bulkSuccess: false
-  },
-  reducers: {
-    // === FETCH LIST ACTIONS ===
+        bulkLoading: false,
+        bulkError: null,
+        bulkSuccess: false,
 
-    getFacilities: (state) => {
-      state.listLoading = true;
-      state.listError = null;
+        masterList: [], 
+        masterListLoading: false,
+        masterListError: null,
     },
-    getFacilitiesSuccess: (state, action) => {
-      state.listLoading = false;
-      state.list = action.payload;
-      state.listError = null;
-    },
-    getFacilitiesFail: (state, action) => {
-      state.listLoading = false;
-      state.listError = {
-        message: action.payload.message || 'Failed to fetch facilities',
-        status: action.payload.status || 500
-      };
-    },
+    reducers: {
+        // === FETCH LIST ACTIONS ===
+        
+        getFacilities: (state) => {
+            state.listLoading = true;
+            state.listError = null;
+        },
+        getFacilitiesSuccess: (state, action) => {
+            state.listLoading = false;
+            state.list = action.payload; 
+            state.listError = null;
+        },
+        getFacilitiesFail: (state, action) => {
+            state.listLoading = false;
+            state.listError = {
+                message: action.payload.message || 'Failed to fetch facilities',
+                status: action.payload.status || 500
+            };
+        },
+
+
 
     // === CREATE (ADD) ACTIONS ===
 
@@ -138,27 +144,44 @@ const facilitySlice = createSlice({
     // === UTILITY/RESET ACTIONS ===
 
     uploadBulkFacilities: (state) => {
-      state.bulkLoading = true;
-      state.bulkError = null;
-      state.bulkSuccess = false;
-      // state.bulkResult = null;
-    },
-    uploadBulkFacilitiesSuccess: (state, action) => {
-      state.bulkLoading = false;
-      state.bulkSuccess = true;
-      // Optional: Store detailed response if the API provides it
-      // state.bulkResult = action.payload;
+            state.bulkLoading = true;
+            state.bulkError = null;
+            state.bulkSuccess = false;
+            // state.bulkResult = null;
+        },
+        uploadBulkFacilitiesSuccess: (state, action) => {
+            state.bulkLoading = false;
+            state.bulkSuccess = true;
+            // Optional: Store detailed response if the API provides it
+            // state.bulkResult = action.payload;
+            
+            // NOTE: If the bulk update impacts the list, the Saga should dispatch 
+            // getFacilities() next, which will refill state.list
+        },
+        uploadBulkFacilitiesFail: (state, action) => {
+            state.bulkLoading = false;
+            state.bulkError = {
+                message: action.payload.message || 'Bulk upload failed',
+                status: action.payload.status || 500
+            };
+        },
 
-      // NOTE: If the bulk update impacts the list, the Saga should dispatch
-      // getFacilities() next, which will refill state.list
-    },
-    uploadBulkFacilitiesFail: (state, action) => {
-      state.bulkLoading = false;
-      state.bulkError = {
-        message: action.payload.message || 'Bulk upload failed',
-        status: action.payload.status || 500
-      };
-    },
+        getMasterFacilities: (state) => {
+            state.masterListLoading = true;
+            state.masterListError = null;
+        },
+        getMasterFacilitiesSuccess: (state, action) => {
+            state.masterListLoading = false;
+            state.masterList = action.payload; 
+            state.masterListError = null;
+        },
+        getMasterFacilitiesFail: (state, action) => {
+            state.masterListLoading = false;
+            state.masterListError = {
+                message: action.payload.message || 'Failed to fetch master facilities',
+                status: action.payload.status || 500
+            };
+        },
 
     resetFacilityOperationState: (state) => {
       state.operationLoading = false;
@@ -168,28 +191,36 @@ const facilitySlice = createSlice({
   }
 });
 
-export const {
-  getFacilities,
-  getFacilitiesSuccess,
-  getFacilitiesFail,
-  createFacility,
-  createFacilitySuccess,
-  createFacilityFail,
-  updateFacility,
-  updateFacilitySuccess,
-  updateFacilityFail,
-  // NEW EXPORTS
-  deleteFacility,
-  deleteFacilitySuccess,
-  deleteFacilityFail,
-  resetFacilityOperationState,
-  getFacilitiesCount,
-  getFacilitiesCountSuccess,
-  getFacilitiesCountFail,
+export const { 
+    getFacilities, 
+    getFacilitiesSuccess, 
+    getFacilitiesFail,
 
-  uploadBulkFacilities,
-  uploadBulkFacilitiesSuccess,
-  uploadBulkFacilitiesFail
+    createFacility,
+    createFacilitySuccess,
+    createFacilityFail,
+
+    updateFacility,
+    updateFacilitySuccess,
+    updateFacilityFail,
+
+    deleteFacility,
+    deleteFacilitySuccess,
+    deleteFacilityFail,
+
+    resetFacilityOperationState,
+    getFacilitiesCount,
+    getFacilitiesCountSuccess,
+    getFacilitiesCountFail,
+
+    uploadBulkFacilities,
+    uploadBulkFacilitiesSuccess,
+    uploadBulkFacilitiesFail,
+    
+    getMasterFacilities, 
+    getMasterFacilitiesSuccess, 
+    getMasterFacilitiesFail 
+
 } = facilitySlice.actions;
 
 // Selectors for easy access to state
@@ -205,5 +236,10 @@ export const selectListCount = (state) => state.facility.listCount;
 export const selectBulkLoading = (state) => state.facility.bulkLoading;
 export const selectBulkSuccess = (state) => state.facility.bulkSuccess;
 export const selectBulkError = (state) => state.facility.bulkError;
+
+export const selectMasterList = (state) => state.facility.masterList;
+export const selectMasterListLoading = (state) => state.facility.masterListLoading;
+export const selectMasterListError = (state) => state.facility.masterListError;
+
 
 export default facilitySlice.reducer;

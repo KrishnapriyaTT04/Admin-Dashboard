@@ -104,7 +104,6 @@ function* updateFacilitySaga(action,facilityId) {
 
     delete updateBody.id;
     const params = {
-      // Example API call for updating a facility
       api: `${FACILITY_API_BASE}/facilities/${facilityData.id}`, 
       method: 'PATCH',
       body: JSON.stringify(updateBody),
@@ -115,15 +114,10 @@ function* updateFacilitySaga(action,facilityId) {
     };
 
     const res = yield call(commonApi, params);
-      console.log("----------------------saga-res------------------",res);
 
-    if (res?.message === 'success') {
-      yield call(toast.success, 'Facility updated successfully!', { autoClose: 3000 });
-      yield put(actionType.updateFacilitySuccess(res.data)); 
-      yield put(actionType.getFacilities());
-    } else {
-      // throw new Error(res?.message || 'Facility update failed.');
-    }
+ yield call(toast.success, 'Facility updated successfully!', { autoClose: 3000 });
+
+
   } catch (error) {
     console.error('Update Facility failed:', error);
     yield put(actionType.updateFacilityFail({ 
@@ -206,6 +200,8 @@ export default function* facilityActionWatcher() {
    yield takeEvery(actionType.updateFacility.type, updateFacilitySaga);
    yield takeEvery(actionType.getFacilitiesCount.type, getFacilitiesCount);
    yield takeEvery(actionType.uploadBulkFacilities.type, uploadBulkFacilitiesSaga);
+   yield takeEvery(actionType.getMasterFacilities.type, getMasterFacilitiesSaga);
+
 
   
 }

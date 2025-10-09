@@ -1,6 +1,7 @@
-import { Button, Box, Typography, IconButton, Grid, useTheme } from '@mui/material';
-import { Formik, Form, Field, ErrorMessage } from 'formik'; // ✅ Ensure all are imported
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { Button, Box, Typography, IconButton, Grid, useTheme ,  FormControl,  InputLabel,Select,Checkbox,ListItemText} from '@mui/material';
+import { Formik, Form, Field, ErrorMessage } from 'formik'; 
+import { useDispatch,useSelector } from 'react-redux';
 import Drawer from '@mui/material/Drawer';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -10,10 +11,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormikSwitch from '../common/toggleSwitch';
 import MapPickerComponent from '../common/locationMapPicker'
 
- import { createFacility ,updateFacility} from 'container/FacilityContainer/slice'; 
+ import { createFacility ,updateFacility, getMasterFacilities} from 'container/FacilityContainer/slice'; 
+ 
 
 
   import { districtsData } from '../common/district' 
+
+
 
 
 const dayMap = [
@@ -26,35 +30,28 @@ const dayMap = [
     { id: 'Sunday', label: 'Sun' },
 ];
 
-// --- Base Initial Values (Full Structure) ---
+
+
 const baseInitialValues = {
   title: '', category: '', isPaid: false, facilityType: '', openingTime: '', closingTime: '', is24H: false,
-  seatCapacity: 0,ratingCount:0,reviewCount:0, remarks: '', status: 'active', frequency: [],
-//   contactInfo: { name: '', email: '', phone: '' },
+  seatCapacity: 1,ratingCount:0,reviewCount:0, remarks: '', status: 'active', frequency: [],
   contactName:'',contactEmail:'',contactPhone:'',
-  city: '', state: 'kerala',stateId: 'kl', district: '',districtCode: '', pinCode: '', geoLoc: ['', ''], landmark: '',
-  indianType:false, europeanType:false,address1:'',address2:''
+  city: '', state: 'kerala',stateId: 'kl', district: '',districtCode: '', pinCode: '', geoLoc: ['', ''], landmark: ''
+  ,address1:'',address2:'',features: []
 };
 
-// --- Validation Schema (Correct as is) ---
 const validationSchema = Yup.object({
   title: Yup.string().required('Title is required'),
   category: Yup.string().required('Category is required'),
   isPaid: Yup.boolean(),
-  facilityType: Yup.string(),
+  facilityType: Yup.string().required('Facility Type is required'),
   openingTime: Yup.string().when('is24H', { is: false, then: (schema) => schema.required('Opening time is required'), otherwise: (schema) => schema.nullable(), }),
   closingTime: Yup.string().when('is24H', { is: false, then: (schema) => schema.required('Closing time is required'), otherwise: (schema) => schema.nullable(), }),
   is24H: Yup.boolean(),
   seatCapacity: Yup.number().integer().min(0, 'Capacity cannot be negative'),
   remarks: Yup.string().max(500, 'Remarks must be under 500 characters'),
   status: Yup.string().required('Status is required'),
-  frequency: Yup.array().of(Yup.string()),
-//   .min(1, 'Select at least one day'),
-//   ,contactInfo: Yup.object({
-//     name: Yup.string().required('Contact name is required'),
-//     email: Yup.string().email('Invalid email format'),
-//     phone: Yup.string().matches(/^[0-9]+$/, 'Phone must be only digits'),
-//   }),
+  frequency: Yup.array().of(Yup.string()).min(1, 'Please select at least one day or frequency.'), 
    contactName: Yup.string().required('Contact name is required'),
     contactEmail: Yup.string().email('Invalid email format'),
     contactPhone: Yup.string().matches(/^[0-9]+$/, 'Phone must be only digits'),
@@ -63,16 +60,14 @@ const validationSchema = Yup.object({
   stateId: Yup.string().required('State Id is required'),
   district: Yup.string(),
   districtCode:Yup.string(),
-  pinCode: Yup.string().required('Pin code  is required').matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
+  pinCode: Yup.string().required('Pincode  is required').matches(/^[0-9]{6}$/, 'Pincode must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
   landmark: Yup.string().required('Landmark is required'),
-  indianType:Yup.boolean(),
-  europeanType:Yup.boolean(),
+  features:Yup.array(),
   address1:Yup.string().required('Address is required'),
   address2:Yup.string(),
 });
 
-// --- Function to Map Item Data to Formik Values (Correct as is) ---
 const getInitialValues = (item) => (
 
     {
@@ -89,25 +84,18 @@ const getInitialValues = (item) => (
     remarks: item?.remarks || baseInitialValues.remarks,
     status: item?.status || baseInitialValues.status,
     frequency: item?.frequency || baseInitialValues.frequency,
-    // contactInfo: {
-    //   name: item?.contactInfo?.name || baseInitialValues.contactInfo.name,
-    //   email: item?.contactInfo?.email || baseInitialValues.contactInfo.email,
-    //   phone: item?.contactInfo?.phone || baseInitialValues.contactInfo.phone,
-    // },
-     contactName: item?.contactName || baseInitialValues.contactName,
-      contactEmail: item?.contactEmail || baseInitialValues.contactEmail,
-      contactPhone: item?.contactPhone || baseInitialValues.contactPhone,
+    contactName: item?.contactName || baseInitialValues.contactName,
+    contactEmail: item?.contactEmail || baseInitialValues.contactEmail,
+    contactPhone: item?.contactPhone || baseInitialValues.contactPhone,
     city: item?.city || baseInitialValues.city,
     state: item?.state || baseInitialValues.state,
     stateId: item?.stateId || baseInitialValues.stateId,
     district: item?.district || baseInitialValues.district,
-    
     districtCode:item?.districtCode || baseInitialValues.districtCode,
     pinCode: item?.pinCode || baseInitialValues.pinCode,
     geoLoc: item?.geoLoc?.length === 2 ? item.geoLoc : baseInitialValues.geoLoc,
     landmark: item?.landmark || baseInitialValues.landmark,
-    indianType:item?.indianType ?? baseInitialValues.indianType,
-    europeanType:item?.europeanType ?? baseInitialValues.europeanType,
+    features:item?.features || baseInitialValues.features,
     ratingCount: item?.ratingCount ?? baseInitialValues.ratingCount,
     reviewCount:item?.reviewCount ?? baseInitialValues.reviewCount,
     address1:item?.address1 || baseInitialValues.address1,
@@ -119,8 +107,17 @@ const getInitialValues = (item) => (
 
 const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
   const theme = useTheme();
-  // const cmnstyle = cmnstyles(theme); // Keep commented if not used
   const dispatch = useDispatch();
+   const featureOptions = useSelector((state) => state.facility?.masterList || []);
+
+
+    useEffect(() => {
+   let reqUrl =`/master-facility-features`
+       dispatch(getMasterFacilities(reqUrl));
+
+       console.log("--------------------------facilityList--",featureOptions);
+       
+}, [dispatch]); 
 
   const submit = (values) => {
       if(values.is24H==true){
@@ -130,16 +127,14 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 
       console.log('Updating Facility:', values);
                     
-
-
-//    values.contactInfo.phone=  values.contactInfo.phone.toString()
    values.geoLoc = values.geoLoc.map(str => parseFloat(str)); 
 
 
     if (values.id) { 
          delete values.ratingCount
          delete values.reviewCount
-      dispatch(updateFacility(values,values.id)); 
+         getUrl = "facilities?"
+      dispatch(updateFacility(values,getUrl)); 
       console.log('Updating Facility:', values);
     } else {
          delete values.id; 
@@ -157,15 +152,11 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
       enableReinitialize={true}
       setFieldValue
     >
-      {/* 🎯 FIX: This is the correct single render function for the Formik context 🎯 */}
       {({ values, isSubmitting, isValid, dirty,setFieldValue }) => (
         <Drawer
           anchor="right"
           open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}            // state.listError = {
-            //     message: action.payload.message || 'Failed to fetch facilities',
-            //     status: action.payload.status || 500
-            // };
+          onClose={() => setDrawerOpen(false)}            
           PaperProps={{
             sx: {
               width: { xs: '100%', sm: '80%', md: '60%', lg: '1100px' },
@@ -246,14 +237,12 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         {({ field, meta }) => (
             <TextField
                 {...field}
-                select // Tells TextField to render a Select component
+                select 
                 label="Category"
                 fullWidth
                 error={meta.touched && !!meta.error}
                 helperText={meta.touched && meta.error}
-                // Optional: set inputProps/SelectProps if needed, but usually not required here
             >
-                {/* FIX: Replace <option> with <MenuItem> */}
                 <MenuItem value="">Select Category</MenuItem>
                 <MenuItem value="public">Public</MenuItem>
                 <MenuItem value="private">Private</MenuItem>
@@ -294,36 +283,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
 </Grid>
 
 
-       {/* isIndian */}
-
-     <Grid item xs={3}>
-    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-        <FormikSwitch name="indianType" /> 
-        <Typography 
-            variant="body1" 
-            component="label" 
-            htmlFor="indianType"
-            sx={{color:values.indianType?'green':'gray'}}
-        >Indian?
-        </Typography>
-    </Box>
-</Grid>
-
-       {/* european */}
-
-     <Grid item xs={3}>
-    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-        <FormikSwitch name="europeanType" /> 
-        <Typography 
-            variant="body1" 
-            component="label" 
-            htmlFor="europeanType"
-            sx={{color:values.europeanType?'green':'gray'}}
-        >European?
-        </Typography>
-    </Box>
-</Grid>
-
+   
 
     {/* Conditional Time Inputs */}
     {!values.is24H && (
@@ -378,6 +338,65 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         </Field>
     </Grid>
 
+<Grid item xs={6}>
+  <Field name="features">
+    {({ field, form, meta }) => (
+      <FormControl fullWidth error={meta.touched && !!meta.error}>
+        <InputLabel>Features</InputLabel>
+        <Select
+          {...field}
+          multiple
+          value={(field.value || []).map(f => f.featureId)} // Extract featureIds for Select value
+          onChange={(event) => {
+            const selectedFeatureIds = event.target.value;
+            // Map selected featureIds to full feature objects
+            const selectedFeatures = selectedFeatureIds.map(featureId => {
+              const option = featureOptions.find(f => f.featureId === featureId);
+              return {
+                featureName: option.featureName,
+                featureId: option.featureId
+              };
+            });
+            form.setFieldValue(field.name, selectedFeatures);
+          }}
+          renderValue={(selected) => 
+            selected
+              .map((featureId) => {
+                const option = featureOptions.find(f => f.featureId === featureId);
+                return option ? option.featureName : featureId;
+              })
+              .join(', ')
+          }
+        >
+          {featureOptions.map((option) => (
+            <MenuItem   key={option.featureId} value={option.featureId}>
+              <Checkbox checked={(field.value || []).some(f => f.featureId === option.featureId)}
+              
+              />
+              <ListItemText  
+              
+              primary={option.featureName}
+                 primaryTypographyProps={{ 
+                sx: {
+                    // Force the color override
+                    color: `${theme.palette.primary.dark} !important`, 
+                }
+            }}
+              />
+            </MenuItem>
+          ))}
+        </Select>
+        {meta.touched && meta.error && (
+          <Typography variant="caption" color="error">
+            {meta.error}
+          </Typography>
+        )}
+      </FormControl>
+    )}
+  </Field>
+</Grid>
+
+
     {/* frequency */}
  <Grid item xs={12}>
         <Typography variant="subtitle1" gutterBottom>Frequency (Days Available)</Typography>
@@ -416,7 +435,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Contact Name"
+                    label="Name"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
@@ -431,7 +450,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Contact Email"
+                    label="Email"
                     type="email"
                     fullWidth
                     error={meta.touched && !!meta.error}
@@ -498,21 +517,35 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         </Box>
     </Grid>
 
-       <Grid item xs={12}>
+
+    <Grid item xs={12}>
+    <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
+       
+       {/* 🔑 FIX: Only render the MapPickerComponent when the drawer is open */}
+       {drawerOpen && (
+           <MapPickerComponent
+                key={values.geoLoc.join(',')} 
+                initialLocation={values.geoLoc} 
+                onLocationSelect={(newCoords) => {                
+                    if (newCoords && newCoords.length === 2) {
+                        setFieldValue('geoLoc[0]', String(newCoords[0]));
+                        setFieldValue('geoLoc[1]', String(newCoords[1]));
+                    }
+                }} 
+            />
+       )}
+        
+        <Typography variant="h6" sx={{ mt: 2 }}>Location</Typography>
+    </Box>
+</Grid>
+
+       {/* <Grid item xs={12}>
     <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
        
        <MapPickerComponent
-            // 💡 FIX: Use key to force map component re-initialization when geoLoc changes
             key={values.geoLoc.join(',')} 
-            
-            // 1. Pass the current geoLoc array
             initialLocation={values.geoLoc} 
-            
-            // 2. Pass the handler to update the form fields (This part is correct)
-            onLocationSelect={(newCoords) => {
-
-                console.log("----------------------------------------");
-                
+            onLocationSelect={(newCoords) => {                
                 if (newCoords && newCoords.length === 2) {
                     setFieldValue('geoLoc[0]', String(newCoords[0]));
                     setFieldValue('geoLoc[1]', String(newCoords[1]));
@@ -522,7 +555,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         
         <Typography variant="h6" sx={{ mt: 2 }}>Location</Typography>
     </Box>
-</Grid>
+</Grid> */}
     {/* geoLoc */}
     <Grid item xs={12} sm={6}>
         <Field name="geoLoc[0]">
@@ -585,18 +618,15 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
         {({ field, meta }) => (
             <TextField
                 {...field}
-                select // Renders as a Select component
-                label="District" // Updated label
+                select 
+                label="District"
                 fullWidth
                 
-                // Formik Error/HelperText Logic
                 error={meta.touched && !!meta.error}
                 helperText={meta.touched && meta.error}
                 
                 // Static Props
-                disabled={false} // Typically, a district field is NOT disabled
-
-                // Custom Styling for Disabled State (You might remove this if not disabled)
+                disabled={false} 
                 sx={{
                     '& .MuiInputBase-root.Mui-disabled': {
                         backgroundColor: '#cececeff',
@@ -604,17 +634,12 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
                     },
                 }}
             >
-                {/* 1. Default/Placeholder Option */}
                 <MenuItem value="">Select District</MenuItem>
                 
-                {/* 2. Map over the districtsData to create dynamic options */}
                 {districtsData && districtsData.map((district) => (
                     <MenuItem 
                      key={district.districtCode} 
                      value={district.label} 
-                    //   value={district.districtCode} 
-                        // key={district.districtId} 
-                        // value={district.districtId} 
                     >
                         {district.label} 
                     </MenuItem>
@@ -645,7 +670,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Pin Code"
+                    label="Pincode"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
