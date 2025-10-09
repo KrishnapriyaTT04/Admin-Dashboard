@@ -60,7 +60,7 @@ const validationSchema = Yup.object({
   stateId: Yup.string().required('State Id is required'),
   district: Yup.string(),
   districtCode:Yup.string(),
-  pinCode: Yup.string().required('Pin code  is required').matches(/^[0-9]{6}$/, 'Pin Code must be 6 digits'),
+  pinCode: Yup.string().required('Pincode  is required').matches(/^[0-9]{6}$/, 'Pincode must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
   landmark: Yup.string().required('Landmark is required'),
   features:Yup.array(),
@@ -658,7 +658,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage }) => {
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Pin Code"
+                    label="Pincode"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
