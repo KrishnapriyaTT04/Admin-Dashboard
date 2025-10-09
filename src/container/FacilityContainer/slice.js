@@ -21,6 +21,10 @@ const facilitySlice = createSlice({
         masterList: [], 
         masterListLoading: false,
         masterListError: null,
+
+        masterFacilityTypeLoading : false,
+        masterFacilityTypeList : [], 
+        masterFacilityTypeError : null,
     },
     reducers: {
         // === FETCH LIST ACTIONS ===
@@ -183,6 +187,26 @@ const facilitySlice = createSlice({
             };
         },
 
+        getMasterFacilityType: (state) => {
+            state.masterFacilityTypeLoading = true;
+            state.masterFacilityTypeError = null;
+        },
+        getMasterFacilityTypeSuccess: (state, action) => {
+            state.masterFacilityTypeLoading = false;
+            state.masterFacilityTypeList = action.payload; // 🔑 Renamed to masterFacilityTypeList
+            state.masterFacilityTypeError = null;
+        },
+        getMasterFacilityTypeFail: (state, action) => {
+            state.masterFacilityTypeLoading = false;
+            state.masterFacilityTypeError = {
+                message: action.payload.message || 'Failed to fetch facility types',
+                status: action.payload.status || 500
+            };
+        },
+
+
+        
+
     resetFacilityOperationState: (state) => {
       state.operationLoading = false;
       state.operationError = null;
@@ -219,7 +243,11 @@ export const {
     
     getMasterFacilities, 
     getMasterFacilitiesSuccess, 
-    getMasterFacilitiesFail 
+    getMasterFacilitiesFail ,
+
+    getMasterFacilityType,
+    getMasterFacilityTypeSuccess,
+    getMasterFacilityTypeFail
 
 } = facilitySlice.actions;
 
@@ -240,6 +268,10 @@ export const selectBulkError = (state) => state.facility.bulkError;
 export const selectMasterList = (state) => state.facility.masterList;
 export const selectMasterListLoading = (state) => state.facility.masterListLoading;
 export const selectMasterListError = (state) => state.facility.masterListError;
+
+export const selectMasterFacilityTypeList = (state) => state.facility.masterFacilityTypeList;
+export const selectMasterFacilityTypeLoading = (state) => state.facility.masterFacilityTypeLoading;
+export const selectMasterFacilityTypeError = (state) => state.facility.masterFacilityTypeError;
 
 
 export default facilitySlice.reducer;

@@ -16,7 +16,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
- import { createFacility ,updateFacility, getMasterFacilities} from 'container/FacilityContainer/slice'; 
+ import { createFacility ,updateFacility, getMasterFacilities,getMasterFacilityType} from 'container/FacilityContainer/slice'; 
  
 
 
@@ -113,16 +113,25 @@ const getInitialValues = (item) => (
 const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-   const featureOptions = useSelector((state) => state.facility?.masterList || []);
+  const featureOptions = useSelector((state) => state.facility?.masterList || []);
+  const masterFacilityTypeList = useSelector((state) => state.facility?.masterFacilityTypeList || []);
+
+    const [shouldRender, setShouldRender] = useState(false);
        console.log("---------------------2-----facilityList--",getReqestUrl);
 
 
     useEffect(() => {
    let reqUrl =`/master-facility-features`
        dispatch(getMasterFacilities(reqUrl));
+          let reqUrlFaclityType =`/master-facility-types`
+       dispatch(getMasterFacilityType(reqUrlFaclityType));
 
-       console.log("--------------------------facilityList--",getReqestUrl);
-       
+       console.log("--------------------------facilityList--",masterFacilityTypeList);
+         const timer = setTimeout(() => {
+      setShouldRender(true);
+    }, 50);
+    
+    return () => clearTimeout(timer);
 }, [dispatch]); 
 
   const submit = (values) => {
@@ -222,7 +231,80 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
         </Field>
     </Grid>
 
-        <Grid item xs={6}>
+
+
+
+<Grid item xs={6}>
+    <Field name="facilityType"> 
+        {({ field, meta }) => (
+            <TextField
+                {...field}
+                select 
+                label="Facility Type"
+                fullWidth
+                
+                error={meta.touched && !!meta.error}
+                helperText={meta.touched && meta.error}
+                
+                // Static Props
+                disabled={false} 
+                sx={{
+                    '& .MuiInputBase-root.Mui-disabled': {
+                        backgroundColor: '#cececeff',
+                        WebkitTextFillColor: 'rgba(0, 0, 0, 0.87)',
+                    },
+                }}
+            >
+                <MenuItem value="">Select Facility Type</MenuItem>
+                
+                {masterFacilityTypeList && masterFacilityTypeList.map((ftype) => (
+                    <MenuItem 
+                     key={ftype.id} 
+                     value={ftype.facilityType} 
+                    >
+                        {ftype.facilityType} 
+                    </MenuItem>
+                ))}
+            </TextField>
+        )}
+    </Field>
+</Grid>
+
+    {/* <Grid item xs={6}>
+  <Field name="facilityType">
+    {({ field, form, meta }) => (
+      <FormControl fullWidth error={meta.touched && !!meta.error}>
+        <InputLabel id="facility-type-label">Facility Type</InputLabel>
+        <Select
+          {...field}
+          labelId="facility-type-label"
+          label="Facility Type" 
+          value={field.facilityType || ''} 
+
+        >
+
+          <MenuItem value="">
+            <em>Select Facility Type</em>
+          </MenuItem>
+          
+          {masterFacilityTypeList.map((option) => (
+            <MenuItem key={option.id} value={option.facilityType}>
+              {option.facilityType}
+            </MenuItem>
+          ))}
+        </Select>
+        
+        {meta.touched && meta.error && (
+          <Typography variant="caption" color="error">
+            {meta.error}
+          </Typography>
+        )}
+      </FormControl>
+    )}
+  </Field>
+</Grid> */}
+
+        {/* <Grid item xs={6}>
         <Field name="facilityType">
             {({ field, meta }) => (
                 <TextField
@@ -234,7 +316,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                 />
             )}
         </Field>
-    </Grid>
+    </Grid> */}
 
     {/* category */}
 <Grid item xs={6}>
