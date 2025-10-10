@@ -39,7 +39,7 @@ export default function BackgroundLetterAvatars() {
       >
         {/* Left side: Name */}
 
-        <Typography sx={{ color: '#fff', fontWeight: 300 }}>{`${slctSideMenu}`}</Typography>
+        <Typography sx={{ color: '#fff', fontWeight: 300 }}>{}</Typography>
 
         {/* Right side: Avatar, role, ProfileSection */}
         <Stack direction="row" alignItems="center" spacing={2}>

@@ -209,9 +209,9 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm }) => {
       </DialogTitle>
       
       <DialogContent dividers>
-        <Typography variant="body1" sx={{ mb: 2 }}>
+        {/* <Typography variant="body1" sx={{ mb: 2 }}>
           You are changing the status for **{facility.title}** (ID: {facility.id}).
-        </Typography>
+        </Typography> */}
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
             Current Status: 
@@ -247,13 +247,48 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm }) => {
       </DialogContent>
       
       <DialogActions>
-        <Button onClick={onClose} color="inherit">
+        <Button onClick={onClose}  sx={{
+                    mt: 1,
+                    py: 1.5,
+                    fontWeight: 400,
+                    fontSize: 12,
+                     color: '#019863',
+                    // backgroundImage: 'linear-gradient(180deg, #019863, #019863)',
+                    borderRadius: 2,
+                      border: '1px solid #019863',
+                    boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                      color: '#019863',
+                      border: '1px solid #019863',
+                      backgroundImage: 'none',
+                    }
+                  }}>
           Cancel
         </Button>
         <Button
           onClick={handleConfirm}
-          color="primary"
-          variant="contained"
+        //   color="primary"
+        //   variant="contained"
+            sx={{
+                    mt: 1,
+                    py: 1.5,
+                    fontWeight: 400,
+                    fontSize: 12,
+                    color: '#fff',
+                    backgroundImage: 'linear-gradient(180deg, #019863, #019863)',
+                    borderRadius: 2,
+                      border: '1px solid #019863',
+                    boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                      color: '#019863',
+                      border: '1px solid #019863',
+                      backgroundImage: 'none',
+                    }
+                  }}
           // Disable button if no new status is selected or it's the same as the current one
           disabled={!newStatus || newStatus === facility.status}
         >
