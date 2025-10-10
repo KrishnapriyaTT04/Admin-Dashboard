@@ -97,7 +97,7 @@ export default function Users() {
   </Grid>
 
   {/* Search */}
-  <Grid container sx={{ width: '100%', alignItems: 'center', justifyContent: 'center', mt: 1 }}>
+  <Grid container sx={{ width: '100%', alignItems: 'center', justifyContent: 'center', mt: 0 }}>
     <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <TextField
@@ -121,7 +121,7 @@ export default function Users() {
   </Grid>
 
   {/* Table */}
-  <TableContainer sx={{ mt: 1 }}>
+  <TableContainer sx={{ mt: 0 }}>
     <Table sx={{ minWidth: 650 }} aria-label="users table">
       <TableHead
         keys={keys}
