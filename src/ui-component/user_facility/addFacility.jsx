@@ -768,14 +768,32 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     <Grid item xs={6}>
         {/* Placeholder for Cancel/Other Button */}
     </Grid>
-    <Grid item xs={12} marginInline={3}>
+    <Grid item xs={12} marginInline={3} >
         <Button 
             type="submit" 
             variant="contained" 
             color="primary"
             startIcon={<CheckCircleOutlineIcon />}
             fullWidth
-            sx={{ py: 1.5, textTransform: 'none' }}
+            sx={{
+                    mt: 1,
+                    py: 1.5,
+                    fontWeight: 600,
+                    fontSize: 16,
+                    color: '#fff',
+                    backgroundImage: 'linear-gradient(180deg, #019863, #019863)',
+                    borderRadius: 2,
+                      border: '1px solid #019863',
+                    boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                      color: '#019863',
+                      border: '1px solid #019863',
+                      backgroundImage: 'none',
+                    }
+                  }}
+            // sx={{ py: 1.5, textTransform: 'none', bgcolor:"#019863"}}
              disabled={isSubmitting || !isValid} 
         >
             {isSubmitting ? 'Submitting...' : (item?.id ? 'Update Facility' : 'Create Facility')}
