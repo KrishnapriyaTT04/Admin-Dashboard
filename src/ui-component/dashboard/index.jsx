@@ -13,9 +13,9 @@ import {
   getIssueReports
 } from 'container/ReportIssuesContainer/slice';
 import {
-  getUserFeedback,
-  getUserFeedbackCount
-} from 'container/UserFeedbackContainer/slice';
+  getRatings,
+  getRatingCount
+} from 'container/RatingContainer/slice';
 import {
   getUserCount,
   getUsers
@@ -29,15 +29,16 @@ const DashboardDefault = () => {
   useEffect(() => {
     const urls = {
       facilities: `facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`,
-      users: `users?filter={"limit":${8},"skip":${page},"order":["createdOn DESC"]}`,
-      issues: `issues?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`
+      users: `users?filter={"limit":8,"skip":${page},"order":["createdOn DESC"]}`,
+      issues: `issues?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`, 
+      feedback:`feedbacks?filter={"limit": 5,"skip": 0}`
     };
 
     dispatch(getFacilitiesCount('facilities/count'));
     dispatch(getFacilities(urls.facilities));
     dispatch(getIssuesCount());
-    dispatch(getUserFeedback());
-    dispatch(getUserFeedbackCount());
+    dispatch(getRatings(urls.feedback));
+    dispatch(getRatingCount());
     dispatch(getUserCount());
     dispatch(getIssueReports(urls.issues));
     dispatch(getUsers(urls.users));

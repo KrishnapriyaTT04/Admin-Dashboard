@@ -11,18 +11,14 @@ import { DetailCard } from './DetailCard';
 const AnalyticsCard = () => {
   const facilityList = useSelector((state) => state.facility?.list || []);
   const issueList = useSelector((state) => state.reportIssue?.list || []);
-  const feedbackList = useSelector((state) => state.feedback?.list || []);
+  const feedbackList = useSelector((state) => state.rating?.list || []);
   const usersList = useSelector((state) => state.user?.list || []);
-
-  const facilitycount = useSelector((state) => state.facility?.listCount || 0);
-  const issuecount = useSelector((state) => state.reportIssue?.listCount || 0);
-  const feedbackcount = useSelector((state) => state.feedback?.listCount || 0);
-  const usercount = useSelector((state) => state?.user?.listCount || 0);
+  
 
   const counts = {
     facilities: useSelector((state) => state.facility?.listCount || 0),
     issues: useSelector((state) => state.reportIssue?.listCount || 0),
-    feedback: useSelector((state) => state.feedback?.listCount || 0),
+    feedback: useSelector((state) => state?.rating?.listCount || 0),
     users: useSelector((state) => state.user?.listCount || 0)
   };
 
@@ -33,27 +29,28 @@ const AnalyticsCard = () => {
         <Grid container spacing={2.5} alignItems="stretch">
           <Grid item xs={12} sm={3}>
             <Link to="/userManagment" style={{ textDecoration: 'none' }}>
-              <Card title="Users" count={usercount} color="#2055a8" bgTheme="#e3f2fd" icon={<UserOutlined />} />
+              <Card title="Users" count={counts.users} color="#2055a8" bgTheme="#e3f2fd" icon={<UserOutlined />} />
             </Link>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <Link to="/facility" style={{ textDecoration: 'none' }}>
-              <Card title="Facilities" count={facilitycount} color="#006064" bgTheme="#e0f7fa" icon={<HomeOutlined />} />
+              <Card title="Facilities" count={counts.facilities} color="#006064" bgTheme="#e0f7fa" icon={<HomeOutlined />} />
             </Link>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <Link to="/reportedIssues" style={{ textDecoration: 'none' }}>
-              <Card title="Issues" count={issuecount} color="#f2b13b" bgTheme="#f2b13b17" icon={<WarningOutlined />} />
+              <Card title="Issues" count={counts.issues} color="#f2b13b" bgTheme="#f2b13b17" icon={<WarningOutlined />} />
             </Link>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <Link to="/rating" style={{ textDecoration: 'none' }}>
-              <Card title="Feedback" count={feedbackcount} color="#e83766" bgTheme="#e837661c" icon={<MessageOutlined />} />
+              <Card title="Feedback" count={counts.feedback} color="#e83766" bgTheme="#e837661c" icon={<MessageOutlined />} />
             </Link>
           </Grid>
+
           <Grid item xs={12} md={4}>
             <DetailCard
               title="Facilities"
@@ -79,7 +76,6 @@ const AnalyticsCard = () => {
               count={counts.feedback}
               data={feedbackList}
               fields={[{ name: 'createdUser', bold: true }, { name: 'comments' }]}
-              sx={{ background: blueGrey[50] }}
             />
           </Grid>
         </Grid>
