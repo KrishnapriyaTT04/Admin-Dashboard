@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-import { getIssueReports } from 'container/ReportIssuesContainer/slice';
+import { getIssueReports, getIssuesCount } from 'container/ReportIssuesContainer/slice';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
 import { userReport } from 'utils/TableConfig';
@@ -40,23 +40,25 @@ export default function userReportedIssues() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
   const [limit, setLimit] = useState(5);
-    const [getReqUrl, setGetReqUrl] = useState('');
+  const [getReqUrl, setGetReqUrl] = useState('');
 
   // const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
   const issueList = useSelector((state) => state?.reportIssue?.list);
-  const count = useSelector((state) => state.emission?.efTypeListCount || 0);
+  const count = useSelector((state) => state.reportIssue?.listCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
   let tableDataFilter = emissionFactorTypeXSLList.map((item, index) => ({
     slno: index + 1,
     name: item.name,
     desc: item.desc
   }));
-  let countPagination = Math.ceil(count / 10);
+  let countPagination = Math.ceil(count / limit);
   const { config, keys } = userReport;
 
+
   useEffect(() => {
-     let reqUrl = `issues?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
+    let reqUrl = `issues?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
     dispatch(getIssueReports(reqUrl));
+    dispatch(getIssuesCount());
     // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
   }, []);
 
@@ -75,10 +77,10 @@ export default function userReportedIssues() {
       }
     };
 
-        const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
-        let reqUrl = `issues?filter=${encodedFilter}`;
-        dispatch(getIssueReports(reqUrl));
-        setPage(0);
+    const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
+    let reqUrl = `issues?filter=${encodedFilter}`;
+    dispatch(getIssueReports(reqUrl));
+    setPage(0);
   };
 
   function handleDownloadExcel() {
@@ -121,28 +123,14 @@ export default function userReportedIssues() {
     setSelectedItem({});
   };
 
-  // const handlePageClick = (e) => {
-  //   const selectedPage = e.selected;
-  //   setPage(selectedPage);
-  //   // dispatch(
-  //   //   getEfType({
-  //   //     page: selectedPage + 1,
-  //   //     searchVal: searchQuery
-  //   //   })
-  //   // );
-  // };
-
-
-    const handlePageClick = (e) => {
-      const selectedPage = e.selected;
-      const newSkip = selectedPage * limit;
-      setPage(selectedPage);
-      let reqUrl = `facilities?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
-      setGetReqUrl(reqUrl);
-      dispatch(getIssueReports(reqUrl));
-    };
-
-
+  const handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    const newSkip = selectedPage * limit;
+    setPage(selectedPage);
+    let reqUrl = `issues?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
+    setGetReqUrl(reqUrl);
+    dispatch(getIssueReports(reqUrl));
+  };
 
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
@@ -176,7 +164,7 @@ export default function userReportedIssues() {
           }}
         >
           <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
-           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -222,7 +210,7 @@ export default function userReportedIssues() {
           </Table>
         </TableContainer>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
-          {countPagination > 1 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
+          {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
         {open && <ViewReport drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
         {/* {formOpen && <UpdateEfTypeForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />} */}
