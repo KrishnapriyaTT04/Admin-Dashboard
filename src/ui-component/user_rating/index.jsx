@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 
 // Redux Slice
-import { getRatings,getRatingCount} from 'container/RatingContainer/slice';
+import { getRatings } from 'container/RatingContainer/slice';
 
 // Table Config
 import { userRating } from 'utils/TableConfig';
@@ -21,7 +21,7 @@ import TableRows from 'utils/TableRows';
 import ViewRatingDetail from './viewRating';
 import styles from '../common/style';
 import cmnStyles from '../common/style1';
-
+ import { getUserFeedback,getUserFeedbackCount } from 'container/UserFeedbackContainer/slice';
 
 
 export default function UserRating() {
@@ -38,15 +38,15 @@ export default function UserRating() {
 
   // Redux State
   const ratingsList = useSelector((state) => state.rating?.list || []);
-  const count = useSelector((state) => state.rating?.listCount || 0);
+  const count = useSelector((state) => state.feedback?.listCount || 0);
 
   // Table config
   const { config, keys } = userRating;
 
   useEffect(() => {
 
-     dispatch(getRatings());
-        dispatch(getRatingCount())
+     dispatch(getUserFeedback());
+        dispatch(getUserFeedbackCount())
       dispatch(getRatings({ searchQuery }));
 
   }, [searchQuery, page]);
@@ -129,8 +129,8 @@ export default function UserRating() {
             config={config}
             sx={{
               '& th': {
-                textAlign: 'center !important', 
-                paddingLeft: '0px', 
+                textAlign: 'center !important', // Change to center
+                paddingLeft: '0px', // Reset padding for better centering
                 paddingRight: '0px'
               }
             }}
@@ -150,16 +150,16 @@ export default function UserRating() {
             msg="Ratings"
             tableData={displayedData}
             filter={searchQuery || ''}
-            
+            // *** MODIFICATION START ***
             sx={{
               '& td': {
-              
+                // Change textAlign to center for table data cells
                 textAlign: 'center !important',
-                paddingLeft: '0px', 
+                paddingLeft: '0px', // Reset padding for better centering
                 paddingRight: '0px'
               }
             }}
-            
+            // *** MODIFICATION END ***
           />
         </Table>
       </TableContainer>
