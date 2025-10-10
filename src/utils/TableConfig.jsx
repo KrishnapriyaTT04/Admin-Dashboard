@@ -43,7 +43,7 @@ export const userRating = {
 
 
 export const facilityHeads = {
-  keys: ['title', 'contactEmail', 'contactPhone'],
+  keys: ['title', 'contactEmail', 'contactPhone','status'],
   config: {
     title: {
       label: 'Title',
@@ -57,6 +57,11 @@ export const facilityHeads = {
     },
     contactPhone: {
       label: 'Phone',
+      type: 'string',
+      class: ' cmn_Cap commonDesc'
+    },
+     status:{
+      label: 'Status',
       type: 'string',
       class: ' cmn_Cap commonDesc'
     }

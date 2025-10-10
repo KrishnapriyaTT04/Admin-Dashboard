@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  Pagination as MuiPagination, 
-  Stack, 
-  Box 
-} from '@mui/material';
+import { Pagination as MuiPagination, Stack, Box } from '@mui/material';
 
 const Pagination = ({ countPagination, page, handlePageClick }) => {
   const handleChange = (event, value) => {
@@ -12,16 +8,21 @@ const Pagination = ({ countPagination, page, handlePageClick }) => {
 
   return (
     <Box className="paginationDiv" sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-      {countPagination > 1 && (
+      {countPagination >= 1 && (
         <MuiPagination
-          count={countPagination} 
-          page={page + 1} 
-          onChange={handleChange} 
-          showFirstButton 
-          showLastButton 
-          siblingCount={2} 
-          boundaryCount={2} 
-          color="success" 
+          count={countPagination}
+          page={page + 1}
+          onChange={handleChange}
+          showFirstButton
+          showLastButton
+          siblingCount={2}
+          boundaryCount={2}
+          sx={{
+            '& .MuiPaginationItem-root.Mui-selected': {
+              backgroundColor: '#019863',
+              color: '#fff'
+            }
+          }}
         />
       )}
     </Box>
