@@ -121,7 +121,10 @@ function* updateFacilitySaga(action) {
     const res = yield call(commonApi, params);
 
  yield call(toast.success, 'Facility updated successfully!', { autoClose: 3000 });
+         console.log("---------------getUrl--getUrl---------",getUrl);
+         
        if (getUrl) {
+            
              yield put(actionType.getFacilities(getUrl)); 
         }
 

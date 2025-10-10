@@ -133,7 +133,7 @@ export default function Facility() {
 
   // Function to open the modal
   const handleStatusChangeModal = (facilityItem) => {
-    console.log("--------------------------facilityItem----------------------");
+    console.log("--------------------------facilityItem----------------------",getReqUrl);
     
     setSelectedFacility(facilityItem); // Save the facility data
     setIsStatusModalOpen(true);        // Open the modal
@@ -147,15 +147,15 @@ export default function Facility() {
 
     const handleUpdateStatus = (newStatus) => {
       // 💡 Implementation for updating status here
-            console.log(`Updating facility 11${selectedFacility.id} to status: ${newStatus}`);
+            console.log(`Updating facility 11${selectedFacility.id} to status: ${getReqUrl}`);
 
            let values ={
-            "status":"inactive",
+            "status": newStatus,
             "id":selectedFacility.id
            }
-            dispatch(updateFacility({values,getReqUrl})); 
+            dispatch(updateFacility({values,getReqestUrl:getReqUrl})); 
       
-      console.log(`Updating facility ${selectedFacility.id} to status: ${newStatus}`);
+      console.log(`Updating facility ${selectedFacility.id} to status: ${getReqUrl}`);
       handleCloseStatusModal(); // Close after action
   };
 

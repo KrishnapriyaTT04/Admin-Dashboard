@@ -163,7 +163,6 @@ import WarningIcon from '@mui/icons-material/Warning';
 const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
-  { value: 'pending', label: 'Pending Review' },
 ];
 
 const StatusChangeModal = ({ open, facility, onClose, onConfirm }) => {
