@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 
 // Redux Slice
-import { getRatings } from 'container/RatingContainer/slice';
+import { getRatings, getRatingCount } from 'container/RatingContainer/slice';
 
 // Table Config
 import { userRating } from 'utils/TableConfig';
@@ -21,13 +21,10 @@ import TableRows from 'utils/TableRows';
 import ViewRatingDetail from './viewRating';
 import styles from '../common/style';
 import cmnStyles from '../common/style1';
- import { getUserFeedback,getUserFeedbackCount } from 'container/UserFeedbackContainer/slice';
-
 
 export default function UserRating() {
   const theme = useTheme();
   const style = styles(theme);
-  const cmnstyle = cmnStyles(theme);
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
@@ -38,54 +35,69 @@ export default function UserRating() {
 
   // Redux State
   const ratingsList = useSelector((state) => state.rating?.list || []);
-  const count = useSelector((state) => state.feedback?.listCount || 0);
-
+  const count = useSelector((state) => state?.rating?.listCount || 0);
   // Table config
   const { config, keys } = userRating;
 
+  // --- API Request Logic ---
   useEffect(() => {
+    // Construct the filter object for the list API call
+    const filterObject = {
+      limit,
+      skip: page * limit,
+      order: ['createdOn DESC'],
+      where: searchQuery
+        ? {
+            // Searching by facilityTitle, case-insensitive
+            facilityTitle: { like: searchQuery, options: 'i' }
+          }
+        : {}
+    };
 
-     dispatch(getUserFeedback());
-        dispatch(getUserFeedbackCount())
-      dispatch(getRatings({ searchQuery }));
+    const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
+    const reqUrl = `feedbacks?filter=${encodedFilter}`;
+    
+    // Construct the filter object for the count API call
+    const countFilterObject = searchQuery
+      ? {
+          where: {
+            facilityTitle: { like: searchQuery, options: 'i' }
+          }
+        }
+      : {};
 
-  }, [searchQuery, page]);
+    const encodedCountFilter = encodeURIComponent(JSON.stringify(countFilterObject));
+    const countUrl = `feedbacks/count?where=${encodedCountFilter}`;
+    dispatch(getRatings(reqUrl)); 
+    dispatch(getRatingCount());
+  }, [dispatch, searchQuery, page, limit]);
 
-  // Search handler
- const searchHandler = (e) => {
-  setSearchQuery(e.target.value);
-  setPage(0);
-};
+  const searchHandler = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setPage(0); 
+  };
 
-  // Pagination handler
   const handlePageClick = (e) => {
     setPage(e.selected);
   };
+  // --- END API Request Logic ---
 
-  // View modal
   const handleViewModal = (item) => {
     setOpen(true);
     setSelectedItem(item);
   };
 
-  // Calculate total pages
   const countPagination = Math.ceil(count / limit);
 
-  // Slice data for current page
-  const paginatedData = ratingsList.slice(page * limit, page * limit + limit);
+  console.log("==countPagination", countPagination, count, limit);
+  
 
-  // Fix for starRating display
-  const displayedData = paginatedData.map((item) => {
+  const displayedData = ratingsList.map((item) => {
     return {
       ...item,
       starRating: item.starRating
     };
-  });
-  paginatedData.forEach((item, index) => {
-    console.log(`Row ${index + 1}:`);
-    keys.forEach((key) => {
-      console.log(`  ${key}:`, item[key]);
-    });
   });
 
   return (
@@ -120,50 +132,44 @@ export default function UserRating() {
           </Box>
         </Grid>
       </Grid>
-
-      {/* Table */}
-      <TableContainer sx={{ mt: 0 }}>
-        <Table sx={{ minWidth: 650 }} aria-label="ratings table">
-          <TableHead
-            keys={keys}
-            config={config}
-            sx={{
-              '& th': {
-                textAlign: 'center !important', // Change to center
-                paddingLeft: '0px', // Reset padding for better centering
-                paddingRight: '0px'
-              }
-            }}
-          />
-          <TableRows
-            data={displayedData}
-            keys={keys}
-            config={config}
-            currentPage={page + 1}
-            tableLimit={limit}
-            hasView={true}
-            hasEdit={false}
-            hasDelete={false}
-            hasStatusChange={false}
-            hasMore={false}
-            handleViewModel={handleViewModal}
-            msg="Ratings"
-            tableData={displayedData}
-            filter={searchQuery || ''}
-            // *** MODIFICATION START ***
-            sx={{
-              '& td': {
-                // Change textAlign to center for table data cells
-                textAlign: 'center !important',
-                paddingLeft: '0px', // Reset padding for better centering
-                paddingRight: '0px'
-              }
-            }}
-            // *** MODIFICATION END ***
-          />
-        </Table>
-      </TableContainer>
-
+        <TableContainer sx={{ mt: 0 }}>
+          <Table sx={{ minWidth: 650 }} aria-label="ratings table">
+            <TableHead
+              keys={keys}
+              config={config}
+              sx={{
+                '& th': {
+                  textAlign: 'center !important',
+                  paddingLeft: '0px',
+                  paddingRight: '0px'
+                }
+              }}
+            />
+            <TableRows
+              data={displayedData}
+              keys={keys}
+              config={config}
+              currentPage={page + 1}
+              tableLimit={limit}
+              hasView={true}
+              hasEdit={false}
+              hasDelete={false}
+              hasStatusChange={false}
+              hasMore={false}
+              handleViewModel={handleViewModal}
+              msg="Ratings"
+              tableData={displayedData}
+              filter={searchQuery || ''}
+              sx={{
+                '& td': {
+                  textAlign: 'center !important',
+                  paddingLeft: '0px',
+                  paddingRight: '0px'
+                }
+              }}
+            />
+          </Table>
+        </TableContainer>
       {/* Pagination */}
       {countPagination > 1 && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
