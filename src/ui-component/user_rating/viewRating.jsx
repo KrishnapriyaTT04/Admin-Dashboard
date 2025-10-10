@@ -141,12 +141,6 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 </Typography>
                 <Typography variant="body1">{item?.facilityId || 'N/A'}</Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Internal Facility ID
-                </Typography>
-                <Typography variant="body1">{item?.facilityInternalId || 'N/A'}</Typography>
-              </Grid>
             </Grid>
           </Paper>
 

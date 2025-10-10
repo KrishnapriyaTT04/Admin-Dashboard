@@ -159,7 +159,7 @@ export default function Users() {
           currentPage={page + 1}
           tableLimit={limit}
           hasView
-          hasEdit={true}
+          hasEdit={false}
           hasDelete={false}
           hasStatusChange={true}
           handleViewModel={handleViewModal}
