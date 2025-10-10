@@ -273,54 +273,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     </Field>
 </Grid>
 
-    {/* <Grid item xs={6}>
-  <Field name="facilityType">
-    {({ field, form, meta }) => (
-      <FormControl fullWidth error={meta.touched && !!meta.error}>
-        <InputLabel id="facility-type-label">Facility Type</InputLabel>
-        <Select
-          {...field}
-          labelId="facility-type-label"
-          label="Facility Type" 
-          value={field.facilityType || ''} 
-
-        >
-
-          <MenuItem value="">
-            <em>Select Facility Type</em>
-          </MenuItem>
-          
-          {masterFacilityTypeList.map((option) => (
-            <MenuItem key={option.id} value={option.facilityType}>
-              {option.facilityType}
-            </MenuItem>
-          ))}
-        </Select>
-        
-        {meta.touched && meta.error && (
-          <Typography variant="caption" color="error">
-            {meta.error}
-          </Typography>
-        )}
-      </FormControl>
-    )}
-  </Field>
-</Grid> */}
-
-        {/* <Grid item xs={6}>
-        <Field name="facilityType">
-            {({ field, meta }) => (
-                <TextField
-                    {...field}
-                    label="Facility Type"
-                    fullWidth
-                    error={meta.touched && !!meta.error}
-                    helperText={meta.touched && meta.error}
-                />
-            )}
-        </Field>
-    </Grid> */}
-
     {/* category */}
 <Grid item xs={6}>
     <Field name="category">
@@ -344,7 +296,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
 
 
     {/* isPaid Checkbox */}
- <Grid item xs={3}>
+ <Grid item xs={6}>
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
         <FormikSwitch name="isPaid" /> 
         <Typography 
@@ -359,7 +311,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
 
     {/* is24H Checkbox */}
 
-     <Grid item xs={3}>
+     <Grid item xs={6}>
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
         <FormikSwitch name="is24H" /> 
         <Typography 
@@ -373,51 +325,10 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
 </Grid>
 
 
-   
-
-    {/* Conditional Time Inputs */}
-    {/* {!values.is24H && (
-        <>
-            <Grid item xs={12} sm={6}>
-                <Field name="openingTime">
-                    {({ field, meta }) => (
-                        <TextField
-                            {...field}
-                            label="Opening Time"
-                            type="time"
-                             fullWidth
-                            InputLabelProps={{ shrink: true }}
-                            error={meta.touched && !!meta.error}
-                            helperText={meta.touched && meta.error}
-                        />
-                    )}
-                </Field>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <Field name="closingTime">
-                    {({ field, meta }) => (
-                        <TextField
-                            {...field}
-                            label="Closing Time"
-                            type="time"
-                            fullWidth
-                            InputLabelProps={{ shrink: true }}
-                            error={meta.touched && !!meta.error}
-                            helperText={meta.touched && meta.error}
-                        />
-                    )}
-                </Field>
-            </Grid>
-
-
-        </>
-    )} */}
-
-
 {!values.is24H && (
   <LocalizationProvider 
     dateAdapter={AdapterDayjs} 
-    adapterLocale="en" // Explicitly set locale
+    adapterLocale="en" 
   >
     <Grid item xs={12} sm={6}>
       <Field name="openingTime">
@@ -429,7 +340,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
               const timeString = newValue ? newValue.format('HH:mm') : '';
               form.setFieldValue('openingTime', timeString);
             }}
-            // 🔥 Force 24-hour format with multiple props
             ampm={false}
             views={['hours', 'minutes']}
             format="HH:mm"
@@ -438,7 +348,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                 fullWidth: true,
                 error: meta.touched && !!meta.error,
                 helperText: meta.touched && meta.error,
-                placeholder: "00:00", // 24-hour format placeholder
+                placeholder: "00:00", 
               },
             }}
           />
