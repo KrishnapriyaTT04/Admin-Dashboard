@@ -24,7 +24,7 @@ const AnalyticsCard = () => {
 
   return (
 
-    <Grid container item xs={12} spacing={2.5} alignItems="stretch" sx={{ height: '80vh' }}>
+    <Grid container item xs={12} spacing={2.5} alignItems="stretch" >
       <Grid item xs={12} md={9}>
         <Grid container spacing={2.5} alignItems="stretch">
           <Grid item xs={12} sm={3}>
@@ -60,6 +60,7 @@ const AnalyticsCard = () => {
               fields={[{ name: 'title', bold: true }, { name: 'facilityType' }, { name: 'city' }]}
             />
           </Grid>
+
           <Grid item xs={12} md={4}>
             <DetailCard
               title="Issues"
@@ -69,6 +70,7 @@ const AnalyticsCard = () => {
               fields={[{ name: 'assignedName', bold: true }, { name: 'topic' }]}
             />
           </Grid>
+
           <Grid item xs={12} md={4}>
             <DetailCard
               title="Feedback"
