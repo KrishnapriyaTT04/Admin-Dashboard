@@ -198,7 +198,8 @@ const  TableRows = ({
                     <Tooltip title="Change status">
                       <IconButton
                         color="warning"
-                        onClick={() => handleDeleteModal(row)}
+                          onClick={() => handlProjectStatusModal(row)} 
+                        // onClick={() => handleStatusChangeModal(row)}
                         size="small"
                         sx={{ ...style.cmnIcon, ...style.cmnStatusIcon }}
                       >

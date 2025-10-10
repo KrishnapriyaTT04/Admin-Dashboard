@@ -10,9 +10,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { FileUploadOutlined } from '@mui/icons-material';
 
+import ChangeStatusModal from '../common/commonStatusChange'
+
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
-import { getFacilities, selectFacilityList, getFacilitiesCount} from 'container/FacilityContainer/slice';
+import { getFacilities, updateFacility, getFacilitiesCount} from 'container/FacilityContainer/slice';
 
 import { facilityHeads } from 'utils/TableConfig';
 
@@ -50,6 +52,9 @@ export default function Facility() {
   const [showXSLUploadModal, setshowXSLUploadModal] = useState(false);
   const [showXSLModal, setShowXSLModal] = useState(false);
   const [getReqUrl, setGetReqUrl] = useState('');
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [selectedFacility, setSelectedFacility] = useState(null);
+
 
   const facilityList = useSelector((state) => state.facility?.list || []);
 
@@ -125,10 +130,40 @@ export default function Facility() {
     setPage(0);
   };
 
-  function handleDownloadExcel() {
-    setShowXSLModal(true);
-    // dispatch(fetchEmissionFactorTypeXSL({ limit: count }));
-  }
+
+  // Function to open the modal
+  const handleStatusChangeModal = (facilityItem) => {
+    console.log("--------------------------facilityItem----------------------");
+    
+    setSelectedFacility(facilityItem); // Save the facility data
+    setIsStatusModalOpen(true);        // Open the modal
+  };
+
+  // Function to close the modal
+  const handleCloseStatusModal = () => {
+    setIsStatusModalOpen(false);
+    setSelectedFacility(null);
+  };
+
+    const handleUpdateStatus = (newStatus) => {
+      // 💡 Implementation for updating status here
+            console.log(`Updating facility 11${selectedFacility.id} to status: ${newStatus}`);
+
+           let values ={
+            "status":"inactive",
+            "id":selectedFacility.id
+           }
+            dispatch(updateFacility({values,getReqUrl})); 
+      
+      console.log(`Updating facility ${selectedFacility.id} to status: ${newStatus}`);
+      handleCloseStatusModal(); // Close after action
+  };
+
+
+  // function handleDownloadExcel() {
+  //   setShowXSLModal(true);
+  //   // dispatch(fetchEmissionFactorTypeXSL({ limit: count }));
+  // }
 
   const XSLHandler = () => {
     excelExport();
@@ -298,12 +333,13 @@ export default function Facility() {
                 tableLimit={limit}
                 hasView={true}
                 hasEdit={true}
-                hasDelete={true}
-                hasStatusChange={false}
+                hasDelete={false}
+                hasStatusChange={true}
                 hasMore={false}
                 handleViewModel={handleViewModal}
-                handleDeleteModal={handleDeleteModal}
+                // handleDeleteModal={handleDeleteModal}
                 handleFormModal={handleFormModal}
+                handlProjectStatusModal={handleStatusChangeModal}
                 msg="Projects"
                 tableData={facilityList}
                 filter={searchQuery || ''}
@@ -348,15 +384,30 @@ export default function Facility() {
         {formOpen && (
           <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} getReqestUrl={getReqUrl} />
         )}
-        {showDeleteModal && (
-          <ConfirmModal
-            show={showDeleteModal}
-            handleCloseModal={closeDeleteModal}
-            submitHandler={deleteHandler}
-            modalTitle={'Delete Confirmation'}
-            modalText={'Are you sure you want to delete?'}
-            btnsubmitText={'DELETE'}
+        {selectedFacility && (
+          <ChangeStatusModal
+              open={isStatusModalOpen}
+              facility={selectedFacility} // Pass the selected data
+              onClose={handleCloseStatusModal}
+              onConfirm={handleUpdateStatus} // Pass the function to execute on confirm
           />
+          
+      )}
+        {showDeleteModal && (
+          <StatusChangeModal
+              open={isStatusModalOpen}
+              facility={selectedFacility} // Pass the selected data
+              onClose={handleCloseStatusModal}
+              onConfirm={handleUpdateStatus} // Pass the function to execute on confirm
+          />
+          // <ConfirmModal
+          //   show={showDeleteModal}
+          //   handleCloseModal={closeDeleteModal}
+          //   submitHandler={deleteHandler}
+          //   modalTitle={'Delete Confirmation'}
+          //   modalText={'Are you sure you want to delete?'}
+          //   btnsubmitText={'DELETE'}
+          // />
         )}
         {/* {showXSLModal && (
           <ConfirmModal
