@@ -51,7 +51,7 @@ const RoleMenu = {
     // },
         {
       id: 'rating',
-      title: 'Feedbacks & Ratings',
+      title: 'Rating & Feedbacks',
       type: 'item',
       url: '/rating',
       icon: icons.IconStar,
