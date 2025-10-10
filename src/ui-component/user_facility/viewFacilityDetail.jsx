@@ -589,7 +589,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <DetailItem 
-                  label="Pin Code" 
+                  label="Pincode" 
                   value={item.pinCode}
                 />
               </Grid>

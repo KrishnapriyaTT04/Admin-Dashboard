@@ -339,6 +339,8 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             onChange={(newValue) => {
               const timeString = newValue ? newValue.format('HH:mm') : '';
               form.setFieldValue('openingTime', timeString);
+              console.log("-----------timeString------------",timeString)
+              
             }}
             ampm={false}
             views={['hours', 'minutes']}
