@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
  import { userFeedback } from 'utils/TableConfig';
- import { getUserFeedback,getUserFeedbackCount } from 'container/UserFeedbackContainer/slice';
+//  import { getUserFeedback,getUserFeedbackCount } from 'container/UserFeedbackContainer/slice';
 import ViewFeedbackDetail from './viewFeedback';
 // const users = [
 //   { id: 1, name: 'Alice', age: 30, city: 'New York' },
@@ -52,11 +52,11 @@ export default function Type() {
   let countPagination = Math.ceil(count / limit);
   const { config, keys } = userFeedback;
 
-  useEffect(() => {
-    dispatch(getUserFeedback());
-    dispatch(getUserFeedbackCount())
-    // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
-  }, [searchQuery]);
+  // useEffect(() => {
+  //   dispatch(getUserFeedback());
+  //   dispatch(getUserFeedbackCount())
+  //   // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
+  // }, [searchQuery]);
 
   const searchHandler = (e) => {
     const value = e.target.value;

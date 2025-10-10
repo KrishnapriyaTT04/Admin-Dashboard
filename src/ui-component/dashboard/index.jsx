@@ -24,8 +24,8 @@ const DashboardDefault = () => {
     dispatch(getFacilitiesCount(countUrl));
     dispatch(getFacilities(reqUrl));
     dispatch(getIssuesCount());
-    dispatch(getUserFeedback());
-    dispatch(getUserFeedbackCount());
+    // dispatch(getUserFeedback());
+    // dispatch(getUserFeedbackCount());
     dispatch(getUserCount());
     dispatch(getUserCount());
     dispatch(getIssueReports(repUrl));

@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 
 // Redux Slice
-import { getRatings } from 'container/RatingContainer/slice';
+import { getRatings,getRatingCount} from 'container/RatingContainer/slice';
 
 // Table Config
 import { userRating } from 'utils/TableConfig';
@@ -21,7 +21,7 @@ import TableRows from 'utils/TableRows';
 import ViewRatingDetail from './viewRating';
 import styles from '../common/style';
 import cmnStyles from '../common/style1';
- import { getUserFeedback,getUserFeedbackCount } from 'container/UserFeedbackContainer/slice';
+
 
 
 export default function UserRating() {
@@ -38,15 +38,15 @@ export default function UserRating() {
 
   // Redux State
   const ratingsList = useSelector((state) => state.rating?.list || []);
-  const count = useSelector((state) => state.feedback?.listCount || 0);
+  const count = useSelector((state) => state.rating?.listCount || 0);
 
   // Table config
   const { config, keys } = userRating;
 
   useEffect(() => {
 
-     dispatch(getUserFeedback());
-        dispatch(getUserFeedbackCount())
+     dispatch(getRatings());
+        dispatch(getRatingCount())
       dispatch(getRatings({ searchQuery }));
 
   }, [searchQuery, page]);
