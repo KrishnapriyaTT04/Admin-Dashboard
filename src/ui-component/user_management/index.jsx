@@ -202,10 +202,10 @@ export default function Users() {
     {/* Status Change Modal */}
     {isStatusModalOpen && selectedItem && (
       <ChangeStatusModal
-        open={isStatusModalOpen}
-        facility={selectedItem}
-        onClose={handleCloseStatusModal}
-        onConfirm={handleUpdateStatus}
+//         open={isStatusModalOpen}
+//         facility={selectedItem}
+//         onClose={handleCloseStatusModal}
+//         onConfirm={handleUpdateStatus}
       />
     )}
   </MainCard>
