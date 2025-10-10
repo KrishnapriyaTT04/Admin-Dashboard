@@ -9,7 +9,7 @@ import * as actionType from './slice';
 function* getUserFeedback(action) {
   const tokenData = JSON.parse(localStorage.getItem('klooToken'));
   const accessToken = tokenData?.accessToken;
-      console.log('------------------------ called saagaaaaaaa');
+      console.log('===called saagaaaaaaa', accessToken);
 
   try {
     let params = {
@@ -17,7 +17,7 @@ function* getUserFeedback(action) {
       method: 'GET',
       successAction: actionType.getUserFeedbackSucces(),
       failAction: actionType.getUserFeedbackFail(),
-      authourization: 'Bearer',
+      authorization: 'Bearer',
       token:  accessToken
     };
     let res = yield call(commonApi, params);
@@ -54,7 +54,7 @@ function* getFeedbackCount(action) {
       method: 'GET',
       successAction: actionType.getFeedbackCountSucces(),
       failAction: actionType.getFeedbackCountFail(),
-      authourization: 'Bearer',
+      authorization: 'Bearer',
       token:  accessToken
     };
     let res = yield call(commonApi, params);
@@ -77,7 +77,7 @@ function* getFeedbackCount(action) {
             // yield call(action.payload.navigate, '/dashboard');
 
     console.error('Fetch user feed back count failed:', error);
-    // yield call(toast.error, 'Failed to fetch user feedbacks count.', { autoClose: 3000 });
+    yield call(toast.error, 'Failed to fetch user feedbacks count.', { autoClose: 3000 });
   }
 }
 

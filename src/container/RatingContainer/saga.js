@@ -2,19 +2,16 @@ import { takeEvery, call, put } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import commonApi from '../api'; // Your API utility
+import commonApi from '../api';
 import appConfig from '../../config';
-import * as actionType from './slice'; // Rating slice actions
+import * as actionType from './slice';
 
 // Base API endpoint for ratings
 const RATING_API_BASE = `${appConfig.ip}`;
 
-/**
- * Fetch Ratings Saga
- */
+
 function* getRatingsSaga(action) {
   try {
-    // Retrieve token
     const tokenData = JSON.parse(localStorage.getItem('klooToken'));
     const accessToken = tokenData?.accessToken;
 
@@ -27,13 +24,10 @@ function* getRatingsSaga(action) {
       return;
     }
 
-    // Extract search query (if provided)
     const searchQuery = action.payload?.searchQuery || '';
 
-    // 🔍 Build API URL dynamically
-    let apiUrl = `${RATING_API_BASE}/feedbacks`;
+    let apiUrl = `${RATING_API_BASE}/${action.payload}`;
     if (searchQuery.trim() !== '') {
-      // Create filter object to search by title (case insensitive)
       const filter = {
         where: { facilityTitle: { like: searchQuery, options: 'i' } },
         order: ['createdOn DESC']
@@ -50,15 +44,12 @@ function* getRatingsSaga(action) {
       token: accessToken,
     };
 
-    // API call
+
     const res = yield call(commonApi, params);
     const ratingData = res?.data || res;
-
     if (!Array.isArray(ratingData)) {
       throw new Error('Invalid response structure for rating list.');
     }
-
-    // Success dispatch
     yield put(actionType.getRatingsSuccess(ratingData));
 
   } catch (error) {
@@ -72,30 +63,28 @@ function* getRatingsSaga(action) {
 
 
 
-function* getRatingCount() {
 
+function* getRatingCount(action) {
+  const tokenData = JSON.parse(localStorage.getItem('klooToken'));
+  const accessToken = tokenData?.accessToken;
   try {
-    const params = {
-      api: `${RATING_API_BASE}/feedbacks/count`, 
+    let params = {
+      api: `${RATING_API_BASE}/feedbacks/count`,
       method: 'GET',
       successAction: actionType.getRatingCountSuccess(),
       failAction: actionType.getRatingCountFail(),
-      authourization: `Bearer`
-    };    
-
+      authorization: 'Bearer',
+      token:  accessToken
+    };
+   let res = yield call(commonApi, params);
   } catch (error) {
-    console.error('Fetch Feedback failed:', error);
-    yield put(actionType.getRatingCountFail({ 
-      message: error.message || 'Failed to fetch Feedback.', 
-      status: error.response?.status || 500 
-    }));
-    yield call(toast.error, 'Failed to load feedback list.', { autoClose: 3000 });
+    console.error('Fetch user Feedback count failed:', error);
+
   }
 }
 
 
 export default function* ratingWatcher() {
-    // Watches for getRatings action and triggers getRatingsSaga
     yield takeEvery(actionType.getRatings.type, getRatingsSaga);
     yield takeEvery(actionType.getRatingCount.type, getRatingCount);
 }
