@@ -24,16 +24,7 @@ function* getRatingsSaga(action) {
       return;
     }
 
-    const searchQuery = action.payload?.searchQuery || '';
-
     let apiUrl = `${RATING_API_BASE}/${action.payload}`;
-    if (searchQuery.trim() !== '') {
-      const filter = {
-        where: { facilityTitle: { like: searchQuery, options: 'i' } },
-        order: ['createdOn DESC']
-      };
-      apiUrl += `?filter=${encodeURIComponent(JSON.stringify(filter))}`;
-    }
 
     const params = {
       api: apiUrl,
@@ -46,13 +37,18 @@ function* getRatingsSaga(action) {
 
 
     const res = yield call(commonApi, params);
-    const ratingData = res?.data || res;
-    if (!Array.isArray(ratingData)) {
+    const ratingData = res?.data || res; // Assuming data is either top-level or in 'data' field
+    
+    // Check if the result is an array before dispatching
+    if (Array.isArray(ratingData)) {
+      yield put(actionType.getRatingsSuccess(ratingData));
+    } else if(ratingData?.count) {
       throw new Error('Invalid response structure for rating list.');
+    } else {
+      yield put(actionType.getRatingsSuccess(ratingData)); // Dispatching non-array data, assuming it's correct
     }
-    yield put(actionType.getRatingsSuccess(ratingData));
-
   } catch (error) {
+    console.error('Fetch Ratings failed:', error);
     yield put(actionType.getRatingsFail({
       message: error.message || 'Failed to fetch ratings.',
       status: error.response?.status || 500
@@ -60,8 +56,6 @@ function* getRatingsSaga(action) {
     yield call(toast.error, 'Failed to load ratings.', { autoClose: 3000 });
   }
 }
-
-
 
 
 function* getRatingCount(action) {
@@ -78,9 +72,9 @@ function* getRatingCount(action) {
     };
    let res = yield call(commonApi, params);
   } catch (error) {
-    console.error('Fetch user Feedback count failed:', error);
+    console.error('Fetch user Feedback count failed:', error);
 
-  }
+  }
 }
 
 
