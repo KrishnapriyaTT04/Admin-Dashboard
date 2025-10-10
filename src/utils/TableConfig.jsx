@@ -23,7 +23,7 @@ export const userRating = {
   keys: ['facilityTitle', 'comments', 'starRating'],
   config: {
      facilityTitle: {
-      label: 'facilityTitle',
+      label: 'Facility Title',
       type: 'string',
       class: ' commonDesc'
     },
