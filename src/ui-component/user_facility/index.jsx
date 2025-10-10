@@ -377,8 +377,6 @@ export default function Facility() {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
-        {/* {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />} */}
-        {/* {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setOpen} item={selectedItem} />} */}
         {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
 
         {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem} />}
@@ -388,7 +386,7 @@ export default function Facility() {
         {selectedFacility && (
           <ChangeStatusModal
               open={isStatusModalOpen}
-              facility={selectedFacility} // Pass the selected data
+              facility={selectedFacility} 
               onClose={handleCloseStatusModal}
               onConfirm={handleUpdateStatus} // Pass the function to execute on confirm
           />
