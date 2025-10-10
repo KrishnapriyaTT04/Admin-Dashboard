@@ -3,46 +3,46 @@ export default function componentStyleOverrides() {
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#1d3848', // Dark green sidebar background
-          color: '#FFFFFF' // White text color
+          backgroundColor: '#1d3848', 
+          color: '#FFFFFF' 
         }
       }
     },
     MuiListItemButton: {
       styleOverrides: {
         root: {
-          color: '#FFFFFF', // White text color
+          color: '#FFFFFF',
           '&.Mui-selected': {
-            color: '#0F3A2D', // Selected item text color
-            backgroundColor: '#fff', // Slightly lighter green for selected
+            color: '#0F3A2D', 
+            backgroundColor: '#fff', 
             '&:hover': {
-              backgroundColor: '#fff' // Hover effect
+              backgroundColor: '#fff' 
             },
             '& .MuiListItemIcon-root': {
-              color: '#0F3A2D' // Selected icon color
+              color: '#0F3A2D' 
             }
           },
-          '&:hover': {
-            backgroundColor: '#fff', // Hover background
-            color: '#0F3A2D',
-            '& .MuiListItemIcon-root': {
-              color: '#0F3A2D'
-            }
-          }
+          // '&:hover': {
+          //   backgroundColor: '#fff', 
+          //   color: '#0F3A2D',
+          //   '& .MuiListItemIcon-root': {
+          //     color: '#0F3A2D'
+          //   }
+          // }
         }
       }
     },
     MuiListItemIcon: {
       styleOverrides: {
         root: {
-          color: '#FFFFFF' // Icon color (White)
+          color: '#FFFFFF'
         }
       }
     },
     MuiListItemText: {
       styleOverrides: {
         primary: {
-          color: '#FFFFFF' // Text color (White)
+          color: '#FFFFFF' 
         }
       }
     }
