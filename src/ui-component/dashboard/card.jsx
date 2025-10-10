@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { Box, Chip, Grid, Stack, Typography } from '@mui/material';
-// import { RiseOutlined, FallOutlined } from '@ant-design/icons';
 
 const Card = ({ color, bgTheme, title, count, percentage, isLoss, icon }) => {
 

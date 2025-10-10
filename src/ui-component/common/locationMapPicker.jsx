@@ -19,8 +19,8 @@ export default function LocationMapPicker({ initialLocation, onLocationSelect })
 
     // 1. Initialize local state for the marker position
     // Parses initialLocation strings to numbers, defaulting to Kerala center if null
-    const initialLat = parseFloat(initialLocation?.[0]) || 10.99835602;
-    const initialLng = parseFloat(initialLocation?.[1]) || 77.01502627;
+    const initialLat = parseFloat(initialLocation?.[0]) || 9.954197292297296;
+    const initialLng = parseFloat(initialLocation?.[1]) || 76.29988268403412;
     
     const [markerCoords, setMarkerCoords] = useState({ 
         lat: initialLat, 

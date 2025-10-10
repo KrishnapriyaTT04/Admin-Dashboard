@@ -40,6 +40,7 @@ export default function userReportedIssues() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
   const [limit, setLimit] = useState(5);
+    const [getReqUrl, setGetReqUrl] = useState('');
 
   // const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
   const issueList = useSelector((state) => state?.reportIssue?.list);
@@ -67,7 +68,7 @@ export default function userReportedIssues() {
       skip: 0,
       order: ['createdOn DESC'],
       where: {
-        title: {
+        reportedByName: {
           like: value,
           options: 'i'
         }
@@ -120,16 +121,28 @@ export default function userReportedIssues() {
     setSelectedItem({});
   };
 
-  const handlePageClick = (e) => {
-    const selectedPage = e.selected;
-    setPage(selectedPage);
-    // dispatch(
-    //   getEfType({
-    //     page: selectedPage + 1,
-    //     searchVal: searchQuery
-    //   })
-    // );
-  };
+  // const handlePageClick = (e) => {
+  //   const selectedPage = e.selected;
+  //   setPage(selectedPage);
+  //   // dispatch(
+  //   //   getEfType({
+  //   //     page: selectedPage + 1,
+  //   //     searchVal: searchQuery
+  //   //   })
+  //   // );
+  // };
+
+
+    const handlePageClick = (e) => {
+      const selectedPage = e.selected;
+      const newSkip = selectedPage * limit;
+      setPage(selectedPage);
+      let reqUrl = `facilities?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
+      setGetReqUrl(reqUrl);
+      dispatch(getIssueReports(reqUrl));
+    };
+
+
 
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
@@ -168,7 +181,7 @@ export default function userReportedIssues() {
                 fullWidth
                 variant="outlined"
                 size="small"
-                placeholder="Search by name"
+                placeholder="Search by Reported By"
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}

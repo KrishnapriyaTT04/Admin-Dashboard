@@ -3,35 +3,54 @@ import { Card, CardContent, Typography, Divider, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 export const DetailCard = ({ title, data = [], count, fields = [], path, sx = {} }) => {
-  const capitalizeWords = (str) =>
-    str
-      ?.toString()
-      ?.toLowerCase()
-      ?.replace(/\b\w/g, (char) => char.toUpperCase()) || '';
+  const capitalize = (str) =>
+    str?.toString()?.replace(/\b\w/g, (char) => char.toUpperCase()) || '';
 
   const safeData = Array.isArray(data) ? data : [];
 
   return (
-    <Card sx={{ borderRadius: 3, boxShadow: 2, height: '100%', ...sx }}>
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Card
+      sx={{
+        borderRadius: 3,
+        boxShadow: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        overflow: 'hidden',
+        ...sx
+      }}
+    >
+      <CardContent
+        sx={{
+          flex: 1,
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': { width: '6px' },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#ccc',
+            borderRadius: '10px'
+          },
+          '&::-webkit-scrollbar-thumb:hover': { backgroundColor: '#888' },
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#ccc #f1f1f1'
+        }}
+      >
+        {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
           <Typography variant="subtitle1" fontWeight={900}>
             {title}{' '}
             <span
               style={{
-                fontWeight: 900,
                 fontSize: '10px',
-                border: '1px solid rgb(1 152 99)',
-                color: 'rgb(1 152 99)',
+                border: '1px solid #019863',
+                color: '#019863',
                 borderRadius: '10px',
-                background: 'rgb(242 245 248)',
+                background: '#f2f5f8',
                 padding: '3px 7px'
               }}
             >
-              <span className="text-lg font-bold leading-none">{String(count).padStart(2, '0')}</span>
+              {String(count).padStart(2, '0')}
             </span>
           </Typography>
-
           <Box
             component={Link}
             to={path}
@@ -49,43 +68,35 @@ export const DetailCard = ({ title, data = [], count, fields = [], path, sx = {}
 
         <Divider sx={{ mb: 1 }} />
 
-        {safeData.length > 0
-          ? safeData.map((item, idx) => (
-              <Box key={idx}>
-                <Box mb={1}>
-                  <Typography fontWeight={fields[0]?.bold ? 600 : 400} fontSize="13px">
-                    {capitalizeWords(item[fields[0]?.name])}
-                  </Typography>
-
-                  <Typography fontSize="13px">
-                    {[capitalizeWords(item[fields[1]?.name]), capitalizeWords(item[fields[2]?.name])].filter(Boolean).join(' | ')}
-                  </Typography>
-
-                  {fields.slice(3).map((field, i) => (
-                    <Typography
-                      key={i}
-                      fontWeight={field.bold ? 600 : 400}
-                      fontSize={field.size || '13px'}
-                      color={field.color || 'inherit'}
-                    >
-                      {capitalizeWords(item[field.name])}
-                    </Typography>
-                  ))}
-                </Box>
-                <Divider sx={{ mb: 1 }} />
-              </Box>
-            ))
-          : // Blank placeholder rows for consistent card height
-            Array.from(new Array(5)).map((_, idx) => (
-              <Box key={idx} mb={1} sx={{ minHeight: 20 }}>
-                {fields.map((_, i) => (
-                  <Typography key={i} fontSize="13px" sx={{ visibility: 'hidden' }}>
-                    placeholder
-                  </Typography>
-                ))}
-                <Divider sx={{ mb: 1 }} />
-              </Box>
-            ))}
+        {/* Data List */}
+        {safeData.length > 0 ? (
+          safeData.map((item, idx) => (
+            <Box key={idx} mb={1}>
+              <Typography fontWeight={fields[0]?.bold ? 600 : 400} fontSize="13px">
+                {capitalize(item[fields[0]?.name])}
+              </Typography>
+              <Typography
+                fontSize="13px"
+                sx={{
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis'
+                }}
+              >
+                {fields
+                  .slice(1)
+                  .map((f) => capitalize(item[f.name]))
+                  .filter(Boolean)
+                  .join(' | ')}
+              </Typography>
+              <Divider sx={{ mt: 1 }} />
+            </Box>
+          ))
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            No records found.
+          </Typography>
+        )}
       </CardContent>
     </Card>
   );
