@@ -77,7 +77,7 @@ function* getFeedbackCount(action) {
             // yield call(action.payload.navigate, '/dashboard');
 
     console.error('Fetch user feed back count failed:', error);
-    // yield call(toast.error, 'Failed to fetch user feedbacks count.', { autoClose: 3000 });
+    yield call(toast.error, 'Failed to fetch user feedbacks count.', { autoClose: 3000 });
   }
 }
 

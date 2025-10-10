@@ -129,8 +129,8 @@ export default function UserRating() {
             config={config}
             sx={{
               '& th': {
-                textAlign: 'center !important', 
-                paddingLeft: '0px', 
+                textAlign: 'center !important', // Change to center
+                paddingLeft: '0px', // Reset padding for better centering
                 paddingRight: '0px'
               }
             }}
@@ -150,16 +150,16 @@ export default function UserRating() {
             msg="Ratings"
             tableData={displayedData}
             filter={searchQuery || ''}
-            
+            // *** MODIFICATION START ***
             sx={{
               '& td': {
-              
+                // Change textAlign to center for table data cells
                 textAlign: 'center !important',
-                paddingLeft: '0px', 
+                paddingLeft: '0px', // Reset padding for better centering
                 paddingRight: '0px'
               }
             }}
-            
+            // *** MODIFICATION END ***
           />
         </Table>
       </TableContainer>
