@@ -31,7 +31,7 @@ export default function UserRating() {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
@@ -98,7 +98,7 @@ export default function UserRating() {
       </Grid>
 
       {/* Search */}
-      <Grid container sx={{ width: '100%', alignItems: 'center', justifyContent: 'center', mt: 2 }}>
+      <Grid container sx={{ width: '100%', alignItems: 'center', justifyContent: 'center', mt: 0 }}>
         <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <TextField
@@ -122,15 +122,15 @@ export default function UserRating() {
       </Grid>
 
       {/* Table */}
-      <TableContainer sx={{ mt: 2 }}>
+      <TableContainer sx={{ mt: 0 }}>
         <Table sx={{ minWidth: 650 }} aria-label="ratings table">
           <TableHead
             keys={keys}
             config={config}
             sx={{
               '& th': {
-                textAlign: 'center !important', // Change to center
-                paddingLeft: '0px', // Reset padding for better centering
+                textAlign: 'center !important', 
+                paddingLeft: '0px', 
                 paddingRight: '0px'
               }
             }}
@@ -150,16 +150,16 @@ export default function UserRating() {
             msg="Ratings"
             tableData={displayedData}
             filter={searchQuery || ''}
-            // *** MODIFICATION START ***
+            
             sx={{
               '& td': {
-                // Change textAlign to center for table data cells
+              
                 textAlign: 'center !important',
-                paddingLeft: '0px', // Reset padding for better centering
+                paddingLeft: '0px', 
                 paddingRight: '0px'
               }
             }}
-            // *** MODIFICATION END ***
+            
           />
         </Table>
       </TableContainer>
