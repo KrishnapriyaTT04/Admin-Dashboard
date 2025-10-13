@@ -5,11 +5,11 @@ import PersonIcon from '@mui/icons-material/Person';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
-import BadgeIcon from '@mui/icons-material/Badge'; 
+import BadgeIcon from '@mui/icons-material/Badge';
 
 // Component for viewing individual user details in a side drawer
 const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
-  const theme = useTheme(); 
+  const theme = useTheme();
 
   // Helper function to safely format dates
   const formatDate = (dateString) => {
@@ -27,7 +27,7 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       return 'Invalid Date';
     }
   };
-  
+
   // Helper function to display the full name
   const getFullName = () => {
     return item?.fullName || (item?.firstName && item?.lastName ? `${item.firstName} ${item.lastName}` : 'N/A');
@@ -41,7 +41,13 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
           {title}
         </Typography>
       </Box>
-      <Typography variant="body1" sx={{ wordBreak: 'break-word', textTransform: title === 'Role' || title === 'User Type' || title === 'Status' ? 'capitalize' : 'none' }}>
+      <Typography
+        variant="body1"
+        sx={{
+          wordBreak: 'break-word',
+          textTransform: title === 'Role' || title === 'User Type' || title === 'Status' ? 'capitalize' : 'none'
+        }}
+      >
         {value || 'N/A'}
       </Typography>
     </Grid>
@@ -57,12 +63,11 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
           // Responsive width adjusted
           width: { xs: '100%', sm: '80%', md: '450px' },
           maxWidth: '100vw',
-          backgroundColor: theme.palette.background.default,
+          backgroundColor: theme.palette.background.default
         }
       }}
     >
       <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
-
         {/* Header */}
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
           <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
@@ -72,12 +77,11 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
             <CloseIcon />
           </IconButton>
         </Grid>
-        
+
         <Divider sx={{ mb: 3 }} />
 
         {/* Content */}
         <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-
           {/* User Name Header */}
           <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
             {getFullName()}
@@ -91,7 +95,7 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 Contact & Account
               </Typography>
             </Box>
-            
+
             <Grid container spacing={3}>
               <DetailItem title="Full Name" value={getFullName()} />
               <DetailItem title="Username" value={item?.username} />
@@ -108,9 +112,9 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 Role & Status
               </Typography>
             </Box>
-            
+
             <Grid container spacing={3}>
-              <DetailItem title="User Type" value={item?.userType} />
+              <DetailItem title="User Type" value={item?.userType === 'publicUser' ? 'Public User' : item?.userType} />
               <DetailItem title="Role" value={item?.role} />
               <DetailItem title="Status" value={item?.status} />
               {/* Add more relevant fields if necessary */}
@@ -125,15 +129,13 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 Audit Trail
               </Typography>
             </Box>
-            
+
             <Grid container spacing={3}>
               <DetailItem title="Created On" value={formatDate(item?.createdOn)} />
               <DetailItem title="Last Modified On" value={formatDate(item?.modifiedOn)} />
             </Grid>
           </Paper>
-          
         </Box>
-        
       </Box>
     </Drawer>
   );

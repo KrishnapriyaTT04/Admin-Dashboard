@@ -64,18 +64,14 @@ export const facilityHeads = {
 };
 
 export const usersHeads = {
-  keys: ['fullName', 'email', 'phone','role','status'],
+  keys: ['fullName',  'phone','role','status'],
   config: {
     fullName: {
       label: 'Name',
       type: 'string',
       class: ' commonDesc'
     },
-    email: {
-      label: 'Email',
-      type: 'string',
-      class: ' cmn_Cap commonDesc'
-    },
+    
     phone: {
       label: 'Phone',
       type: 'string',
