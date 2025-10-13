@@ -69,7 +69,7 @@ export const facilityHeads = {
 };
 
 export const usersHeads = {
-  keys: ['fullName', 'email', 'phone','status'],
+  keys: ['fullName', 'email', 'phone','role','status'],
   config: {
     fullName: {
       label: 'Name',
@@ -85,6 +85,11 @@ export const usersHeads = {
       label: 'Phone',
       type: 'string',
       class: ' cmn_Cap commonDesc'
+    },
+    role:{
+       label: 'Role',
+       type: 'string',
+       class: ' cmn_Cap commonDesc'
     },
     status:{
       label: 'Status',
