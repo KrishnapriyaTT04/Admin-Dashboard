@@ -105,7 +105,7 @@ export default function UserRating() {
       {/* Header */}
       <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
-          Feedbacks & Ratings
+          Rating & Feedback
         </Typography>
       </Grid>
 
@@ -117,7 +117,7 @@ export default function UserRating() {
               fullWidth
               variant="outlined"
               size="small"
-              placeholder="Search by Title"
+              placeholder="Search by Facility Title"
               value={searchQuery}
               onChange={searchHandler}
               InputProps={{
