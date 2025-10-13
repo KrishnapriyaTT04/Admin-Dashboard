@@ -167,10 +167,8 @@ const STATUS_OPTIONS = [
 
 const StatusChangeModal = ({ open, facility, onClose, onConfirm }) => {
   const theme = useTheme();
-  // State to hold the new status selected by the user
   const [newStatus, setNewStatus] = useState('');
 
-  // Update the internal state when the facility prop changes (when the modal opens)
   useEffect(() => {
     if (facility) {
       // Set the default selection to the facility's current status
@@ -252,16 +250,16 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm }) => {
                     py: 1.5,
                     fontWeight: 400,
                     fontSize: 12,
-                     color: '#019863',
+                     color: 'red',
                     // backgroundImage: 'linear-gradient(180deg, #019863, #019863)',
                     borderRadius: 2,
-                      border: '1px solid #019863',
+                      border: '1px solid red',
                     boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: 'transparent',
-                      color: '#019863',
-                      border: '1px solid #019863',
+                      color: 'red',
+                      border: '1px solid red',
                       backgroundImage: 'none',
                     }
                   }}>
@@ -276,7 +274,7 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm }) => {
                     py: 1.5,
                     fontWeight: 400,
                     fontSize: 12,
-                    color: '#fff',
+                    color: 'white !important',
                     backgroundImage: 'linear-gradient(180deg, #019863, #019863)',
                     borderRadius: 2,
                       border: '1px solid #019863',
