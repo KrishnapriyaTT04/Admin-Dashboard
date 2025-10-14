@@ -1,4 +1,81 @@
-import { takeEvery, call } from 'redux-saga/effects';
+// import { takeEvery, call } from 'redux-saga/effects';
+// import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+
+// import commonApi from '../api';
+// import appConfig from '../../config';
+// import * as actionType from './slice';
+
+// function* login(action) {
+//   let loginReq = {
+//     client_id: action.payload.client_id,
+//     client_secret: action.payload.client_secret,
+//     username: action.payload.email,
+//     password: action.payload.password
+//   };
+
+//   try {
+//     let params = {
+//       api: `${appConfig.ip}/auth/login/admin`,
+//       method: 'POST',
+//       successAction: actionType.loginSuccess(),
+//       failAction: actionType.loginFail(),
+//       authourization: null,
+//       body: JSON.stringify(loginReq)
+//     };
+//     let res = yield call(commonApi, params);
+//     if (res) {
+//       localStorage.setItem('klooToken', JSON.stringify(res));
+//       yield call(toast.success, 'Login successful', { autoClose: 3000 });
+//       yield call(action.payload.navigate, '/dashboard');
+//     } else {
+//       console.log('------------err---', res);
+//       yield call(toast.error, 'Login failed. Please try again.', { autoClose: 3000 });
+//     }
+//   } catch (error) {
+//     yield call(action.payload.navigate, '/dashboard');
+
+//     console.error('Login failed:', error);
+//     yield call(toast.error, 'Login failed. Please try again.', { autoClose: 3000 });
+//   }
+// }
+
+
+
+// function* userMe() {
+//     const token = JSON.parse(localStorage.getItem('klooToken'));   
+//   try {
+//     const params = {
+//       api: `${ISSUE_API_BASE}/users/me`, 
+//       method: 'GET',
+//       successAction: actionType.userMeSuccess(),
+//       failAction: actionType.userMeFail(),
+//       authorization: `Bearer`,
+//       token: `${token?.accessToken}`
+//     };
+    
+//     const res = yield call(commonApi, params);
+//   } catch (error) {
+//     console.error('Fetch User failed:', error);
+//     yield put(actionType.getIssuesCountFail({ 
+//       message: error.message || 'Failed to fetch User.', 
+//       status: error.response?.status || 500 
+//     }));
+//     yield call(toast.error, 'Failed to load User list.', { autoClose: 3000 });
+//   }
+// }
+
+
+// export default function* LoginActionWatcher() {
+//   yield takeEvery(actionType.userLogin, login);
+//   yield takeEvery(actionType.userMe, userMe);
+// }
+
+
+
+
+
+import { takeEvery, call, put } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -7,60 +84,70 @@ import appConfig from '../../config';
 import * as actionType from './slice';
 
 function* login(action) {
-     console.log("------------action---",action);
-
-     let loginReq={
-      client_id: action.payload.client_id,
-      client_secret: action.payload.client_secret,
-      username: action.payload.email,
-      password: action.payload.password,
-     }
+  const loginReq = {
+    client_id: action.payload.client_id,
+    client_secret: action.payload.client_secret,
+    username: action.payload.email,
+    password: action.payload.password
+  };
 
   try {
-    let params = {
+    const params = {
       api: `${appConfig.ip}/auth/login/admin`,
-     //api:`${appConfig.ip}/auth/login/admin`,
-     method: 'POST',
+      method: 'POST',
       successAction: actionType.loginSuccess(),
       failAction: actionType.loginFail(),
-      authourization: null,
-       body: JSON.stringify(loginReq) 
+      authorization: null,
+      body: JSON.stringify(loginReq)
     };
-    let res = yield call(commonApi, params);
-     if(res){
+
+    const res = yield call(commonApi, params);
+
+    if (res) {
       localStorage.setItem('klooToken', JSON.stringify(res));
-       yield call(toast.success, 'Login successful', { autoClose: 3000 });
+
+      yield call(toast.success, 'Login successful', { autoClose: 3000 });
+
+      yield call(userMe);
+
       yield call(action.payload.navigate, '/dashboard');
-     }else{
-         console.log("------------err---",res);
+    } else {
       yield call(toast.error, 'Login failed. Please try again.', { autoClose: 3000 });
-      //localStorage.setItem('userToken', JSON.stringify(null));
-     }
-        //     localStorage.setItem('userDtls', JSON.stringify(res));
-
-    // if (res?.message) {
-    //   if (res.message.roles !== 'Inclips Admin') {
-    //     localStorage.setItem('userDtls', JSON.stringify(res));
-    //     yield call(toast.success, 'Login successful', { autoClose: 3000 });
-    //     yield call(action.payload.navigate, '/dashboard');
-    //   } else {
-    //     throw new Error('User not valid');
-    //   }
-    // } else {
-    //   throw new Error('Invalid response from API');
-    // }
+    }
   } catch (error) {
-    //  data={
-    //   'message':{"role":"admin"}
-    //  }
-    //  localStorage.setItem('userDtls', JSON.stringify(data));
-            yield call(action.payload.navigate, '/dashboard');
-
     console.error('Login failed:', error);
     yield call(toast.error, 'Login failed. Please try again.', { autoClose: 3000 });
   }
 }
 
+function* userMe() {
+  const token = JSON.parse(localStorage.getItem('klooToken'));
+  try {
+    const params = {
+      api: `${appConfig.ip}/users/me`,
+      method: 'GET',
+      successAction: actionType.userMeSuccess(),
+      failAction: actionType.userMeFail(),
+      authorization: `Bearer`,
+      token: `${token?.accessToken}`
+    };
+
+    const res = yield call(commonApi, params);
+    
+    yield put(actionType.userMeSuccess(res));
+  } catch (error) {
+    console.error('Fetch User failed:', error);
+    yield put(
+      actionType.userMeFail({
+        message: error.message || 'Failed to fetch user.',
+        status: error.response?.status || 500
+      })
+    );
+    yield call(toast.error, 'Failed to load user details.', { autoClose: 3000 });
+  }
+}
+
 export default function* LoginActionWatcher() {
   yield takeEvery(actionType.userLogin, login);
+  yield takeEvery(actionType.userMe, userMe);
 }

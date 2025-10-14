@@ -265,7 +265,7 @@ export default function Facility() {
                 fullWidth
                 variant="outlined"
                 size="small"
-                placeholder="Search by title"
+                placeholder="Search by Title"
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}

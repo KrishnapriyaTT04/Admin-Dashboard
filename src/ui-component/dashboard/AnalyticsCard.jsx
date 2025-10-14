@@ -67,7 +67,7 @@ const AnalyticsCard = () => {
               path="/reportedIssues"
               count={counts.issues}
               data={issueList}
-              fields={[{ name: 'assignedName', bold: true }, { name: 'topic' }]}
+              fields={[{ name: 'reportedByName', bold: true }, { name: 'topic' }]}
             />
           </Grid>
 

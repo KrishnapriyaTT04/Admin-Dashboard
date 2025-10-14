@@ -66,8 +66,6 @@ function* getIssuesCount() {
     };
     
     const res = yield call(commonApi, params);
-    console.log("==res",res);
- 
   } catch (error) {
     console.error('Fetch Issues failed:', error);
     yield put(actionType.getIssuesCountFail({ 

@@ -11,7 +11,7 @@ const getStatusColor = (status) => {
     case 'active':
       return { text: '#019863', bg: '#0198632e' };
     case 'inactive':
-      return { text: '#6c757d', bg: '#6c757d2e' };
+      return { text: 'red', bg: '#ff00001a' };
     case 'cancelled':
       return { text: '#ffffff', bg: '#f86c6b' };
     case 'created':

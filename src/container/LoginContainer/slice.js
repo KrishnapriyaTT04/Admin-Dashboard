@@ -4,6 +4,7 @@ const loginSlice = createSlice({
     name: 'login',
     initialState: {
         data: {},
+        userData: [],
         loading: false,
         error: null
     },
@@ -23,11 +24,24 @@ const loginSlice = createSlice({
                 message: action.payload.message || 'Login failed',
                 status: action.payload.status || 500
             };
+        },
+
+        userMe: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        userMeSuccess: (state, action) => {
+         state.loading = false;
+            state.userData = action.payload;
+            state.error = null;
+        },
+        userMeFail: (state, action) => {
+            state.loading = false;
         }
     }
 });
 
-export const { userLogin, loginSuccess, loginFail } = loginSlice.actions;
+export const { userLogin, loginSuccess, loginFail, userMe, userMeSuccess, userMeFail } = loginSlice.actions;
 export const selectError = (state) => state.login.error;
 
 export default loginSlice.reducer;

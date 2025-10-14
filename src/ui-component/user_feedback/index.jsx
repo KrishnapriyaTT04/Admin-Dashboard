@@ -155,7 +155,7 @@ export default function Type() {
 
           {/* Search Box */}
           <Grid item xs={12} sm={4} md={6} lg={6} xl={6}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', pt: { xs: 1, md: 2 }  }}>
               <TextField
                 fullWidth
                 variant="outlined"

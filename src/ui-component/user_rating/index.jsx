@@ -129,7 +129,7 @@ export default function UserRating() {
       {/* Search */}
       <Grid container sx={{ width: '100%', alignItems: 'center', justifyContent: 'center', mt: 0 }}>
         <Grid item xs={12} sm={8} md={6} lg={4} xl={4}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center',  pt: { xs: 1, md: 2 } }}>
             <TextField
               fullWidth
               variant="outlined"
