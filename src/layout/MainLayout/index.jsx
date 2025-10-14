@@ -14,6 +14,7 @@ import { drawerWidth } from 'store/constant';
 import { IconChevronRight } from '@tabler/icons-react';
 import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
 import { CssBaseline, styled, useTheme } from '@mui/material';
+import Footer from 'ui-component/common/footer';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && prop !== 'theme' })(({ theme, open }) => ({
   ...theme.typography.mainContent,
@@ -48,7 +49,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && pr
   }
 }));
 
-// ==============================|| MAIN LAYOUT ||============================== //
 
 const MainLayout = () => {
   const theme = useTheme();
@@ -66,52 +66,63 @@ const MainLayout = () => {
     dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
   };
 
-  return (
-    <>
-      <Box
-        sx={{ display: 'flex', cursor: isDraftOrPending ? 'not-allowed' : '' }}
-        onClick={() => (!flag && isDraftOrPending ? setOpenPendingModal(true) : '')}
+ return (
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',   // stack main content + footer vertically
+      minHeight: '100vh',        // ensures footer sticks to bottom on short pages
+      cursor: isDraftOrPending ? 'not-allowed' : ''
+    }}
+    onClick={() => (!flag && isDraftOrPending ? setOpenPendingModal(true) : '')}
+  >
+    <CssBaseline />
+
+    {/* Header */}
+    <AppBar
+      enableColorOnDark
+      position="fixed"
+      color="inherit"
+      elevation={0}
+      sx={{
+        bgcolor: theme.palette.background.default,
+        transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
+      }}
+    >
+      <Toolbar
+        sx={{
+          background: 'linear-gradient(180deg, #019863, #019863)'
+        }}
       >
-        <CssBaseline />
-        {/* header */}
-        <AppBar
-          enableColorOnDark
-          position="fixed"
-          color="inherit"
-          elevation={0}
-          sx={{
-            bgcolor: theme.palette.background.default,
-            transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
-          }}
-        >
-          <Toolbar
-            sx={{
-              background: 'linear-gradient(180deg, #019863, #019863)'
-            }}
-          >
-            <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
-          </Toolbar>
-        </AppBar>
+        <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
+      </Toolbar>
+    </AppBar>
 
-        <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
+    {/* Main content + Sidebar */}
+    <Box sx={{ display: 'flex', flex: 1 }}>
+      <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
 
-        <Main
-          sx={{
-            marginLeft: leftDrawerOpened ? '0px' : matchDownMd ? '20px' : '-190px !important',
-            marginRight: '0px',
-            pointerEvents: isDraftOrPending ? 'none' : '',
-            opacity: isDraftOrPending ? 0.5 : ''
-          }}
-          theme={theme}
-          open={leftDrawerOpened}
-        >
-          {/* breadcrumb */}
-          <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
-          <Outlet />
-        </Main>
-      </Box>
-    </>
-  );
+      <Main
+        sx={{
+          marginLeft: leftDrawerOpened ? '0px' : matchDownMd ? '20px' : '-190px !important',
+          marginRight: '0px',
+          pointerEvents: isDraftOrPending ? 'none' : '',
+          opacity: isDraftOrPending ? 0.5 : ''
+        }}
+        theme={theme}
+        open={leftDrawerOpened}
+      >
+        {/* Breadcrumb */}
+        <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
+        <Outlet />
+      </Main>
+    </Box>
+
+    {/* Footer */}
+    <Footer />
+  </Box>
+);
+
 };
 
 export default MainLayout;

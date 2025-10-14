@@ -6,6 +6,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 // Redux Slice
 import { getRatings, getRatingCount } from 'container/RatingContainer/slice';
@@ -83,6 +85,21 @@ export default function UserRating() {
   };
   // --- END API Request Logic ---
 
+  const renderStars = (rating) => {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    stars.push(
+      i <= rating ? (
+        <StarIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />
+      ) : (
+        <StarBorderIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />
+      )
+    );
+  }
+  return <Box sx={{ display: 'flex', justifyContent: 'left' }}>{stars}</Box>;
+};
+
+
   const handleViewModal = (item) => {
     setOpen(true);
     setSelectedItem(item);
@@ -96,7 +113,7 @@ export default function UserRating() {
   const displayedData = ratingsList.map((item) => {
     return {
       ...item,
-      starRating: item.starRating
+      starRating: renderStars(item.starRating)
     };
   });
 

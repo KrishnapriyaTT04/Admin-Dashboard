@@ -98,7 +98,6 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
 
             <Grid container spacing={3}>
               <DetailItem title="Full Name" value={getFullName()} />
-              <DetailItem title="Username" value={item?.username} />
               <DetailItem icon={EmailIcon} title="Email" value={item?.email} />
               <DetailItem icon={PhoneIcon} title="Phone" value={item?.phone} />
             </Grid>

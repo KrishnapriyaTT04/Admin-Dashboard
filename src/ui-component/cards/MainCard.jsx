@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import Footer from 'ui-component/common/footer';
 
 // project-import
 
@@ -36,6 +37,7 @@ const MainCard = React.forwardRef(
     ref
   ) => {
     return (
+      <>
       <Card
         ref={ref}
         {...others}
@@ -63,6 +65,8 @@ const MainCard = React.forwardRef(
         )}
         {!content && children}
       </Card>
+     
+      </>
     );
   }
 );

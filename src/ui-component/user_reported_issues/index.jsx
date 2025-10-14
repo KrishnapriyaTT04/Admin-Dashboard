@@ -25,6 +25,7 @@ import ViewReport from './viewReport';
 // import UpdateEfTypeForm from './updateForm';
 import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
+import Footer from 'ui-component/common/footer';
 
 export default function userReportedIssues() {
   const theme = useTheme();
@@ -236,5 +237,6 @@ export default function userReportedIssues() {
         )} */}
       </MainCard>
     </>
+    
   );
 }
