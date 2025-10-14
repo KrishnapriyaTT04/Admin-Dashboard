@@ -13,7 +13,7 @@ import ViewFeedbackDetail from './viewUserDetail';
 import ChangeStatusModal from '../common/commonStatusChange'; // <-- NEW IMPORT
 // import UpdateForm from './addUser'; // <-- NEW IMPORT (Assuming this is your Add/Edit User Form)
 
-import { getUsers, getUserCount } from 'container/UsersContainer/slice'; // <-- ADD updateUser
+import { getUsers, getUserCount,updateUser } from 'container/UsersContainer/slice'; // <-- ADD updateUser
 import { usersHeads } from 'utils/TableConfig';
 import styles from '../common/style';
 import cmnStyles from '../common/style1';
@@ -95,15 +95,16 @@ export default function Users() {
     setIsStatusModalOpen(false);
     setSelectedItem(null);
   };
+  
 
-  // const handleUpdateStatus = (newStatus) => {
-  //   let values = {
-  //     status: newStatus,
-  //     id: selectedItem.id
-  //   }; // Dispatch the update action, passing the refresh URL
-  //   dispatch(updateUser({ values, getReqestUrl: getReqUrl }));
-  //   handleCloseStatusModal();
-  // }; // Delete modal (REMOVED: handleDeleteModal, closeDeleteModal, deleteHandler)
+  const handleUpdateStatus = (newStatus) => {
+    let values = {
+      status: newStatus,
+      id: selectedItem.id
+    }; // Dispatch the update action, passing the refresh URL
+    dispatch(updateUser({ values, getReqestUrl: getReqUrl }));
+    handleCloseStatusModal();
+  }; // Delete modal (REMOVED: handleDeleteModal, closeDeleteModal, deleteHandler)
 
  return (
   <MainCard>
@@ -202,10 +203,10 @@ export default function Users() {
     {/* Status Change Modal */}
     {isStatusModalOpen && selectedItem && (
       <ChangeStatusModal
-//         open={isStatusModalOpen}
-//         facility={selectedItem}
-//         onClose={handleCloseStatusModal}
-//         onConfirm={handleUpdateStatus}
+        open={isStatusModalOpen}
+        facility={selectedItem}
+        onClose={handleCloseStatusModal}
+        onConfirm={handleUpdateStatus}
       />
     )}
   </MainCard>

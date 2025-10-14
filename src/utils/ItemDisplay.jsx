@@ -1,34 +1,33 @@
 // renderItem.js
 import React from 'react';
 import Chip from '@mui/material/Chip';
-import Typography from '@mui/material/Typography'; // Make sure to import Typography
+import Typography from '@mui/material/Typography'; 
 import dateFormat from 'dateformat';
 import { useTheme } from '@mui/material';
 import styles from './style';
 const getStatusColor = (status) => {
   switch (status) {
-    case 'paid':
-      return '#4dbd74';
-    case 'inProgress':
-      return '#f5bc11c2';
-    case 'cancelled':
-      return '#f86c6b';
-    case 'created':
-      return '#20a8d8';
+    case 'open': 
     case 'active':
-      return '#00cc99';
+      return { text: '#019863', bg: '#0198632e' };
+    case 'inactive':
+      return { text: '#6c757d', bg: '#6c757d2e' };
+    case 'cancelled':
+      return { text: '#ffffff', bg: '#f86c6b' };
+    case 'created':
+      return { text: '#ffffff', bg: '#20a8d8' };
     case 'suspended':
-      return '#808080';
+      return { text: '#ffffff', bg: '#808080' };
     case 'draft':
-      return '#808080';
-    case 'publish': // Grouped publish, completed, closed for clarity
+      return { text: '#ffffff', bg: '#808080' };
+    case 'publish':
     case 'completed':
     case 'closed':
-      return '#00cc99';
+      return { text: '#ffffff', bg: '#00cc99' };
     case 'deleted':
-      return 'red';
+      return { text: '#ffffff', bg: '#ff0000' };
     default:
-      return 'blue';
+      return { text: '#ffffff', bg: 'blue' };
   }
 };
 
@@ -40,8 +39,8 @@ const renderItem = (data, type, res = '', key = '') => {
   switch (type) {
     case 'string':
       if (key === 'status') {
-        // Corrected: Wrapping Chip in Typography with component="div"
-        returnData = (
+        const colors = getStatusColor(data);
+        return (
           <Typography
             variant="body2"
             component="div"
@@ -55,7 +54,9 @@ const renderItem = (data, type, res = '', key = '') => {
               label={data === 'inProgress' ? 'In Progress' : data}
               sx={{
                 ...style.chipLabel,
-                backgroundColor: getStatusColor(data)
+                backgroundColor: colors.bg,
+                color: colors.text,
+                fontWeight: 600
               }}
               size="small"
             />

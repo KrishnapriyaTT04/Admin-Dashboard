@@ -181,30 +181,6 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 <Typography variant="body1">{item?.modifiedUser || item?.modifiedBy || 'N/A'}</Typography>
                 {renderDateTime(item?.modifiedOn)}
               </Grid>
-
-              {/* Deleted */}
-              <Grid item xs={12} md={4}>
-                <Typography variant="subtitle2" sx={{ display: 'flex', alignItems: 'center', mb: 0.5, gap: 0.5 }}>
-                  <DeleteIcon fontSize="small" color={item?.deleted ? 'error' : 'action'} />
-                  Deletion Status
-                </Typography>
-                <Box sx={{ mt: 0.5 }}>
-                  <Chip
-                    label={item?.deleted ? 'DELETED' : 'ACTIVE'}
-                    color={item?.deleted ? 'error' : 'success'}
-                    size="small"
-                    variant="outlined"
-                  />
-                  {item?.deleted && (
-                    <>
-                      <Typography variant="body2" sx={{ mt: 1 }}>
-                        By: {item?.deletedBy || 'N/A'}
-                      </Typography>
-                      {renderDateTime(item?.deletedOn)}
-                    </>
-                  )}
-                </Box>
-              </Grid>
             </Grid>
           </Paper>
         </Box>

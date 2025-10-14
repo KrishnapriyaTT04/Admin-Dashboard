@@ -169,7 +169,7 @@ export default function userReportedIssues() {
                 fullWidth
                 variant="outlined"
                 size="small"
-                placeholder="Search by Reported By"
+                placeholder="Search by Reported User"
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}

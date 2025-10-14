@@ -67,7 +67,7 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
         {/* Header */}
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
           <Typography variant="h2" sx={{ fontWeight: 600, color: '#019863' }}>
-            Report Details
+            Issue Details
           </Typography>
           <IconButton onClick={() => setDrawerOpen(false)} size="large">
             <CloseIcon />
@@ -246,12 +246,6 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
                 </Typography>
                 <Typography variant="body1">{item?.facilityId || 'N/A'}</Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Internal Facility ID
-                </Typography>
-                <Typography variant="body1">{item?.facilityInternalId || 'N/A'}</Typography>
-              </Grid>
             </Grid>
           </Paper>
 
@@ -291,20 +285,6 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
                 {renderDateTime(item?.modifiedOn)}
               </Grid>
 
-              {/* Deleted */}
-              <Grid item xs={12} md={4}>
-                <Typography variant="subtitle2">
-                  Deletion Status
-                </Typography>
-                <Box sx={{ mt: 0.5 }}>
-                  <Chip
-                    label={item?.deleted ? 'DELETED' : 'ACTIVE'}
-                    color={item?.deleted ? 'error' : 'success'}
-                    size="small"
-                    variant="outlined"
-                  />
-                </Box>
-              </Grid>
             </Grid>
           </Paper>
         </Box>
