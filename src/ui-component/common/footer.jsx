@@ -8,7 +8,7 @@ const Footer = () => {
   const leftDrawerOpened = useSelector((state) => state.customization.opened);
   return (
     <AppBar
-      position="static" // or "fixed" if you want it always visible at bottom
+      position="static" 
       elevation={0}
       sx={{
         top: 'auto',
