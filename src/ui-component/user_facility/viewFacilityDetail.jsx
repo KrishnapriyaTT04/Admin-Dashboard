@@ -34,6 +34,15 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
     return 'Not specified';
   };
 
+  const facilityFeatures = [
+  { value: item.isPaid, label: 'Paid Service' },
+  { value: item.is24H, label: '24 Hours' },
+  { value: item.indianType, label: 'Indian Type' },
+  { value: item.europeanType, label: 'European Type' },
+  { value: item.isFavourite, label: 'Favourite' }
+];
+const activeFeatures = facilityFeatures.filter((feature) => feature.value);
+
   const StatusChip = ({ value, label }) => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
       <Chip label={value ? 'Yes' : 'No'} color={value ? 'success' : 'default'} variant="outlined" size="small" />

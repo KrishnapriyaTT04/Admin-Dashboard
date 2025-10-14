@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton, Grid, useTheme, Divider, Paper } from '@mui/material';
+import { Box, Typography, IconButton, Grid, useTheme, Divider, Paper, Chip } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
@@ -115,8 +115,26 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
             <Grid container spacing={3}>
               <DetailItem title="User Type" value={item?.userType === 'publicUser' ? 'Public User' : item?.userType} />
               <DetailItem title="Role" value={item?.role} />
-              <DetailItem title="Status" value={item?.status} />
-              {/* Add more relevant fields if necessary */}
+
+              {/* Status as Chip */}
+              <DetailItem
+                title="Status"
+                value={
+                  <Chip
+                    label={item?.status}
+                    color={
+                      item?.status === 'active'
+                        ? 'success'
+                        : item?.status === 'pending'
+                          ? 'warning'
+                          : item?.status === 'inactive'
+                            ? 'default'
+                            : 'primary'
+                    }
+                    size="small"
+                  />
+                }
+              />
             </Grid>
           </Paper>
 
