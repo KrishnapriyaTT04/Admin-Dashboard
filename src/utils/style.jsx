@@ -37,11 +37,11 @@ const style = (theme) => ({
     }
   },
   cmnStatusIcon: {
-    backgroundColor: '#c70707ff',
+    backgroundColor: 'red',
     padding: '3px 3px',
 
     '&:hover': {
-      backgroundColor: '#27a5d6'
+      backgroundColor: '#c70707ff'
     }
   },
   cmnMoreIcon: {
