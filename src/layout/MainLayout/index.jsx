@@ -67,6 +67,7 @@ const MainLayout = () => {
   };
 
  return (
+  <>
   <Box
     sx={{
       display: 'flex',
@@ -117,10 +118,9 @@ const MainLayout = () => {
         <Outlet />
       </Main>
     </Box>
-
-    {/* Footer */}
-    <Footer />
   </Box>
+   <Footer />
+  </>
 );
 
 };

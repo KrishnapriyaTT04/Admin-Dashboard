@@ -8,7 +8,7 @@ const Footer = () => {
   const leftDrawerOpened = useSelector((state) => state.customization.opened);
   return (
     <AppBar
-      position="static" 
+      position="fixed" 
       elevation={0}
       sx={{
         top: 'auto',
@@ -20,7 +20,7 @@ const Footer = () => {
         ml: {
           md: leftDrawerOpened ? `${drawerWidth}px` : 0
         },
-        height: 80,
+        height: 50,
         background: 'linear-gradient(180deg, #019863, #019863)',
         color: '#fff'
       }}
