@@ -43,20 +43,15 @@ export const userRating = {
 
 
 export const facilityHeads = {
-  keys: ['title', 'contactEmail', 'contactPhone','status'],
+  keys: ['title', 'facilityType', 'contactPhone','status'],
   config: {
     title: {
       label: 'Title',
       type: 'string',
       class: ' commonDesc'
     },
-    contactEmail: {
-      label: 'Email',
-      type: 'string',
-      class: ' cmn_Cap commonDesc'
-    },
-    contactPhone: {
-      label: 'Phone',
+    facilityType: {
+      label: 'Facility Type',
       type: 'string',
       class: ' cmn_Cap commonDesc'
     },
@@ -69,18 +64,14 @@ export const facilityHeads = {
 };
 
 export const usersHeads = {
-  keys: ['fullName', 'email', 'phone','role','status'],
+  keys: ['fullName',  'phone','role','status'],
   config: {
     fullName: {
       label: 'Name',
       type: 'string',
       class: ' commonDesc'
     },
-    email: {
-      label: 'Email',
-      type: 'string',
-      class: ' cmn_Cap commonDesc'
-    },
+    
     phone: {
       label: 'Phone',
       type: 'string',
@@ -125,7 +116,8 @@ export const userReport = {
     status:{
       label: 'Status',
       type: 'string',
-      class: ' cmn_Cap commonDesc'
+      // class: ' cmn_Cap commonDesc'
+    
     }
   }
 };

@@ -1,3 +1,4 @@
+import { padding } from '@mui/system';
 import colors from 'assets/scss/_themes-vars.module.scss';
 
 const style = (theme) => ({
@@ -73,13 +74,13 @@ const style = (theme) => ({
   },
   chipLabel: {
     '&.MuiChip-root': {
-      color: '#fff',
-
+      // color: '#fff',
+      padding: '15px 20px',
       textTransform: 'capitalize',
       height: '16px',
-      fontWeight: '600',
-      fontSize: '11px',
-      borderRadius: '4px'
+      fontWeight: '500',
+      fontSize: '12px',
+      borderRadius: '20px'
       // fontFamily: theme.palette.fontFamily
     },
     '& .MuiChip-label': {
