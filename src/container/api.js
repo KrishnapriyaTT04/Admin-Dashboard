@@ -1,6 +1,7 @@
-import { put } from 'redux-saga/effects';
+import { put, call } from 'redux-saga/effects';
 import appConfig from '../config';
 import { Base64 } from 'js-base64';
+import { toast } from 'react-toastify';
 
 function* commonApi(value) {
 
@@ -35,7 +36,6 @@ function* commonApi(value) {
     'Content-Type': 'application/json'
   };
 
-  console.log("authHeader==", authHeader);
   
   try {
     const response = yield fetch(`${value.api}`, {
@@ -43,19 +43,24 @@ function* commonApi(value) {
       headers: value.authourization !== null ? authHeader : noauthHeader,
       body: value.body ? value.body : null
     });
-        console.log("====response----cmn===",response);
         
     if (!response.ok) {
+            if(response.status===401){
+                yield call(toast.error, `Session has Expired. Please log in again.`, { autoClose: 3000 });
+                    localStorage.setItem('klooToken', JSON.stringify(''));
+                    window.location.reload();         // Normal reload (may use cache)
+      }else{
       throw response;
+
+      }
+
+
     } else {
       
-        console.log("------------1--------response----cmn--else-----------");
 
  let resJSON = null;
 
-    // ✅ FIX: Check for 204 No Content
     if (response.status === 204) {
-        // Successful update with no body. Set payload to null or a success marker.
         resJSON = {}; 
         
     } else {
