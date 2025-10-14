@@ -14,6 +14,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import StarIcon from '@mui/icons-material/Star';
 import WcIcon from '@mui/icons-material/Wc';
+import LocationMapViewer from 'ui-component/common/locationMapView';
 
 const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   console.log('==item', item);
@@ -328,6 +329,12 @@ const activeFeatures = facilityFeatures.filter((feature) => feature.value);
               <Grid item xs={12} sm={6}>
                 <DetailItem label="Longitude" value={item.geoLoc?.[1]} />
               </Grid>
+  <Grid item xs={12} sm={12}>
+    <LocationMapViewer 
+      location={[item.geoLoc[0], item.geoLoc[1]]} 
+    zoom={16} />
+  </Grid>
+              
             </Grid>
           </DetailSection>
 
