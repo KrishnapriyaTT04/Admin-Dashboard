@@ -40,7 +40,7 @@ export default function userReportedIssues() {
   const [formOpen, setFormOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(20);
   const [getReqUrl, setGetReqUrl] = useState('');
 
   // const efTypeList = useSelector((state) => state.emission?.efTypeList || []);

@@ -30,7 +30,7 @@ export default function UserRating() {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(20);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
@@ -107,9 +107,6 @@ export default function UserRating() {
 
   const countPagination = Math.ceil(count / limit);
 
-  console.log("==countPagination", countPagination, count, limit);
-  
-
   const displayedData = ratingsList.map((item) => {
     return {
       ...item,
@@ -122,7 +119,7 @@ export default function UserRating() {
       {/* Header */}
       <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
-          Rating & Feedback
+          Ratings & Feedback
         </Typography>
       </Grid>
 
@@ -188,7 +185,7 @@ export default function UserRating() {
           </Table>
         </TableContainer>
       {/* Pagination */}
-      {countPagination > 1 && (
+      {countPagination > 0 && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />
         </Box>

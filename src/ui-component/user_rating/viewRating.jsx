@@ -14,6 +14,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
 
+  console.log("==item@123", item);
+  
+
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
 
@@ -94,7 +97,7 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
                   <StarIcon color="warning" sx={{ mr: 0.5 }} />
                   <Typography variant="body1" fontWeight={500}>
-                    {item?.starRating ? `${Number(item.starRating)} / 5` : 'No rating provided'}
+                    {item?.starRating}
                   </Typography>
                 </Box>
               </Grid>

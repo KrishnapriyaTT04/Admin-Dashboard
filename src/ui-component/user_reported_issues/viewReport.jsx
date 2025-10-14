@@ -26,10 +26,14 @@ import LabelImportantIcon from '@mui/icons-material/LabelImportant';
 const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString('en-US');
-  };
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');      
+  const month = String(date.getMonth() + 1).padStart(2, '0'); 
+  const year = date.getFullYear();                       
+  return `${day}/${month}/${year}`;
+};
+
 
   const formatTime = (dateString) => {
     if (!dateString) return 'N/A';
@@ -174,45 +178,7 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
           </Paper>
 
           {/* Existing Sections */}
-          {/* Feedback Section */}
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-              mb: 3,
-              border: '1px solid #e0e0e0',
-              borderRadius: 2,
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <FeedbackOutlinedIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>
-                Feedback
-              </Typography>
-            </Box>
-
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Star Rating
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
-                  <StarIcon color="warning" sx={{ mr: 0.5 }} />
-                  <Typography variant="body1" fontWeight={500}>
-                    {item?.starRating ? `${Number(item.starRating)} / 5` : 'No rating provided'}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Comment / Feedback
-                </Typography>
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-                  {item?.comments || 'No comment provided.'}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Paper>
+      
 
           {/* Facility Info Section */}
           <Paper
