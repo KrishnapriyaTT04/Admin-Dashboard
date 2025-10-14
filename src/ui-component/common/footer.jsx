@@ -8,7 +8,7 @@ const Footer = () => {
   const leftDrawerOpened = useSelector((state) => state.customization.opened);
   return (
     <AppBar
-      position="fixed" 
+      position="fixed"
       elevation={0}
       sx={{
         top: 'auto',
@@ -22,7 +22,9 @@ const Footer = () => {
         },
         height: 50,
         background: 'linear-gradient(180deg, #019863, #019863)',
-        color: '#fff'
+        color: '#fff',
+        zIndex: 1000,
+         transition: 'width 0.6s ease, margin-left 0.3s ease'
       }}
     >
       <Toolbar

@@ -44,6 +44,15 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
     return 'Not specified';
   };
 
+  const facilityFeatures = [
+  { value: item.isPaid, label: 'Paid Service' },
+  { value: item.is24H, label: '24 Hours' },
+  { value: item.indianType, label: 'Indian Type' },
+  { value: item.europeanType, label: 'European Type' },
+  { value: item.isFavourite, label: 'Favourite' }
+];
+const activeFeatures = facilityFeatures.filter((feature) => feature.value);
+
   const StatusChip = ({ value, label }) => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
       <Chip 
@@ -193,18 +202,24 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
               </Grid>
             </Grid>
             
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block', fontWeight: 500 }}>
-                Facility Features
-              </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                <StatusChip value={item.isPaid} label="Paid Service" />
-                <StatusChip value={item.is24H} label="24 Hours" />
-                <StatusChip value={item.indianType} label="Indian Type" />
-                <StatusChip value={item.europeanType} label="European Type" />
-                <StatusChip value={item.isFavourite} label="Favourite" />
-              </Stack>
-            </Box>
+           <Box sx={{ mt: 2 }}>
+    {activeFeatures.length > 0 && (
+      <>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mb: 1, display: 'block', fontWeight: 500 }}
+        >
+          Facility Features
+        </Typography>
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          {activeFeatures.map((feature, idx) => (
+            <StatusChip key={idx} value={feature.value} label={feature.label} />
+          ))}
+        </Stack>
+      </>
+    )}
+  </Box>
           </DetailSection>
 
           {/* Operating Hours */}
