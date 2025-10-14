@@ -301,10 +301,10 @@ const activeFeatures = facilityFeatures.filter((feature) => feature.value);
           {/* Location Details */}
           <DetailSection icon={<LocationOnIcon />} title="Location Details">
             <Grid container spacing={3}>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <DetailItem label="Address Line 1" value={item.address1} />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <DetailItem label="Address Line 2" value={item.address2} />
               </Grid>
               <Grid item xs={12} sm={6}>

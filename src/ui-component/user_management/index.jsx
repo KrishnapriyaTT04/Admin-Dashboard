@@ -25,7 +25,7 @@ export default function Users() {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(20);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false); // const [showDeleteModal, setShowDeleteModal] = useState(false); // <-- REMOVED
@@ -181,7 +181,7 @@ sx={{ maxWidth: 300, width: '100%' }}
     </TableContainer>
 
     {/* Pagination */}
-    {countPagination > 1 && (
+    {countPagination > 0 && (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
         <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />
       </Box>
