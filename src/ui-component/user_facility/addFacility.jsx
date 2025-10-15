@@ -117,17 +117,12 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
   const masterFacilityTypeList = useSelector((state) => state.facility?.masterFacilityTypeList || []);
 
     const [shouldRender, setShouldRender] = useState(false);
-    
-       console.log("---------------------2-----facilityList--",getReqestUrl);
-
 
     useEffect(() => {
    let reqUrl =`/master-facility-features`
        dispatch(getMasterFacilities(reqUrl));
           let reqUrlFaclityType =`/master-facility-types`
        dispatch(getMasterFacilityType(reqUrlFaclityType));
-
-       console.log("--------------------------facilityList--",masterFacilityTypeList);
          const timer = setTimeout(() => {
       setShouldRender(true);
     }, 3000);
@@ -181,7 +176,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
           }}
         >
           <Box sx={{ p: 3, height: '100%', }}>
-             {/* Header */}
             <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
                 <Typography variant="h4" sx={{ color: theme.palette.primary.dark }}>
                     {item?.id ? 'Edit Facility' : 'Create New Facility'}
@@ -191,7 +185,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                 </IconButton>
             </Grid>
 
-            {/* Form */}
             <Form 
               className="form-container" 
               style={{ display: 'grid', gap: '20px', 
@@ -202,16 +195,15 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                <Box sx={{ p: 3, flexGrow: 1, overflowY: 'auto', maxHeight: '72vh',
 
                 '&::-webkit-scrollbar': {
-                width: '6px', // Make the scrollbar thin
+                width: '6px', 
                 backgroundColor: 'transparent',
             },
             '&::-webkit-scrollbar-thumb': {
-                // Style the part the user drags (the "thumb")
-                backgroundColor: 'rgba(0, 0, 0, 0.2)', // Subtle gray
+                backgroundColor: 'rgba(0, 0, 0, 0.2)',
                 borderRadius: '10px',
             },
             '&::-webkit-scrollbar-thumb:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.4)', // Darken on hover
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
             },
                 }}>
             <Typography variant="h5" sx={{mb:2}}>Facility Details</Typography>
@@ -249,7 +241,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                 error={meta.touched && !!meta.error}
                 helperText={meta.touched && meta.error}
                 
-                // Static Props
                 disabled={false} 
                 sx={{
                     '& .MuiInputBase-root.Mui-disabled': {
@@ -339,7 +330,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             onChange={(newValue) => {
               const timeString = newValue ? newValue.format('HH:mm') : '';
               form.setFieldValue('openingTime', timeString);
-              console.log("-----------timeString------------",timeString)
               
             }}
             ampm={false}
@@ -367,7 +357,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
               const timeString = newValue ? newValue.format('HH:mm') : '';
               form.setFieldValue('closingTime', timeString);
             }}
-            // 🔥 Force 24-hour format with multiple props
             ampm={false}
             views={['hours', 'minutes']}
             format="HH:mm"
@@ -376,7 +365,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                 fullWidth: true,
                 error: meta.touched && !!meta.error,
                 helperText: meta.touched && meta.error,
-                placeholder: "23:59", // 24-hour format placeholder
+                placeholder: "23:59", 
               },
             }}
           />
@@ -409,10 +398,9 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
         <Select
           {...field}
           multiple
-          value={(field.value || []).map(f => f.featureId)} // Extract featureIds for Select value
+          value={(field.value || []).map(f => f.featureId)} 
           onChange={(event) => {
             const selectedFeatureIds = event.target.value;
-            // Map selected featureIds to full feature objects
             const selectedFeatures = selectedFeatureIds.map(featureId => {
               const option = featureOptions.find(f => f.featureId === featureId);
               return {
@@ -441,7 +429,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
               primary={option.featureName}
                  primaryTypographyProps={{ 
                 sx: {
-                    // Force the color override
                     color: `${theme.palette.primary.dark} !important`, 
                 }
             }}
@@ -469,10 +456,10 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                     <Field 
                         type="checkbox" 
                         name="frequency" 
-                        value={day.id} // <-- This passes the full name (e.g., "Monday")
+                        value={day.id} 
                         style={{ marginRight: '4px'  }}
                     />
-                    {day.label} {/* <-- This displays the short name (e.g., "Mon") */}
+                    {day.label} 
                 </label>
             ))}
         </Box>
@@ -584,7 +571,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     <Grid item xs={12}>
     <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
        
-       {/* 🔑 FIX: Only render the MapPickerComponent when the drawer is open */}
        {shouldRender && (
            <MapPickerComponent
                 key={values.geoLoc.join(',')} 
@@ -602,23 +588,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     </Box>
 </Grid>
 
-       {/* <Grid item xs={12}>
-    <Box sx={{ borderBottom: '1px solid #d3bfbfff', paddingBottom: '10px', marginTop: '10px' }}>
-       
-       <MapPickerComponent
-            key={values.geoLoc.join(',')} 
-            initialLocation={values.geoLoc} 
-            onLocationSelect={(newCoords) => {                
-                if (newCoords && newCoords.length === 2) {
-                    setFieldValue('geoLoc[0]', String(newCoords[0]));
-                    setFieldValue('geoLoc[1]', String(newCoords[1]));
-                }
-            }} 
-        />
-        
-        <Typography variant="h6" sx={{ mt: 2 }}>Location</Typography>
-    </Box>
-</Grid> */}
+
     {/* geoLoc */}
     <Grid item xs={12} sm={6}>
         <Field name="geoLoc[0]">
@@ -655,7 +625,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
         {({ field, meta }) => (
             <TextField
                 {...field}
-                select // Tells TextField to render a Select component
+                select 
                 label="State *"
                 fullWidth
                 error={meta.touched && !!meta.error}
@@ -667,7 +637,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                     }
                  }}
             >
-                {/* FIX: Replace <option> with <MenuItem> */}
                 <MenuItem value="">Select State</MenuItem>
                 <MenuItem value="kerala">Kerala</MenuItem>
             </TextField>
@@ -688,7 +657,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                 error={meta.touched && !!meta.error}
                 helperText={meta.touched && meta.error}
                 
-                // Static Props
                 disabled={false} 
                 sx={{
                     '& .MuiInputBase-root.Mui-disabled': {
@@ -762,11 +730,9 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
 </Grid>
 </Box>  
 
-{/* --- Submit Button (to be placed in the STICKY FOOTER BOX) --- */}
 
 <Grid container spacing={1} pb={5}>
     <Grid item xs={6}>
-        {/* Placeholder for Cancel/Other Button */}
     </Grid>
     <Grid item xs={12} marginInline={3} >
         <Button 
@@ -793,7 +759,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
                       backgroundImage: 'none',
                     }
                   }}
-            // sx={{ py: 1.5, textTransform: 'none', bgcolor:"#019863"}}
              disabled={isSubmitting || !isValid} 
         >
             {isSubmitting ? 'Submitting...' : (item?.id ? 'Update Facility' : 'Create Facility')}
