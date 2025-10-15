@@ -200,6 +200,22 @@ const AuthLogin = (props) => {
             
           </Stack>
         </Stack>
+        <Typography variant="body2" sx={{ textAlign: 'center', padding:"10px", textDecoration: 'none' }}>
+          Designed and Developed by{' '}
+          <Link
+            href="https://frugalscientific.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              color: '#fff',
+              textDecoration: 'underline',
+              fontWeight: 500,
+              '&:hover': { color: '#d0f0e0' }
+            }}
+          >
+            Frugal Scientific Pvt Ltd
+          </Link>
+        </Typography>
          <Typography  color="primary.main" fontWeight="100">
                Version : {AppVersion}
               </Typography>

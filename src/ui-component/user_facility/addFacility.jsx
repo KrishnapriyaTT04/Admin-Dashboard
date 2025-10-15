@@ -57,17 +57,17 @@ const validationSchema = Yup.object({
   remarks: Yup.string().max(500, 'Remarks must be under 500 characters'),
   status: Yup.string().required('Status is required'),
   frequency: Yup.array().of(Yup.string()).min(1, 'Please select at least one day or frequency.'), 
-   contactName: Yup.string().required('Contact name is required'),
+   contactName: Yup.string(),
     contactEmail: Yup.string().email('Invalid email format'),
     contactPhone: Yup.string().matches(/^[0-9]+$/, 'Phone must be only digits'),
   city: Yup.string().required('City is required'),
   state: Yup.string().required('State is required'),
   stateId: Yup.string().required('State Id is required'),
-  district: Yup.string(),
+  district: Yup.string().required('District is required'),
   districtCode:Yup.string(),
   pinCode: Yup.string().required('Pincode  is required').matches(/^[0-9]{6}$/, 'Pincode must be 6 digits'),
   geoLoc: Yup.array().of(Yup.string().required('Lat/Long value is required')).min(2).max(2, 'Must provide both Latitude and Longitude'),
-  landmark: Yup.string().required('Landmark is required'),
+  landmark: Yup.string(),
   features:Yup.array(),
   address1:Yup.string().required('Address is required'),
   address2:Yup.string(),
@@ -225,7 +225,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Title"
+                    label="Title *"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
@@ -243,7 +243,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             <TextField
                 {...field}
                 select 
-                label="Facility Type"
+                label="Facility Type *"
                 fullWidth
                 
                 error={meta.touched && !!meta.error}
@@ -280,7 +280,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             <TextField
                 {...field}
                 select 
-                label="Category"
+                label="Category *"
                 fullWidth
                 error={meta.touched && !!meta.error}
                 helperText={meta.touched && meta.error}
@@ -334,7 +334,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
       <Field name="openingTime">
         {({ field, form, meta }) => (
           <MobileTimePicker
-            label="Opening Time (HH:mm)"
+            label="Opening Time (HH:mm) *"
             value={field.value ? dayjs(field.value, 'HH:mm') : null}
             onChange={(newValue) => {
               const timeString = newValue ? newValue.format('HH:mm') : '';
@@ -361,7 +361,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
       <Field name="closingTime">
         {({ field, form, meta }) => (
           <MobileTimePicker
-            label="Closing Time (HH:mm)"
+            label="Closing Time (HH:mm) *"
             value={field.value ? dayjs(field.value, 'HH:mm') : null}
             onChange={(newValue) => {
               const timeString = newValue ? newValue.format('HH:mm') : '';
@@ -462,7 +462,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
 
     {/* frequency */}
  <Grid item xs={12}>
-        <Typography variant="subtitle1" gutterBottom>Frequency (Days Available)</Typography>
+        <Typography variant="subtitle1" gutterBottom>Frequency (Days Available)*</Typography>
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             {dayMap.map(day => (
                 <label key={day.id} style={{ display: 'flex', alignItems: 'center' , color:'gray' }}>
@@ -551,7 +551,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Address 1"
+                    label="Address 1 *"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
@@ -625,7 +625,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Latitude"
+                    label="Latitude *"
                     placeholder="Latitude"
                     fullWidth
                     error={meta.touched && !!meta.error}
@@ -639,7 +639,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Longitude"
+                    label="Longitude *"
                     placeholder="Longitude"
                     fullWidth
                     error={meta.touched && !!meta.error}
@@ -656,7 +656,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             <TextField
                 {...field}
                 select // Tells TextField to render a Select component
-                label="State"
+                label="State *"
                 fullWidth
                 error={meta.touched && !!meta.error}
                 helperText={meta.touched && meta.error}
@@ -682,7 +682,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             <TextField
                 {...field}
                 select 
-                label="District"
+                label="District *"
                 fullWidth
                 
                 error={meta.touched && !!meta.error}
@@ -718,7 +718,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="City"
+                    label="City *"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
@@ -733,7 +733,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Pincode"
+                    label="Pincode *"
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
@@ -748,7 +748,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
             {({ field, meta }) => (
                 <TextField
                     {...field}
-                    label="Landmark"
+                    label="Landmark "
                     fullWidth
                     error={meta.touched && !!meta.error}
                     helperText={meta.touched && meta.error}
