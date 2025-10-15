@@ -7,10 +7,7 @@ import appConfig from '../config';
 function* uploadApi(value) {
   const token = appConfig.token;
   let authorization = value.authourization
-    // ? value.authourization === 'Basic'
-    //   ? 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password)
-    //   : token
-    // : token;
+
      if (value.authorization == 'Basic') {
         authorization = 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password);
       } else if (value.authorization == 'Bearer') {
