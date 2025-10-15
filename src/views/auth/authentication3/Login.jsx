@@ -184,7 +184,7 @@ const AuthLogin = (props) => {
         {/* Footer links */}
         <Stack direction="column" spacing={1} sx={{ width: '100%', alignItems: 'center' }}>
           <Link to="/forgotpassword" style={{ textDecoration: 'none' }}>
-            <Typography variant="body2" color="primary.main" fontWeight="600">
+            <Typography variant="body2" color="#019863" fontWeight="600">
               Forgot Password?
             </Typography>
           </Link>
@@ -193,7 +193,7 @@ const AuthLogin = (props) => {
               Don’t have an account?
             </Typography>
             <Link to="/SignupRole" style={{ textDecoration: 'none' }}>
-              <Typography variant="body2" color="primary.main" fontWeight="600">
+              <Typography variant="body2" color="#019863" fontWeight="600">
                 Sign Up
               </Typography>
             </Link>

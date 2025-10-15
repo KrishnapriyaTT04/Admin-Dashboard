@@ -146,16 +146,33 @@ const ResponsiveIcons = () => {
               handleLogoutClose();
             }}
             variant="outlined"
-            sx={{ textTransform: 'none', borderRadius: 2 }}
+            sx={{
+              textTransform: 'none',
+              borderRadius: 2,
+              borderColor: '#019863',
+              color: '#019863',
+              '&:hover': {
+                borderColor: '#017a53',
+                backgroundColor: '#0198630a'
+              }
+            }}
           >
             Cancel
           </Button>
+
           <Button
             onClick={() => {
               handleLogoutConfirm();
             }}
             variant="contained"
-            sx={{ textTransform: 'none', borderRadius: 2, backgroundColor: 'primary.main' }}
+            sx={{
+              textTransform: 'none',
+              borderRadius: 2,
+              backgroundColor: '#019863',
+              '&:hover': {
+                backgroundColor: '#017a53'
+              }
+            }}
           >
             Proceed
           </Button>
