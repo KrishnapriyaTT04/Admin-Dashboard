@@ -13,6 +13,8 @@ const AnalyticsCard = () => {
   const issueList = useSelector((state) => state.reportIssue?.list || []);
   const feedbackList = useSelector((state) => state.rating?.list || []);
   const usersList = useSelector((state) => state.user?.list || []);
+  const dashCount = useSelector((state) =>state?.dashboard?.dashCount);
+
 
   const counts = {
     facilities: useSelector((state) => state.facility?.listCount || 0),
@@ -28,25 +30,25 @@ const AnalyticsCard = () => {
         <Grid container spacing={2.5} alignItems="stretch">
           <Grid item xs={12} sm={3}>
             <Link to="/userManagment" style={{ textDecoration: 'none' }}>
-              <Card title="Users" count={counts.users} color="#2055a8" bgTheme="#e3f2fd" icon={<UserOutlined />} />
+              <Card title="Users" count={dashCount.userCount} color="#2055a8" bgTheme="#e3f2fd" icon={<UserOutlined />} />
             </Link>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <Link to="/facility" style={{ textDecoration: 'none' }}>
-              <Card title="Facilities" count={counts.facilities} color="#006064" bgTheme="#e0f7fa" icon={<HomeOutlined />} />
+              <Card title="Facilities" count={dashCount.facilityCount} color="#006064" bgTheme="#e0f7fa" icon={<HomeOutlined />} />
             </Link>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <Link to="/reportedIssues" style={{ textDecoration: 'none' }}>
-              <Card title="Issues" count={counts.issues} color="#f2b13b" bgTheme="#f2b13b17" icon={<WarningOutlined />} />
+              <Card title="Issues" count={dashCount.issueCount} color="#f2b13b" bgTheme="#f2b13b17" icon={<WarningOutlined />} />
             </Link>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <Link to="/rating" style={{ textDecoration: 'none' }}>
-              <Card title="Feedback" count={counts.feedback} color="#e83766" bgTheme="#e837661c" icon={<MessageOutlined />} />
+              <Card title="Feedback" count={dashCount.feedbackCount} color="#e83766" bgTheme="#e837661c" icon={<MessageOutlined />} />
             </Link>
           </Grid>
 

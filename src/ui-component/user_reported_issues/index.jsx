@@ -2,30 +2,24 @@ import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { TableContainer, Table, TextField, InputAdornment, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-// import { downloadExcel } from 'react-export-table-to-excel';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 import { getIssueReports, getIssuesCount } from 'container/ReportIssuesContainer/slice';
+import { updIssueStts } from 'container/ReportIssuesContainer/slice';
 
-// import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
 import { userReport } from 'utils/TableConfig';
 
 import MainCard from 'ui-component/cards/MainCard';
 import Pagination from 'utils/TablePagination';
 import TableHead from 'utils/TableHead';
 import TableRows from 'utils/TableRows';
-// import ConfirmModal from 'views/common/ConfirmModal';
 import styles from '../common/style';
-// import EFTypeView from './efTypeView';
 import ViewReport from './viewReport';
-// import UpdateEfTypeForm from './updateForm';
-import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
-import Footer from 'ui-component/common/footer';
+import ChangeStatusModal from '../common/commonStatusChange';
 
 export default function userReportedIssues() {
   const theme = useTheme();
@@ -42,8 +36,7 @@ export default function userReportedIssues() {
   const [showXSLModal, setshowXSLModal] = useState(false);
   const [limit, setLimit] = useState(20);
   const [getReqUrl, setGetReqUrl] = useState('');
-
-  // const efTypeList = useSelector((state) => state.emission?.efTypeList || []);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const issueList = useSelector((state) => state?.reportIssue?.list);
   const count = useSelector((state) => state.reportIssue?.listCount || 0);
   const emissionFactorTypeXSLList = useSelector((state) => state.emission?.emissionFactorTypeXSLList || []);
@@ -55,12 +48,11 @@ export default function userReportedIssues() {
   let countPagination = Math.ceil(count / limit);
   const { config, keys } = userReport;
 
-
   useEffect(() => {
     let reqUrl = `issues?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
+    setGetReqUrl(reqUrl);
     dispatch(getIssueReports(reqUrl));
     dispatch(getIssuesCount());
-    // dispatch(getEfType({ searchVal: searchQuery, page: page + 1 }));
   }, []);
 
   const searchHandler = (e) => {
@@ -86,7 +78,6 @@ export default function userReportedIssues() {
 
   function handleDownloadExcel() {
     setshowXSLModal(true);
-    // dispatch(fetchEmissionFactorTypeXSL({ limit: count }));
   }
 
   const XSLHandler = () => {
@@ -143,9 +134,27 @@ export default function userReportedIssues() {
   };
 
   const deleteHandler = () => {
-    // dispatch(deleteEfType(selectedItem));
     setPage(0);
     closeDeleteModal();
+  };
+
+  const handlProjectStatusModal = (userItem) => {
+    setSelectedItem(userItem);
+    setIsStatusModalOpen(true);
+  };
+
+  const handleCloseStatusModal = () => {
+    setIsStatusModalOpen(false);
+    setSelectedItem(null);
+  };
+
+  const handleUpdateStatus = (newStatus) => {
+    let values = {
+      status: newStatus,
+      id: selectedItem.id
+    };
+    dispatch(updIssueStts({ values, getReqestUrl: getReqUrl }));
+    handleCloseStatusModal();
   };
 
   return (
@@ -199,11 +208,12 @@ export default function userReportedIssues() {
               hasView={true}
               hasEdit={false}
               hasDelete={false}
-              hasStatusChange={false}
+              hasStatusChange={true}
               hasMore={false}
               handleViewModel={handleViewModal}
               handleDeleteModal={handleDeleteModal}
               handleFormModal={handleFormModal}
+              handlProjectStatusModal={handlProjectStatusModal}
               msg="Projects"
               tableData={issueList}
               filter={searchQuery || ''}
@@ -214,7 +224,7 @@ export default function userReportedIssues() {
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
         {open && <ViewReport drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
-        {/* {formOpen && <UpdateEfTypeForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} />} */}
+
         {showDeleteModal && (
           <ConfirmModal
             show={showDeleteModal}
@@ -225,18 +235,17 @@ export default function userReportedIssues() {
             btnsubmitText={'DELETE'}
           />
         )}
-        {/* {showXSLModal && (
-          <ConfirmModal
-            show={showXSLModal}
-            handleCloseModal={closeXSLModal}
-            submitHandler={XSLHandler}
-            modalTitle={'Download Confirmation'}
-            modalText={'Are you sure you want to download?'}
-            btnsubmitText={'DOWNLOAD'}
+
+        {/* Status Change Modal */}
+        {isStatusModalOpen && selectedItem && (
+          <ChangeStatusModal
+            open={isStatusModalOpen}
+            facility={selectedItem}
+            onClose={handleCloseStatusModal}
+            onConfirm={handleUpdateStatus}
           />
-        )} */}
+        )}
       </MainCard>
     </>
-    
   );
 }

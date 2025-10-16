@@ -20,6 +20,7 @@ import {
   getUserCount,
   getUsers
 } from 'container/UsersContainer/slice';
+import {dashCount} from 'container/DashboardContainer/slice';
 
 const DashboardDefault = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const DashboardDefault = () => {
     dispatch(getUserCount());
     dispatch(getIssueReports(urls.issues));
     dispatch(getUsers(urls.users));
+    dispatch(dashCount());
   }, [dispatch, limit, page]);
 
   return (

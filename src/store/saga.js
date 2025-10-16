@@ -6,6 +6,7 @@ import userActionWatcher from 'container/UsersContainer/saga';
 import issueReportActionWatcher from 'container/ReportIssuesContainer/saga';
 import ratingActionWatcher from 'container/RatingContainer/saga';
 import UserFeedbakActionWatcher from 'container/UserFeedbackContainer/saga';
+import DashboardActionWatcher from 'container/DashboardContainer/saga';
 
 
 
@@ -18,7 +19,8 @@ function* rootSaga() {
         call(userActionWatcher) ,
         call(issueReportActionWatcher),
         call(ratingActionWatcher),
-        call(UserFeedbakActionWatcher)
+        call(UserFeedbakActionWatcher),
+        call(DashboardActionWatcher)
         
     ]);
 }

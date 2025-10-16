@@ -5,23 +5,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import commonApi from '../api';
 import appConfig from '../../config';
 
-// Assuming your slice is imported as * as actionType
 import * as actionType from './slice';
 
 // Base API endpoint for users
 const USER_API_BASE = `${appConfig.ip}`;
 
-// --- Sagas ---
 
-// 1. Get Users Saga
 function* getUsersSaga(action) {
-    // Retrieve token from local storage (or wherever it's stored)
     const tokenData = JSON.parse(localStorage.getItem('klooToken'));
     const accessToken = tokenData?.accessToken;
 
     try {
         const params = {
-            // action.payload should be the query string, e.g., 'users?filter={"skip":0...}'
             api: `${USER_API_BASE}/${action.payload}`,
             method: 'GET',
             successAction: actionType.getUsersSuccess(),
@@ -36,7 +31,6 @@ function* getUsersSaga(action) {
             const userData = res.data || res;
             yield put(actionType.getUsersSuccess(userData));
         } else {
-            // Handle case where API returns a success status but unexpected body
             yield put(actionType.getUsersSuccess([]));
         }
 
@@ -51,7 +45,6 @@ function* getUsersSaga(action) {
     }
 }
 
-// 2. Get User Count Saga
 function* getUserCount() {
     const tokenData = JSON.parse(localStorage.getItem('klooToken'));
     const accessToken = tokenData?.accessToken;
@@ -66,7 +59,6 @@ function* getUserCount() {
         };
         const res = yield call(commonApi, params);
         
-        // CRITICAL: You must dispatch success with the result if you want the reducer to update the count
         if (res) {
              yield put(actionType.getUserCountSuccess(res));
         }
@@ -81,25 +73,24 @@ function* getUserCount() {
     }
 }
 
-// 3. Update User Saga (Status Change) - NEW LOGIC ADDED
+
 function* updateUserSaga(action) {
     const tokenData = JSON.parse(localStorage.getItem('klooToken'));
     const accessToken = tokenData?.accessToken;
     
     try {
         const payload = action.payload;
-        const userData = payload.values; // { id: '...', status: 'new_status' }
-        const getUrl = payload.getReqestUrl; // The URL to re-fetch the list
+        const userData = payload.values; 
+        const getUrl = payload.getReqestUrl; 
 
         if (!userData.id) {
             return;
         }
 
         let updateBody = { ...userData };
-        delete updateBody.id; // API usually doesn't need ID in the PATCH body
+        delete updateBody.id;
 
         const params = {
-            // API endpoint to PATCH a user's status
             api: `${USER_API_BASE}/users/${userData.id}`,
             method: 'PATCH',
             body: JSON.stringify(updateBody),
@@ -111,12 +102,9 @@ function* updateUserSaga(action) {
 
         const res = yield call(commonApi, params);
         
-        // Assuming success returns the updated object or a confirmation
         if (res) {
-            // Dispatch success to update the Redux state (list array)
             yield put(actionType.updateUserSuccess(res)); 
-            
-            // Show success toast
+
             yield call(toast.success, 'User status updated successfully!', { autoClose: 3000 });
             
             // Re-fetch the user list to ensure table data is current, using the saved URL
