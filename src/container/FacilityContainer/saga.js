@@ -267,7 +267,6 @@ function* getMasterFacilityTypeSaga(action) {
 function* uploadImagesStart(action) {
     const token = JSON.parse(localStorage.getItem('klooToken')); 
 
-    console.log("--------uploadImagesStart----------action--------------", action);
       const timestamp = Date.now();
       const date = new Date(timestamp);
     try {
@@ -287,7 +286,6 @@ function* uploadImagesStart(action) {
                 api: `${FACILITY_API_BASE}/attachment/upload`,
                 method: 'POST',
                 body: formData,
-                // Passing success/fail actions to uploadApi is usually redundant if using try/catch
                 successAction: actionType.uploadImagesSuccess(),
                  failAction: actionType.uploadImagesFail(),
                 authorization: 'Bearer',
@@ -299,7 +297,6 @@ function* uploadImagesStart(action) {
             const documentUrl = res?.data?.documentUrl || res?.documentUrl || res?.url;
 
             if (documentUrl) {
-                // Collect the required attachment object structure
                 let attachment = {
                     attachmentName: item?.name,
                     attachmentUrl: documentUrl,
@@ -308,7 +305,6 @@ function* uploadImagesStart(action) {
                 };
                 newAttachmentUrls.push(attachment);
             } else {
-                // If any single upload fails to return a URL, throw an error
                 throw new Error(`Failed to get URL for file: ${item.name}`);
             }
         }
@@ -340,7 +336,6 @@ function* uploadImagesStart(action) {
         return newAttachmentUrls;
 
     } catch (error) {
-        console.error("Image upload or facility update failed:", error);
         yield put(actionType.uploadImagesFail({ 
             message: error.message || 'Image upload failed during sequential process.',
             status: error.status || 500 
