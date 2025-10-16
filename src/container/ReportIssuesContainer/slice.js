@@ -1,77 +1,105 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const reportIssueSlice = createSlice({
-    name: 'reportIssue',
-    initialState: {
-        list: [],
-        listLoading: false,
-        listError: null,
-        listCount:0
+  name: 'reportIssue',
+  initialState: {
+    list: [],
+    listLoading: false,
+    listError: null,
+    listCount: 0,
+    operationLoading: false,
+    operationError: null,
+    operationSuccess: false
+  },
+  reducers: {
+    getIssueReports: (state) => {
+      state.listLoading = true;
+      state.listError = null;
     },
-    reducers: {
-      
-        /**
-         * Action to initiate the fetching of the issue report list.
-         */
-        getIssueReports: (state) => {
-            state.listLoading = true;
-            state.listError = null;
-        },
-        
-        /**
-         * Action to handle successful retrieval of the issue report list.
-         * @param {object} action.payload - The array of issue report objects.
-         */
-        getIssueReportsSuccess: (state, action) => {
-            state.listLoading = false;
-            state.list = action.payload; 
-            state.listError = null;
-        },
-        
-        /**
-         * Action to handle failure during issue report list retrieval.
-         * @param {object} action.payload - Contains error details (message, status).
-         */
-        getIssueReportsFail: (state, action) => {
-            state.listLoading = false;
-            state.listError = {
-                message: action.payload.message || 'Failed to fetch issue reports',
-                status: action.payload.status || 500
-            };
-        },
 
-        /**
-         * Action to clear any existing error state for the issue report list.
-         */
-        resetIssueReportListError: (state) => {
-            state.listError = null;
-        },
+    /**
+     * Action to handle successful retrieval of the issue report list.
+     * @param {object} action.payload - The array of issue report objects.
+     */
+    getIssueReportsSuccess: (state, action) => {
+      state.listLoading = false;
+      state.list = action.payload;
+      state.listError = null;
+    },
+
+    /**
+     * Action to handle failure during issue report list retrieval.
+     * @param {object} action.payload - Contains error details (message, status).
+     */
+    getIssueReportsFail: (state, action) => {
+      state.listLoading = false;
+      state.listError = {
+        message: action.payload.message || 'Failed to fetch issue reports',
+        status: action.payload.status || 500
+      };
+    },
+
+    resetIssueReportListError: (state) => {
+      state.listError = null;
+    },
+
+    getIssuesCount: (state) => {
+      state.listLoading = true;
+    },
+    getIssuesCountSuccess: (state, action) => {
+      state.listLoading = false;
+      state.listCount = action.payload.count;
+    },
+    getIssuesCountFail: (state, action) => {
+      state.listLoading = false;
+    },
 
 
-        getIssuesCount: (state) => {
-            state.listLoading = true;
-            
-        },
-        getIssuesCountSuccess: (state, action) => {
-            state.listLoading = false;
-            state.listCount = action.payload.count;
-        },
-        getIssuesCountFail: (state, action) => {
-            state.listLoading = false;
-        },
-        
+
+    updIssueStts: (state) => {
+      state.operationLoading = true;
+      state.operationSuccess = false;
+      state.operationError = null;
+    },
+
+    updIssueSttsSuccess: (state, action) => {
+      state.operationLoading = false;
+      const index = state.list.findIndex((u) => u.id === action.payload.id);
+
+      if (index !== -1) {
+        state.list = [
+          ...state.list.slice(0, index),
+          action.payload, 
+          ...state.list.slice(index + 1) 
+        ];
+      }
+
+      state.operationSuccess = true;
+    },
+
+    updIssueSttsFail: (state, action) => {
+      state.operationLoading = false;
+      state.operationError = {
+        message: action.payload.message || 'Failed to update user',
+        status: action.payload.status || 500
+      };
     }
+  }
 });
 
 // Export actions for use in components or sagas/thunks
-export const { 
-    getIssueReports, 
-    getIssueReportsSuccess, 
-    getIssueReportsFail,
-    resetIssueReportListError,
-    getIssuesCount,
-    getIssuesCountSuccess,
-    getIssuesCountFail
+export const {
+  getIssueReports,
+  getIssueReportsSuccess,
+  getIssueReportsFail,
+  resetIssueReportListError,
+  getIssuesCount,
+  getIssuesCountSuccess,
+  getIssuesCountFail,
+  updIssueStts,
+  updIssueSttsSuccess,
+  updIssueSttsFail
+
 } = reportIssueSlice.actions;
 
 // Export selectors for easily accessing state in components

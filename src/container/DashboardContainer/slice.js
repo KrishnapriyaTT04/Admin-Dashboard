@@ -5,27 +5,22 @@ const dashboardSlice = createSlice({
   initialState: {
     data: {},
     loading: false,
+    dashCount: [],
     error: null
   },
   reducers: {
-    userLogin: (state) => {
-      state.loading = true;
-      state.error = null;
+    dashCount: (state) => {
+      state.listLoading = true;
     },
-    loginSuccess: (state, action) => {
-      state.loading = false;
-      state.data = action.payload;
-      state.error = null;
+    dashCountSuccess: (state, action) => {
+      state.listLoading = false;
+      state.dashCount = action.payload;
     },
-    loginFail: (state, action) => {
-      state.loading = false;
-      state.error = {
-        message: action.payload.message || 'Login failed',
-        status: action.payload.status || 500
-      };
+    dashCountFail: (state, action) => {
+      state.listLoading = false;
     }
   }
 });
 
-export const { userLogin, loginSuccess, loginFail } = dashboardSlice.actions;
+export const { dashCount, dashCountSuccess, dashCountFail } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
