@@ -46,7 +46,7 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       <CardContent>
         <Stack direction="row" alignItems="center" spacing={1.5} mb={2}>
           <Avatar sx={{ bgcolor: lightGreen, color: primary, width: 32, height: 32 }}>{icon}</Avatar>
-          <Typography variant="h6" fontWeight={600} color={primary}>
+          <Typography variant="h5" fontWeight={600} color={primary}>
             {title}
           </Typography>
         </Stack>
@@ -123,10 +123,10 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
               <DetailSection icon={<BusinessIcon />} title="Facility Information">
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4}>
-                    <DetailItem label="Facility ID" value={item.facilityId} isSubtitle />
+                    <DetailItem label="Facility ID" value={item.facilityId}  />
                   </Grid>
                   <Grid item xs={12} sm={4}>
-                    <DetailItem label="Facility Title" value={capitalizeWords(item.facilityTitle)} isSubtitle />
+                    <DetailItem label="Facility Title" value={capitalizeWords(item.facilityTitle)}  />
                   </Grid>
                 </Grid>
               </DetailSection>

@@ -11,7 +11,7 @@ import * as actionType from './slice';
 const USER_API_BASE = `${appConfig.ip}`;
 
 
-function* getUsersSaga(action) {
+function* getUsersSaga(action) {    
     const tokenData = JSON.parse(localStorage.getItem('klooToken'));
     const accessToken = tokenData?.accessToken;
 

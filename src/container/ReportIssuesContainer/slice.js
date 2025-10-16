@@ -56,13 +56,13 @@ const reportIssueSlice = createSlice({
 
 
 
-    updIssueStts: (state) => {
+    updIssue: (state) => {
       state.operationLoading = true;
       state.operationSuccess = false;
       state.operationError = null;
     },
 
-    updIssueSttsSuccess: (state, action) => {
+    updIssueSuccess: (state, action) => {
       state.operationLoading = false;
       const index = state.list.findIndex((u) => u.id === action.payload.id);
 
@@ -77,13 +77,41 @@ const reportIssueSlice = createSlice({
       state.operationSuccess = true;
     },
 
-    updIssueSttsFail: (state, action) => {
+    updIssueFail: (state, action) => {
       state.operationLoading = false;
       state.operationError = {
         message: action.payload.message || 'Failed to update user',
         status: action.payload.status || 500
       };
-    }
+    },
+
+
+        updIssuecmt: (state) => {
+          state.operationLoading = true;
+          state.operationError = null;
+          state.operationSuccess = false;
+        },
+        updIssuecmtSuccess: (state, action) => {
+          state.operationLoading = false;
+          const index = state.list.findIndex((f) => f.id === action.payload.id);
+    
+          if (index !== -1) {
+            state.list = [
+              ...state.list.slice(0, index), 
+              action.payload, 
+              ...state.list.slice(index + 1) 
+            ];
+          }
+    
+          state.operationSuccess = true;
+        },
+        updIssuecmtFail: (state, action) => {
+          state.operationLoading = false;
+          state.operationError = {
+            message: action.payload.message || 'Failed to update facility',
+            status: action.payload.status || 500
+          };
+        },
   }
 });
 
@@ -96,9 +124,12 @@ export const {
   getIssuesCount,
   getIssuesCountSuccess,
   getIssuesCountFail,
-  updIssueStts,
-  updIssueSttsSuccess,
-  updIssueSttsFail
+  updIssue,
+  updIssueSuccess,
+  updIssueFail,
+  updIssuecmt,
+  updIssuecmtSuccess,
+  updIssuecmtFail 
 
 } = reportIssueSlice.actions;
 

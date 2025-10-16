@@ -61,7 +61,7 @@ export default function Facility() {
 
 
   const facilityList = useSelector((state) => state.facility?.list || []);
-
+  
 
   let flattenedFacilityList = [];
 
