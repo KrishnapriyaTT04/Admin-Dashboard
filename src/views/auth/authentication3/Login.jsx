@@ -2,16 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Cookies from 'js-cookie';
-import {
-  Box,
-  Button,
-  Card,
-  IconButton,
-  InputAdornment,
-  Stack,
-  Typography,
-  Divider
-} from '@mui/material';
+import { Box, Button, Card, IconButton, InputAdornment, Stack, Typography, Divider } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link, useNavigate } from 'react-router-dom';
@@ -20,11 +11,9 @@ import { useDispatch } from 'react-redux';
 import FormikTextField from 'ui-component/common/loginInput';
 import { userLogin } from 'container/LoginContainer/slice';
 
-// import logo from "C:/Users/DELL/Desktop/kloo_admin_react_v2/src/assets/images/auth/kloo-icon.svg";
 
-import logo from "assets/images/auth/kloo-icon.svg";
-const AppVersion = import.meta.env.VITE_APP_VERSION; 
-
+import logo from 'assets/images/auth/kloo-icon.svg';
+const AppVersion = import.meta.env.VITE_APP_VERSION;
 
 const AuthLogin = (props) => {
   const dispatch = useDispatch();
@@ -71,20 +60,14 @@ const AuthLogin = (props) => {
           boxShadow: 4,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
-        {/* Logo */}
+
         <Box sx={{ mb: 3, display: 'flex', justifyContent: 'center' }}>
-          <Box
-            component="img"
-            src={logo}
-            alt="Kloo Logo"
-            sx={{ height: { xs: 35, sm: 45 }, maxWidth: '100%' }}
-          />
+          <Box component="img" src={logo} alt="Kloo Logo" sx={{ height: { xs: 35, sm: 45 }, maxWidth: '100%' }} />
         </Box>
 
-        {/* Heading */}
         <Typography
           variant="h4"
           component="h1"
@@ -109,7 +92,6 @@ const AuthLogin = (props) => {
           Log in to your account to continue
         </Typography>
 
-        {/* Formik Form */}
         <Formik
           initialValues={{ client_id: 'webapp', client_secret: 'saqw21!@', email: '', password: '' }}
           validationSchema={validate}
@@ -118,12 +100,7 @@ const AuthLogin = (props) => {
           {() => (
             <Form style={{ width: '100%' }}>
               <Stack spacing={2}>
-                <FormikTextField
-                  name="email"
-                  label="Email Address"
-                  type="text"
-                  fullWidth
-                />
+                <FormikTextField name="email" label="Email Address" type="text" fullWidth />
                 <FormikTextField
                   name="password"
                   label="Password"
@@ -140,7 +117,6 @@ const AuthLogin = (props) => {
                   }}
                 />
 
-                {/* Login Button */}
                 <Button
                   type="submit"
                   variant="contained"
@@ -153,14 +129,14 @@ const AuthLogin = (props) => {
                     color: '#fff',
                     backgroundImage: 'linear-gradient(180deg, #019863, #019863)',
                     borderRadius: 2,
-                      border: '1px solid #019863',
+                    border: '1px solid #019863',
                     boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: 'transparent',
                       color: '#019863',
                       border: '1px solid #019863',
-                      backgroundImage: 'none',
+                      backgroundImage: 'none'
                     }
                   }}
                 >
@@ -171,57 +147,33 @@ const AuthLogin = (props) => {
           )}
         </Formik>
 
-        {/* Error message */}
         {loginError && (
           <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
             {loginError}
           </Typography>
         )}
 
-        {/* Divider */}
         <Divider sx={{ my: 3, width: '100%' }} />
 
-        {/* Footer links */}
-        <Stack direction="column" spacing={1} sx={{ width: '100%', alignItems: 'center' }}>
-          <Link to="/forgotpassword" style={{ textDecoration: 'none' }}>
-            <Typography variant="body2" color="#019863" fontWeight="600">
-              Forgot Password?
-            </Typography>
-          </Link>
-          <Stack direction="row" spacing={0.5} alignItems="center">
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Don’t have an account?
-            </Typography>
-            <Link to="/SignupRole" style={{ textDecoration: 'none' }}>
-              <Typography variant="body2" color="#019863" fontWeight="600">
-                Sign Up
-              </Typography>
-            </Link>
-            
-          </Stack>
-        </Stack>
-        <Typography variant="body2" sx={{ textAlign: 'center', padding:"10px", textDecoration: 'none' }}>
+        <Typography variant="body2" sx={{ textAlign: 'center', padding: '10px', textDecoration: 'none' }}>
           Designed and Developed by{' '}
           <Link
             href="https://frugalscientific.com"
             target="_blank"
             rel="noopener noreferrer"
-            sx={{
-              color: '#fff',
-              textDecoration: 'underline',
-              fontWeight: 500,
-              '&:hover': { color: '#d0f0e0' }
-            }}
+           
           >
             Frugal Scientific Pvt Ltd
           </Link>
         </Typography>
-         <Typography  color="primary.main" fontWeight="100">
-               Version : {AppVersion}
-              </Typography>
+        <Typography color="primary.main" fontWeight="100">
+          Version : {AppVersion}
+        </Typography>
       </Card>
     </Box>
   );
 };
 
 export default AuthLogin;
+
+

@@ -13,7 +13,6 @@ const AnalyticsCard = () => {
   const issueList = useSelector((state) => state.reportIssue?.list || []);
   const feedbackList = useSelector((state) => state.rating?.list || []);
   const usersList = useSelector((state) => state.user?.list || []);
-  
 
   const counts = {
     facilities: useSelector((state) => state.facility?.listCount || 0),
@@ -77,7 +76,7 @@ const AnalyticsCard = () => {
               path="/rating"
               count={counts.feedback}
               data={feedbackList}
-              fields={[{ name: 'createdUser', bold: true }, { name: 'comments' }]}
+              fields={[{ name: 'createdUser', bold: true },{ name: 'starRating' }, { name: 'comments' }]}
             />
           </Grid>
         </Grid>

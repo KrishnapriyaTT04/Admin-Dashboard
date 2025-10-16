@@ -9,7 +9,6 @@ import * as actionType from './slice';
 function* getUserFeedback(action) {
   const tokenData = JSON.parse(localStorage.getItem('klooToken'));
   const accessToken = tokenData?.accessToken;
-      console.log('===called saagaaaaaaa', accessToken);
 
   try {
     let params = {
@@ -18,34 +17,19 @@ function* getUserFeedback(action) {
       successAction: actionType.getUserFeedbackSucces(),
       failAction: actionType.getUserFeedbackFail(),
       authorization: 'Bearer',
-      token:  accessToken
+      token: accessToken
     };
     let res = yield call(commonApi, params);
     if (res) {
-    //   if (res.message.roles !== 'Inclips Admin') {
-    //     localStorage.setItem('userDtls', JSON.stringify(res));
-        // yield call(toast.success, 'successful', { autoClose: 3000 });
-    //     yield call(action.payload.navigate, '/dashboard');
-    //   } else {
-    //     throw new Error('User not valid');
-    //   }
     } else {
       throw new Error('Invalid response from API');
     }
   } catch (error) {
-    //  data={
-    //   'message':{"role":"admin"}
-    //  }
-    //  localStorage.setItem('userDtls', JSON.stringify(data));
-            // yield call(action.payload.navigate, '/dashboard');
-
     yield call(toast.error, 'Failed to fetch user feedbacks.', { autoClose: 3000 });
   }
 }
 
 function* getFeedbackCount(action) {
-    console.log('------------------------------------------ cld cont');
-  
   const tokenData = JSON.parse(localStorage.getItem('klooToken'));
   const accessToken = tokenData?.accessToken;
   try {
@@ -55,27 +39,14 @@ function* getFeedbackCount(action) {
       successAction: actionType.getFeedbackCountSucces(),
       failAction: actionType.getFeedbackCountFail(),
       authorization: 'Bearer',
-      token:  accessToken
+      token: accessToken
     };
     let res = yield call(commonApi, params);
     if (res) {
-    //   if (res.message.roles !== 'Inclips Admin') {
-    //     localStorage.setItem('userDtls', JSON.stringify(res));
-        // yield call(toast.success, 'successful', { autoClose: 3000 });
-    //     yield call(action.payload.navigate, '/dashboard');
-    //   } else {
-    //     throw new Error('User not valid');
-    //   }
     } else {
       throw new Error('Invalid response from API');
     }
   } catch (error) {
-    //  data={
-    //   'message':{"role":"admin"}
-    //  }
-    //  localStorage.setItem('userDtls', JSON.stringify(data));
-            // yield call(action.payload.navigate, '/dashboard');
-
     console.error('Fetch user feed back count failed:', error);
     yield call(toast.error, 'Failed to fetch user feedbacks count.', { autoClose: 3000 });
   }
@@ -83,6 +54,5 @@ function* getFeedbackCount(action) {
 
 export default function* UserFeedbakWatcher() {
   yield takeEvery(actionType.getUserFeedback, getUserFeedback);
-    yield takeEvery(actionType.getUserFeedbackCount, getFeedbackCount);
-
+  yield takeEvery(actionType.getUserFeedbackCount, getFeedbackCount);
 }

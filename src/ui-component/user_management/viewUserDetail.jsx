@@ -1,21 +1,19 @@
-import { Box, Typography, IconButton, Grid, useTheme, Divider, Paper, Chip } from '@mui/material';
-import Drawer from '@mui/material/Drawer';
-import CloseIcon from '@mui/icons-material/Close';
-import PersonIcon from '@mui/icons-material/Person';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import EmailIcon from '@mui/icons-material/Email';
-import PhoneIcon from '@mui/icons-material/Phone';
-import BadgeIcon from '@mui/icons-material/Badge';
+import { Box, Typography, IconButton, Grid, useTheme, Chip, Card, CardContent, Stack, Avatar, Drawer } from '@mui/material';
+import {
+  Close as CloseIcon,
+  Person as PersonIcon,
+  Email as EmailIcon,
+  Phone as PhoneIcon,
+} from '@mui/icons-material';
 
-// Component for viewing individual user details in a side drawer
 const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
+  const primary = '#019863';
+  const lightGreen = '#e8f5e9';
 
-  // Helper function to safely format dates
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     try {
-      // Use a consistent, readable format
       return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
@@ -23,34 +21,63 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
         hour: '2-digit',
         minute: '2-digit'
       });
-    } catch (e) {
+    } catch {
       return 'Invalid Date';
     }
   };
 
-  // Helper function to display the full name
+  
+
   const getFullName = () => {
     return item?.fullName || (item?.firstName && item?.lastName ? `${item.firstName} ${item.lastName}` : 'N/A');
   };
 
-  const DetailItem = ({ icon: Icon, title, value }) => (
-    <Grid item xs={12} sm={6}>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-        {Icon && <Icon fontSize="small" sx={{ mr: 0.5, color: theme.palette.text.secondary }} />}
-        <Typography variant="subtitle2" color="text.secondary">
-          {title}
-        </Typography>
-      </Box>
+  function capitalizeWords(str) {
+    if (!str) return '';
+    return str
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+
+  const DetailSection = ({ icon, title, children }) => (
+    <Card
+      variant="outlined"
+      sx={{
+        mb: 2.5,
+        borderColor: `${primary}30`,
+        '&:hover': { boxShadow: '0 2px 8px rgba(1,152,99,0.1)' }
+      }}
+    >
+      <CardContent>
+        <Stack direction="row" alignItems="center" spacing={1.5} mb={2}>
+          <Avatar sx={{ bgcolor: lightGreen, color: primary, width: 32, height: 32 }}>{icon}</Avatar>
+          <Typography variant="h6" fontWeight={600} color={primary}>
+            {title}
+          </Typography>
+        </Stack>
+        {children}
+      </CardContent>
+    </Card>
+  );
+
+  const DetailItem = ({ label, value, icon, isSubtitle }) => (
+    <Box mb={1.5}>
+      <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+        {icon && (
+          <Box component="span" sx={{ mr: 1, color: primary }}>
+            {icon}
+          </Box>
+        )}
+        {label}
+      </Typography>
       <Typography
-        variant="body1"
-        sx={{
-          wordBreak: 'break-word',
-          textTransform: title === 'Role' || title === 'User Type' || title === 'Status' ? 'capitalize' : 'none'
-        }}
+        variant={isSubtitle ? 'h6' : 'body1'}
+        sx={{ fontWeight: isSubtitle ? 600 : 500, color: theme.palette.text.primary, ml: icon ? 2.5 : 0 }}
       >
         {value || 'N/A'}
       </Typography>
-    </Grid>
+    </Box>
   );
 
   return (
@@ -60,98 +87,71 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       onClose={() => setDrawerOpen(false)}
       PaperProps={{
         sx: {
-          // Responsive width adjusted
-          width: { xs: '100%', sm: '80%', md: '450px' },
-          maxWidth: '100vw',
-          backgroundColor: theme.palette.background.default
+          width: { xs: '100%', sm: '80%', md: '50%', lg: 500 },
+          background: '#fff',
+          boxShadow: '-4px 0 16px rgba(0,0,0,0.08)',
+          borderLeft: `4px solid ${primary}`
         }
       }}
     >
-      <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box p={3} height="100%" display="flex" flexDirection="column">
         {/* Header */}
-        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Typography variant="h5" sx={{ fontWeight: 600, color: theme.palette.primary.main }}>
-            User Details
-          </Typography>
-          <IconButton onClick={() => setDrawerOpen(false)} size="large">
-            <CloseIcon />
-          </IconButton>
-        </Grid>
+        <Box flexGrow={1} overflow="auto" pr={1}>
+          <Card sx={{ mb: 3, bgcolor: primary, color: 'white', borderRadius: 2 }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h2" fontWeight={700} color="white" mr={2}>
+                    {getFullName()}
+                  </Typography>
+                  <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white' }} />
+                </Box>
+                <IconButton
+                  onClick={() => setDrawerOpen(false)}
+                  sx={{
+                    bgcolor: lightGreen,
+                    color: primary,
+                    '&:hover': { bgcolor: '#ffffff' }
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
 
-        <Divider sx={{ mb: 3 }} />
+              <Stack direction="row" spacing={3} mt={1} alignItems="center" flexWrap="wrap">
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <PhoneIcon sx={{ fontSize: 20, color: lightGreen, mr: 1 }} />
+                  <Typography sx={{ color: 'white', fontWeight: 400 }}>{item.phone || 'N/A'}</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <EmailIcon sx={{ fontSize: 20, color: lightGreen, mr: 1 }} />
+                  <Typography sx={{ color: 'white', fontWeight: 400 }}>{item.email || 'N/A'}</Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
 
-        {/* Content */}
-        <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-          {/* User Name Header */}
-          <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
-            {getFullName()}
-          </Typography>
-
-          {/* Primary User Info Section */}
-          <Paper elevation={0} sx={{ p: 3, mb: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <PersonIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>
-                Contact & Account
-              </Typography>
-            </Box>
-
-            <Grid container spacing={3}>
-              <DetailItem title="Full Name" value={getFullName()} />
-              <DetailItem icon={EmailIcon} title="Email" value={item?.email} />
-              <DetailItem icon={PhoneIcon} title="Phone" value={item?.phone} />
+          {/* Basic Information */}
+          <DetailSection icon={<PersonIcon />} title="Basic Information">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <DetailItem
+                  label="User Type"
+                  value={item.userType ? item.userType.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()) : 'N/A'}
+                  isSubtitle
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="Role" value={capitalizeWords(item.role)} isSubtitle />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="Created On" value={formatDate(item.createdOn)} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="Last Modified On" value={formatDate(item.modifiedOn)} />
+              </Grid>
             </Grid>
-          </Paper>
-
-          {/* Status and Role Section */}
-          <Paper elevation={0} sx={{ p: 3, mb: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <BadgeIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>
-                Role & Status
-              </Typography>
-            </Box>
-
-            <Grid container spacing={3}>
-              <DetailItem title="User Type" value={item?.userType === 'publicUser' ? 'Public User' : item?.userType} />
-              <DetailItem title="Role" value={item?.role} />
-
-              {/* Status as Chip */}
-              <DetailItem
-                title="Status"
-                value={
-                  <Chip
-                    label={item?.status}
-                    color={
-                      item?.status === 'active'
-                        ? 'success'
-                        : item?.status === 'pending'
-                          ? 'warning'
-                          : item?.status === 'inactive'
-                            ? 'default'
-                            : 'primary'
-                    }
-                    size="small"
-                  />
-                }
-              />
-            </Grid>
-          </Paper>
-
-          {/* Audit Trail Section */}
-          <Paper elevation={0} sx={{ p: 3, mb: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <CalendarTodayIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>
-                Audit Trail
-              </Typography>
-            </Box>
-
-            <Grid container spacing={3}>
-              <DetailItem title="Created On" value={formatDate(item?.createdOn)} />
-              <DetailItem title="Last Modified On" value={formatDate(item?.modifiedOn)} />
-            </Grid>
-          </Paper>
+          </DetailSection>
         </Box>
       </Box>
     </Drawer>

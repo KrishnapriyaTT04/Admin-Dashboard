@@ -1,59 +1,80 @@
-import {
-  Box,
-  Typography,
-  IconButton,
-  Grid,
-  useTheme,
-  Divider,
-  Paper,
-  Chip,
-} from '@mui/material';
+import { Box, Typography, IconButton, Grid, useTheme, Divider, Paper, Chip, Card, CardContent, Stack, Avatar } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
-import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
-import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
-import StarIcon from '@mui/icons-material/Star';
-import BusinessIcon from '@mui/icons-material/Business';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LabelImportantIcon from '@mui/icons-material/LabelImportant';
+import {
+  Close as CloseIcon,
+  AttachFile as AttachFileIcon,
+  Business as BusinessIcon,
+} from '@mui/icons-material';
 
 const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
+  const primary = '#019863';
+  const lightGreen = '#e8f5e9';
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');      
-  const month = String(date.getMonth() + 1).padStart(2, '0'); 
-  const year = date.getFullYear();                       
-  return `${day}/${month}/${year}`;
-};
-
-
-  const formatTime = (dateString) => {
+  const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch {
+      return 'Invalid Date';
+    }
   };
 
-  const renderDateTime = (dateString) => {
-    if (!dateString) return 'N/A';
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <CalendarTodayIcon fontSize="small" color="action" />
-        <Typography variant="body2">{formatDate(dateString)}</Typography>
-        <AccessTimeIcon fontSize="small" color="action" />
-        <Typography variant="body2">{formatTime(dateString)}</Typography>
-      </Box>
-    );
-  };
+  function capitalizeWords(str) {
+    if (!str) return '';
+    return str
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+
+  const DetailSection = ({ icon, title, children }) => (
+    <Card
+      variant="outlined"
+      sx={{
+        mb: 2.5,
+        borderColor: `${primary}30`,
+        '&:hover': { boxShadow: '0 2px 8px rgba(1,152,99,0.1)' }
+      }}
+    >
+      <CardContent>
+        <Stack direction="row" alignItems="center" spacing={1.5} mb={2}>
+          <Avatar sx={{ bgcolor: lightGreen, color: primary, width: 32, height: 32 }}>{icon}</Avatar>
+          <Typography variant="h6" fontWeight={600} color={primary}>
+            {title}
+          </Typography>
+        </Stack>
+        {children}
+      </CardContent>
+    </Card>
+  );
+
+  const DetailItem = ({ label, value, icon, isSubtitle }) => (
+    <Box mb={1.5}>
+      <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+        {icon && (
+          <Box component="span" sx={{ mr: 1, color: primary }}>
+            {icon}
+          </Box>
+        )}
+        {label}
+      </Typography>
+      <Typography
+        variant={isSubtitle ? 'h6' : 'body1'}
+        sx={{ fontWeight: isSubtitle ? 600 : 500, color: theme.palette.text.primary, ml: icon ? 2.5 : 0 }}
+      >
+        {value || 'N/A'}
+      </Typography>
+    </Box>
+  );
+
 
   return (
     <Drawer
@@ -62,197 +83,92 @@ const formatDate = (dateString) => {
       onClose={() => setDrawerOpen(false)}
       PaperProps={{
         sx: {
-          width: { xs: '100%', sm: '80%', md: '60%', lg: '900px' },
-          backgroundColor: '#fafafa',
-        },
+          width: { xs: '100%', sm: '80%', md: '70%', lg: 800 },
+          background: '#fff',
+          boxShadow: '-4px 0 16px rgba(0,0,0,0.08)',
+          borderLeft: `4px solid ${primary}`
+        }
       }}
     >
-      <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box p={3} height="100%" display="flex" flexDirection="column">
         {/* Header */}
-        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Typography variant="h2" sx={{ fontWeight: 600, color: '#019863' }}>
-            Issue Details
-          </Typography>
-          <IconButton onClick={() => setDrawerOpen(false)} size="large">
-            <CloseIcon />
-          </IconButton>
-        </Grid>
-
-        <Divider sx={{ mb: 3 }} />
-
-        <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-          {/* 1. Issue Details Section */}
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-              mb: 3,
-              border: '1px solid #e0e0e0',
-              borderRadius: 2,
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <ReportProblemIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>
-                Issue Details
-              </Typography>
-            </Box>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Topic
-                </Typography>
-                <Typography variant="body1" fontWeight={500}>
-                  {item?.topic || 'N/A'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Priority
-                </Typography>
-                <Chip
-                  label={item?.priority || 'N/A'}
-                  color={
-                    item?.priority === 'high'
-                      ? 'error'
-                      : item?.priority === 'medium'
-                      ? 'warning'
-                      : 'success'
-                  }
-                  size="small"
-                  sx={{ mt: 0.5 }}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Description
-                </Typography>
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-                  {item?.description || 'No description provided.'}
-                </Typography>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Reported By
-                </Typography>
-                <Typography variant="body1" fontWeight={500}>
-                  {item?.reportedByName || 'N/A'}
-                </Typography>
-                {renderDateTime(item?.reportedOn)}
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Status
-                </Typography>
-                <Chip
-                  label={item?.status?.toUpperCase() || 'N/A'}
-                  color={
-                    item?.status === 'open'
-                      ? 'warning'
-                      : item?.status === 'closed'
-                      ? 'success'
-                      : 'default'
-                  }
-                  size="small"
-                  sx={{ mt: 0.5 }}
-                />
-              </Grid>
-
-              {item?.assignedName && (
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Assigned To
+        <Box flexGrow={1} overflow="auto" pr={1}>
+          <Card sx={{ mb: 3, bgcolor: primary, color: 'white', borderRadius: 2 }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h2" fontWeight={700} color="white" mr={2}>
+                    {capitalizeWords(item.topic)}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <AssignmentIndIcon fontSize="small" color="action" />
-                    <Typography variant="body1">{item?.assignedName}</Typography>
-                  </Box>
-                  {renderDateTime(item?.assignedOn)}
-                </Grid>
-              )}
+                  <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white' }} />
+                </Box>
+                <IconButton
+                  onClick={() => setDrawerOpen(false)}
+                  sx={{
+                    bgcolor: lightGreen,
+                    color: primary,
+                    '&:hover': { bgcolor: '#ffffff' }
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Stack direction="row" flexWrap="wrap">
+                <Typography sx={{ color: 'white', fontWeight: 400 }}>
+                  {item.issueId} | {capitalizeWords(item.priority)}
+                </Typography>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          {/* Basic Information */}
+          <DetailSection icon={<AttachFileIcon />} title="Basic Information">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <DetailItem label="Reporter ID" value={capitalizeWords(item.reportedBy)} isSubtitle />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <DetailItem label="Reported By" value={capitalizeWords(item.reportedByName)} isSubtitle />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <DetailItem label="Reported On" value={formatDate(item.reportedOn)} isSubtitle />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <DetailItem label="Description" value={formatDate(item.description)} isSubtitle />
+              </Grid>
             </Grid>
-          </Paper>
+          </DetailSection>
 
-          {/* Existing Sections */}
-      
+          {/* Facility Information */}
+          <DetailSection icon={<BusinessIcon />} title="Facility Information">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <DetailItem label="Facility ID" value={item.facilityId} isSubtitle />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <DetailItem label="Facility Title" value={capitalizeWords(item.facilityTitle)} isSubtitle />
+              </Grid>
+            </Grid>
+          </DetailSection>
 
-          {/* Facility Info Section */}
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-              mb: 3,
-              border: '1px solid #e0e0e0',
-              borderRadius: 2,
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <BusinessIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>
-                Facility Information
-              </Typography>
-            </Box>
+   
 
+          {/*  Audit Trail (Admin) Details */}
+          <DetailSection icon={<PersonIcon />} title=" Audit Trail (Admin)">
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Facility Title
-                </Typography>
-                <Typography variant="body1" fontWeight={500}>
-                  {item?.facilityTitle || 'N/A'}
-                </Typography>
+                <DetailItem label="Created" value={item?.createdUser || item?.createdBy || 'N/A'} />
+                {formatDate(item?.createdOn)}
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Facility ID
-                </Typography>
-                <Typography variant="body1">{item?.facilityId || 'N/A'}</Typography>
+                <DetailItem label=" Last Modified" value={item?.modifiedUser || item?.modifiedBy || 'N/A'} />
+                 {formatDate(item?.modifiedOn)}
               </Grid>
             </Grid>
-          </Paper>
+          </DetailSection>
 
-          {/* Audit Trail Section */}
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-              mb: 3,
-              border: '1px solid #e0e0e0',
-              borderRadius: 2,
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <PersonIcon color="primary" sx={{ mr: 1 }} />
-              <Typography variant="h6" fontWeight={600}>
-                Audit Trail (Admin)
-              </Typography>
-            </Box>
-
-            <Grid container spacing={3}>
-              {/* Created */}
-              <Grid item xs={12} md={4}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Created
-                </Typography>
-                <Typography variant="body1">{item?.createdUser || item?.createdBy || 'N/A'}</Typography>
-                {renderDateTime(item?.createdOn)}
-              </Grid>
-
-              {/* Modified */}
-              <Grid item xs={12} md={4}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Last Modified
-                </Typography>
-                <Typography variant="body1">{item?.modifiedUser || item?.modifiedBy || 'N/A'}</Typography>
-                {renderDateTime(item?.modifiedOn)}
-              </Grid>
-
-            </Grid>
-          </Paper>
+       
         </Box>
       </Box>
     </Drawer>
