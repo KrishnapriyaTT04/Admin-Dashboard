@@ -18,7 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
-import { createFacility ,updateFacility, getMasterFacilities,getMasterFacilityType} from 'container/FacilityContainer/slice'; 
+import { createFacility ,updateFacility, getMasterFacilities,getMasterFacilityType,uploadImagesStart} from 'container/FacilityContainer/slice'; 
  
 import { districtsData } from '../common/district' 
 
@@ -280,24 +280,31 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
       console.log('Updating Facility:', values);
                   console.log("Final files for upload:", selectedFiles);
 
-      return;
+    //   return;
    values.geoLoc = values.geoLoc.map(str => parseFloat(str)); 
 
 
     if (values.id) { 
          delete values.ratingCount
          delete values.reviewCount
-         if(selectedFiles.length){
-                     dispatch(updateFacilityWithFile({values,getReqestUrl,selectedFiles})); 
+
+         if(selectedFiles.length>0){
+           const  isCreateOrUpdate ='update'
+                     dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles,isCreateOrUpdate})); 
          }else{
       dispatch(updateFacility({values,getReqestUrl})); 
-      console.log('Updating Facility:', values);
+
          }
 
     } else {
          delete values.id; 
-
+          if(selectedFiles.length>0){
+             const  isCreateOrUpdate ='create'
+               dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles,isCreateOrUpdate})); 
+          }else{
         dispatch(createFacility(values));
+          }
+          
     }
     setDrawerOpen(false);
   };

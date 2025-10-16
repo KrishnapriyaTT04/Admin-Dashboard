@@ -25,8 +25,10 @@ const facilitySlice = createSlice({
         masterFacilityTypeList : [], 
         masterFacilityTypeError : null,
 
-        isLoading: false,
-        error:null
+
+        uploadingImages: false,
+         uploadImagesError: null,
+        imageUrls: [] 
     },
     reducers: {
         // === FETCH LIST ACTIONS ===
@@ -203,26 +205,32 @@ const facilitySlice = createSlice({
                 status: action.payload.status || 500
             };
         },
+
+
         
-    updateFacilityWithImageRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
+     uploadImagesStart: (state) => {
+      state.uploadingImages = true;
+      state.uploadImagesError = null;
     },
-
-
-     uploadFacilityImagesSuccess: (state, action) => {
-        // Handle successful image upload (optional: maybe store temporary URLs)
-          state.isLoading = false;
-      state.error = action.payload; 
+    
+    // Images uploaded successfully
+    uploadImagesSuccess: (state, action) => {
+      state.uploadingImages = false;
+      state.imageUrls = action.payload; // Store the uploaded image URLs
     },
+    
+    // Images upload failed
+      uploadImagesFail: (state, action) => {
+      state.uploadingImages = false;
+      state.uploadImagesError = action.payload; // action.payload is { message, status }
+      state.imageUrls = [];
+      },
 
     resetFacilityOperationState: (state) => {
-      state.isLoading = false;
-      state.error = null;
-    },
-
-
- 
+      state.operationLoading = false;
+      state.operationError = null;
+      state.operationSuccess = false;
+    }
   }
 });
 
@@ -260,9 +268,9 @@ export const {
     getMasterFacilityTypeSuccess,
     getMasterFacilityTypeFail,
 
-    updateFacilityWithImageRequest,
-    uploadFacilityImagesSuccess
-
+    uploadImagesStart,
+    uploadImagesSuccess,
+    uploadImagesFail,
 
 } = facilitySlice.actions;
 
@@ -288,8 +296,9 @@ export const selectMasterFacilityTypeList = (state) => state.facility.masterFaci
 export const selectMasterFacilityTypeLoading = (state) => state.facility.masterFacilityTypeLoading;
 export const selectMasterFacilityTypeError = (state) => state.facility.masterFacilityTypeError;
 
-// export const updateFacilityWithImageRequest = (state) => state.facility.isLoading;
-// export const updateFacilityWithImageRequestImagesSuccess = (state) => state.facility.error;
+export const selectUploadingImages = (state) => state.facility.uploadingImages;
+export const selectUploadImagesError = (state) => state.facility.uploadImagesError;
+export const selectImageUrls = (state) => state.facility.imageUrls;
 
 
 export default facilitySlice.reducer;

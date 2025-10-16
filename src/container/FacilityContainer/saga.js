@@ -42,24 +42,12 @@ function* getFacilities(action) {
 function* createFacilitySaga(action) {
   const token = JSON.parse(localStorage.getItem('klooToken'));
   try {
-    //  action.payload.avgStarRating=0
-    //         action.payload.ratingCount=0
-    //         action.payload.reviewCount=0
-
-    //         action.payload.seatCapacity=2
-
-    // action.payload.facilityType='indian'
-    // action.payload.district='kozhikkode',
-    // action.payload.pinCode="673525"
-    // action.payload.landmark="Library"
-
     const facilityData = action.payload;
 
     const params = {
-      // Example API call for creating a facility
       api: `${FACILITY_API_BASE}/facilities`,
       method: 'POST',
-      body: JSON.stringify(facilityData), // Send facility data in the body
+      body: JSON.stringify(facilityData), 
       successAction: actionType.createFacilitySuccess(),
       failAction: actionType.createFacilityFail(),
       authorization: 'Bearer',
@@ -70,12 +58,9 @@ function* createFacilitySaga(action) {
 
     if (res?.message === 'success') {
       yield call(toast.success, 'Facility added successfully!', { autoClose: 3000 });
-      // Dispatch success and optionally pass the created object back
       yield put(actionType.createFacilitySuccess(res.data));
-      // After creation, optionally re-fetch the list to update the table
       yield put(actionType.getFacilities());
     } else {
-      // throw new Error(res?.message || 'Facility creation failed.');
     }
   } catch (error) {
     console.error('Create Facility failed:', error);
@@ -90,12 +75,13 @@ function* createFacilitySaga(action) {
 }
 
 function* updateFacilitySaga(action) {
+    console.log("-------------updateFacilitySaga------------action------",action);
+    
   const token = JSON.parse(localStorage.getItem('klooToken'));
   try {
     const payload = action.payload;
-    const facilityData = payload.values; // Assuming 'values' holds the form data
+    const facilityData = payload.values;
     const getUrl = payload.getReqestUrl;
-    // const facilityData = action.payload.values;
 
     if (!facilityData.id) {
       return;
@@ -227,7 +213,7 @@ function* getMasterFacilitiesSaga(action) {
 
     yield put(
       actionType.getMasterFacilitiesFail({
-        message: error.message || 'Failed to fetch issue reports.',
+        message: error.message || 'Failed to feisCreateOrUpdatatch issue reports.',
         status: error.response?.status || 500
       })
     );
@@ -276,6 +262,95 @@ function* getMasterFacilityTypeSaga(action) {
   }
 }
 
+
+
+function* uploadImagesStart(action) {
+    const token = JSON.parse(localStorage.getItem('klooToken')); 
+
+    console.log("--------uploadImagesStart----------action--------------", action);
+      const timestamp = Date.now();
+      const date = new Date(timestamp);
+    try {
+        const payload = action.payload;
+        const facilityData = payload.values;
+        const getUrl = payload.getReqestUrl;
+        const selectedFiles = payload.selectedFiles;
+        const isCreateOrUpdate = payload.isCreateOrUpdate;
+        
+        let newAttachmentUrls = [];
+
+        for (let item of selectedFiles) {
+            var formData = new FormData();
+            formData.append('file', item, item?.name); 
+
+            const params = {
+                api: `${FACILITY_API_BASE}/attachment/upload`,
+                method: 'POST',
+                body: formData,
+                // Passing success/fail actions to uploadApi is usually redundant if using try/catch
+                successAction: actionType.uploadImagesSuccess(),
+                 failAction: actionType.uploadImagesFail(),
+                authorization: 'Bearer',
+                token: `${token.accessToken}`,
+                isFileUpload: true
+            };
+
+            const res = yield call(uploadApi, params);
+            const documentUrl = res?.data?.documentUrl || res?.documentUrl || res?.url;
+
+            if (documentUrl) {
+                // Collect the required attachment object structure
+                let attachment = {
+                    attachmentName: item?.name,
+                    attachmentUrl: documentUrl,
+                    attachmentType: item.type,
+                    attachedOn:date
+                };
+                newAttachmentUrls.push(attachment);
+            } else {
+                // If any single upload fails to return a URL, throw an error
+                throw new Error(`Failed to get URL for file: ${item.name}`);
+            }
+        }
+        
+        const existingAttachments = facilityData.attachments || [];
+
+        const combinedAttachments = [
+            ...existingAttachments,
+            ...newAttachmentUrls 
+        ];
+
+        const finalFacilityData = {
+            ...facilityData,
+            attachments: combinedAttachments, 
+        };
+        
+        yield put(actionType.uploadImagesSuccess(newAttachmentUrls));
+
+       
+          if(isCreateOrUpdate=='update'){
+             if (getUrl) {
+            yield put(actionType.updateFacility({ values: finalFacilityData, getReqestUrl: getUrl }));
+             }
+          }else if(isCreateOrUpdate=='create') {
+               yield put(actionType.createFacility( finalFacilityData ));
+          }
+        
+
+        return newAttachmentUrls;
+
+    } catch (error) {
+        console.error("Image upload or facility update failed:", error);
+        yield put(actionType.uploadImagesFail({ 
+            message: error.message || 'Image upload failed during sequential process.',
+            status: error.status || 500 
+        }));
+        throw error;
+    }
+}
+
+
+
 export default function* facilityActionWatcher() {
   yield takeEvery(actionType.getFacilities.type, getFacilities);
   yield takeEvery(actionType.createFacility.type, createFacilitySaga);
@@ -284,4 +359,7 @@ export default function* facilityActionWatcher() {
   yield takeEvery(actionType.uploadBulkFacilities.type, uploadBulkFacilitiesSaga);
   yield takeEvery(actionType.getMasterFacilities.type, getMasterFacilitiesSaga);
   yield takeEvery(actionType.getMasterFacilityType.type, getMasterFacilityTypeSaga);
+  yield takeEvery(actionType.uploadImagesStart.type, uploadImagesStart);
+
+  
 }
