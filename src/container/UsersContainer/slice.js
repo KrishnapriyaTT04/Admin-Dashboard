@@ -7,7 +7,6 @@ const userSlice = createSlice({
         listLoading: false,
         listError: null,
         listCount: 0,
-        // New state for update/operation feedback
         operationLoading: false,
         operationSuccess: false,
         operationError: null
@@ -45,10 +44,7 @@ const userSlice = createSlice({
 
         // --- User Update (Status Change) Actions ---
 
-        /**
-         * Action to start the user update process (e.g., status change).
-         */
-        updateUser: (state) => {
+          updateUser: (state) => {
             state.operationLoading = true;
             state.operationSuccess = false;
             state.operationError = null;
