@@ -213,7 +213,7 @@ function* getMasterFacilitiesSaga(action) {
 
     yield put(
       actionType.getMasterFacilitiesFail({
-        message: error.message || 'Failed to fetch issue reports.',
+        message: error.message || 'Failed to feisCreateOrUpdatatch issue reports.',
         status: error.response?.status || 500
       })
     );
@@ -272,10 +272,10 @@ function* uploadImagesStart(action) {
       const date = new Date(timestamp);
     try {
         const payload = action.payload;
-        const facilityData = isCreateOrUpdata.values;
+        const facilityData = payload.values;
         const getUrl = payload.getReqestUrl;
         const selectedFiles = payload.selectedFiles;
-        isCreateOrUpdata = payload.isCreateOrUpdata;
+        const isCreateOrUpdate = payload.isCreateOrUpdate;
         
         let newAttachmentUrls = [];
 
@@ -296,8 +296,6 @@ function* uploadImagesStart(action) {
             };
 
             const res = yield call(uploadApi, params);
-            console.log(`--------Upload Response for ${item.name}----------`, res);
-
             const documentUrl = res?.data?.documentUrl || res?.documentUrl || res?.url;
 
             if (documentUrl) {
@@ -327,17 +325,15 @@ function* uploadImagesStart(action) {
             attachments: combinedAttachments, 
         };
         
-        console.log("--------uploadImagesStart----------finalFacilityData--------------", finalFacilityData);
-
         yield put(actionType.uploadImagesSuccess(newAttachmentUrls));
 
        
-          if(isCreateOrUpdata=='update'){
+          if(isCreateOrUpdate=='update'){
              if (getUrl) {
             yield put(actionType.updateFacility({ values: finalFacilityData, getReqestUrl: getUrl }));
              }
-          }else if(isCreateOrUpdata=='create') {
-               yield put(actionType.createFacility({ values: finalFacilityData }));
+          }else if(isCreateOrUpdate=='create') {
+               yield put(actionType.createFacility( finalFacilityData ));
           }
         
 

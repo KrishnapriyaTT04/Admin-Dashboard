@@ -287,22 +287,20 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     if (values.id) { 
          delete values.ratingCount
          delete values.reviewCount
-                                    console.log('Updating Facility:-----selectedFiles1', selectedFiles.length);
 
          if(selectedFiles.length>0){
-                     dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles,isCreateOrUpdata:'update'})); 
-                           console.log('Updating Facility:-----1', values);
-
+           const  isCreateOrUpdate ='update'
+                     dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles,isCreateOrUpdate})); 
          }else{
       dispatch(updateFacility({values,getReqestUrl})); 
-                                 console.log('--------updateFacility----------1', values);
 
          }
 
     } else {
          delete values.id; 
           if(selectedFiles.length>0){
-               dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles,isCreateOrUpdata:'create'})); 
+             const  isCreateOrUpdate ='create'
+               dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles,isCreateOrUpdate})); 
           }else{
         dispatch(createFacility(values));
           }
