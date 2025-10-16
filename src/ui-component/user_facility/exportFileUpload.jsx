@@ -7,14 +7,22 @@ import Button from '@mui/material/Button';
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux'; 
 import { uploadBulkFacilities} from 'container/FacilityContainer/slice'; 
+import DownloadIcon from '@mui/icons-material/Download';
+
+
+
+
 
 const UploadBulkFile = ({ drawerOpen, setDrawerOpen }) => { 
+
   const theme = useTheme();
   const dispatch = useDispatch(); 
   
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null); 
   const [fileName, setFileName] = useState(''); 
+      const publicCsvPath = "/files/facility_example.csv"; 
+
 
   const handleFileSelection = (event) => {
       const file = event.target.files[0];
@@ -127,6 +135,19 @@ const UploadBulkFile = ({ drawerOpen, setDrawerOpen }) => {
 
             </Grid>
         </Paper>
+
+
+  <Button
+    component="a"
+     href={publicCsvPath}       
+    download="facility_example.csv" 
+    variant="contained"
+    color="success" 
+    size="large"
+    startIcon={<DownloadIcon />} 
+>
+    Download  Example
+</Button>
       </Box>
     </Drawer>
   );

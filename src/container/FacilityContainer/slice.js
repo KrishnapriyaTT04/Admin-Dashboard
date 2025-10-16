@@ -24,6 +24,9 @@ const facilitySlice = createSlice({
         masterFacilityTypeLoading : false,
         masterFacilityTypeList : [], 
         masterFacilityTypeError : null,
+
+        isLoading: false,
+        error:null
     },
     reducers: {
         // === FETCH LIST ACTIONS ===
@@ -200,15 +203,26 @@ const facilitySlice = createSlice({
                 status: action.payload.status || 500
             };
         },
-
-
         
+    updateFacilityWithImageRequest: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+
+
+     uploadFacilityImagesSuccess: (state, action) => {
+        // Handle successful image upload (optional: maybe store temporary URLs)
+          state.isLoading = false;
+      state.error = action.payload; 
+    },
 
     resetFacilityOperationState: (state) => {
-      state.operationLoading = false;
-      state.operationError = null;
-      state.operationSuccess = false;
-    }
+      state.isLoading = false;
+      state.error = null;
+    },
+
+
+ 
   }
 });
 
@@ -244,7 +258,11 @@ export const {
 
     getMasterFacilityType,
     getMasterFacilityTypeSuccess,
-    getMasterFacilityTypeFail
+    getMasterFacilityTypeFail,
+
+    updateFacilityWithImageRequest,
+    uploadFacilityImagesSuccess
+
 
 } = facilitySlice.actions;
 
@@ -269,6 +287,9 @@ export const selectMasterListError = (state) => state.facility.masterListError;
 export const selectMasterFacilityTypeList = (state) => state.facility.masterFacilityTypeList;
 export const selectMasterFacilityTypeLoading = (state) => state.facility.masterFacilityTypeLoading;
 export const selectMasterFacilityTypeError = (state) => state.facility.masterFacilityTypeError;
+
+// export const updateFacilityWithImageRequest = (state) => state.facility.isLoading;
+// export const updateFacilityWithImageRequestImagesSuccess = (state) => state.facility.error;
 
 
 export default facilitySlice.reducer;
