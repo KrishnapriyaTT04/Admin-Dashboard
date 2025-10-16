@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Button, Box, Typography, IconButton, Grid, useTheme ,  FormControl,  InputLabel,Select,Checkbox,ListItemText} from '@mui/material';
+// import { useEffect, useState ,useCallback} from 'react';
+import React, {useEffect, useState, useCallback,useRef } from 'react';
+
+import { Button, Box, Typography, IconButton, Grid, useTheme ,  FormControl,Paper,  InputLabel,Select,Checkbox,ListItemText} from '@mui/material';
 import { Formik, Form, Field, ErrorMessage } from 'formik'; 
 import { useDispatch,useSelector } from 'react-redux';
 import Drawer from '@mui/material/Drawer';
@@ -16,11 +18,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
- import { createFacility ,updateFacility, getMasterFacilities,getMasterFacilityType} from 'container/FacilityContainer/slice'; 
+import { createFacility ,updateFacility, getMasterFacilities,getMasterFacilityType} from 'container/FacilityContainer/slice'; 
  
+import { districtsData } from '../common/district' 
 
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-  import { districtsData } from '../common/district' 
+import ImageDropzone from '../common/multiImageSelection'; 
 
 
 
@@ -115,9 +119,10 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
   const dispatch = useDispatch();
   const featureOptions = useSelector((state) => state.facility?.masterList || []);
   const masterFacilityTypeList = useSelector((state) => state.facility?.masterFacilityTypeList || []);
-
-    const [shouldRender, setShouldRender] = useState(false);
-
+  const [shouldRender, setShouldRender] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null);
     useEffect(() => {
    let reqUrl =`/master-facility-features`
        dispatch(getMasterFacilities(reqUrl));
@@ -130,6 +135,142 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     return () => clearTimeout(timer);
 }, [dispatch]); 
 
+
+
+
+//  // Improved handler to ADD files with duplicate checking
+//   const handleFilesAdded = useCallback((fileList) => {
+//     const newFiles = Array.from(fileList).filter(file => 
+//       file.type.startsWith('image/')
+//     );
+    
+//     setSelectedFiles(prevFiles => {
+//       // Create a Set of existing file names for quick lookup
+//       const existingFileNames = new Set(prevFiles.map(file => file.name));
+      
+//       // Filter out duplicates from new files
+//       const uniqueNewFiles = newFiles.filter(file => 
+//         !existingFileNames.has(file.name)
+//       );
+      
+//       return [...prevFiles, ...uniqueNewFiles];
+//     });
+//   }, []);
+
+
+
+//   // Handler to REMOVE a file
+//   const handleFileRemoved = useCallback((fileName) => {
+//     setSelectedFiles(prevFiles => prevFiles.filter(file => file.name !== fileName));
+//   }, []);
+
+//   const handleUploadSubmit = () => {
+//     console.log("Final files for upload:", selectedFiles);
+//     const formData = new FormData();
+//     selectedFiles.forEach(file => {
+//       formData.append('images', file); 
+//     });
+    
+//     // Your API call here
+//     // fetch('/api/upload-images', { method: 'POST', body: formData });
+    
+//     // Clear files on success if needed
+//     // setSelectedFiles([]);
+//   };
+
+//   const handleClearAll = () => {
+//     setSelectedFiles([]);
+//   };
+
+
+ // Handler to ADD files
+  const handleFilesAdded = (fileList) => {
+    const newFiles = Array.from(fileList).filter(file => file.type.startsWith('image/'));
+    
+    setSelectedFiles(prevFiles => {
+      // Create a Set of existing file names for quick lookup
+      const existingFileNames = new Set(prevFiles.map(file => file.name));
+      
+      // Filter out duplicates from new files
+      const uniqueNewFiles = newFiles.filter(file => !existingFileNames.has(file.name));
+      
+      return [...prevFiles, ...uniqueNewFiles];
+    });
+  };
+
+  // Handler to REMOVE a file
+  const handleFileRemoved = (fileName) => {
+    setSelectedFiles(prevFiles => prevFiles.filter(file => file.name !== fileName));
+  };
+
+  // Handler for file input change
+  const handleFileChange = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      handleFilesAdded(event.target.files);
+    }
+    // Reset the input to allow same file selection again
+    event.target.value = '';
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAddMoreClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // Drag & Drop handlers
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+    
+    if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+      handleFilesAdded(event.dataTransfer.files);
+    }
+  };
+
+  const handleUploadSubmit = () => {
+    console.log("Final files for upload:", selectedFiles);
+    const formData = new FormData();
+    selectedFiles.forEach(file => {
+      formData.append('images', file);
+    });
+      // Your API call here
+    // fetch('/api/upload-images', { method: 'POST', body: formData });
+    
+    // Optional: Clear files after upload
+    // setSelectedFiles([]);
+  };
+
+
+
+  const handleClearAll = () => {
+    setSelectedFiles([]);
+  };
+
+
   const submit = (values) => {
       if(values.is24H==true){
        values.openingTime="00:00";
@@ -137,15 +278,22 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
       }
 
       console.log('Updating Facility:', values);
-                    
+                  console.log("Final files for upload:", selectedFiles);
+
+      return;
    values.geoLoc = values.geoLoc.map(str => parseFloat(str)); 
 
 
     if (values.id) { 
          delete values.ratingCount
          delete values.reviewCount
+         if(selectedFiles.length){
+                     dispatch(updateFacilityWithFile({values,getReqestUrl,selectedFiles})); 
+         }else{
       dispatch(updateFacility({values,getReqestUrl})); 
       console.log('Updating Facility:', values);
+         }
+
     } else {
          delete values.id; 
 
@@ -725,6 +873,157 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
         </Field>
     </Grid>
 
+  {/* <Box sx={{ p: 3 }}>
+      <h2>Facility Details and Image Upload</h2>
+      
+      <ImageDropzone 
+        selectedFiles={selectedFiles}
+        onFilesAdded={handleFilesAdded}
+        onFileRemoved={handleFileRemoved}
+      />
+      
+      {selectedFiles.length > 0 && (
+        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 3 }}>
+          <Button 
+            variant="outlined" 
+            color="secondary" 
+            onClick={handleClearAll}
+          >
+            Clear All ({selectedFiles.length})
+          </Button>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleUploadSubmit}
+          >
+            Upload {selectedFiles.length} Images to Server
+          </Button>
+        </Box>
+      )}
+    </Box> */}
+
+
+     <Box sx={{ p: 3,  margin: 'auto' }}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Facility Details and Image Upload
+      </Typography>
+
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+      />
+
+      {/* Drag & Drop Area */}
+      <Paper
+        variant="outlined"
+        onDragOver={handleDragOver}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onClick={handleUploadClick}
+        sx={{
+          p: 4,
+          textAlign: 'center',
+          cursor: 'pointer',
+          border: `2px dashed ${isDragging ? 'primary.main' : 'grey.400'}`,
+          backgroundColor: isDragging ? 'primary.light' : 'background.paper',
+          transition: 'all 0.3s',
+          mb: 3,
+          '&:hover': {
+            backgroundColor: 'grey.50',
+          }
+        }}
+      >
+        <CloudUploadIcon color="action" sx={{ fontSize: 40, mb: 1 }} />
+        <Typography variant="h6">
+          Drag & drop images here or click to browse
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          (Supports multiple files)
+        </Typography>
+      </Paper>
+
+      {/* Image Previews */}
+      {selectedFiles.length > 0 && (
+        <Box sx={{ mb: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6">
+              Selected Images ({selectedFiles.length})
+            </Typography>
+            <Button 
+              variant="outlined" 
+              onClick={handleAddMoreClick}
+              startIcon={<CloudUploadIcon />}
+            >
+              Add More Images
+            </Button>
+          </Box>
+          
+          <Grid container spacing={2}>
+            {selectedFiles.map((file, index) => (
+              <Grid item key={`${file.name}-${index}-${file.lastModified}`}>
+                <Paper 
+                  elevation={3} 
+                  sx={{ 
+                    position: 'relative', 
+                    width: 120, 
+                    height: 120,
+                    overflow: 'hidden',
+                  }}
+                >
+                  <img 
+                    src={URL.createObjectURL(file)} 
+                    alt={`Preview ${file.name}`} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  
+                  <IconButton 
+                    size="small"
+                    onClick={() => handleFileRemoved(file.name)} 
+                    sx={{ 
+                      position: 'absolute', 
+                      top: 2, 
+                      right: 2, 
+                      bgcolor: 'rgba(255, 255, 255, 0.9)',
+                      '&:hover': {
+                        bgcolor: 'rgba(255, 255, 255, 1)',
+                      }
+                    }}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      )}
+
+      {/* Action Buttons */}
+      {selectedFiles.length > 0 && (
+        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 3 }}>
+          <Button 
+            variant="outlined" 
+            color="secondary" 
+            onClick={handleClearAll}
+          >
+            Clear All ({selectedFiles.length})
+          </Button>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleUploadSubmit}
+          >
+            Upload {selectedFiles.length} Images to Server
+          </Button>
+        </Box>
+      )}
+    </Box>
     
     
 </Grid>
