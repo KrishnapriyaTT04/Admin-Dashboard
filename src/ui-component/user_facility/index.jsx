@@ -9,6 +9,9 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { FileUploadOutlined } from '@mui/icons-material';
+import StarIcon from '@mui/icons-material/Star';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 
 import ChangeStatusModal from '../common/commonStatusChange'
@@ -53,7 +56,7 @@ export default function Facility() {
   const [showXSLUploadModal, setshowXSLUploadModal] = useState(false);
   const [showXSLModal, setShowXSLModal] = useState(false);
   const [getReqUrl, setGetReqUrl] = useState('');
-    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
 
 
@@ -237,7 +240,33 @@ export default function Facility() {
     closeDeleteModal();
   };
 
-  // console.log("Current facility list:", facilityList);
+const renderStars = (rating) => {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    if (rating >= i) {
+      stars.push(<StarIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
+    } else if (rating >= i - 0.5) {
+      stars.push(<StarHalfIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
+    } else {
+      stars.push(<StarBorderIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
+    }
+  }
+
+  return <Box sx={{ display: 'flex', justifyContent: 'left' }}>{stars}</Box>;
+};
+
+
+
+  const displayedData = facilityList.map((item) => {
+    return {
+      ...item,
+      avgStarRating: renderStars(item.avgStarRating)
+    };
+  });
+
+  console.log("==displayedData", displayedData);
+  
+
 
   return (
     <>
@@ -331,7 +360,7 @@ export default function Facility() {
             <Table sx={{ minWidth: 650 }} aria-label="project table">
               <TableHead keys={keys} config={config} />
               <TableRows
-                data={facilityList}
+                data={displayedData}
                 keys={keys}
                 config={config}
                 currentPage={page + 1}
@@ -346,7 +375,7 @@ export default function Facility() {
                 handleFormModal={handleFormModal}
                 handlProjectStatusModal={handleStatusChangeModal}
                 msg="Projects"
-                tableData={facilityList}
+                tableData={displayedData}
                 filter={searchQuery || ''}
               />
             </Table>

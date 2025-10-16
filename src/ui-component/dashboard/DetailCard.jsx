@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, CardContent, Typography, Divider, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Rating } from '@mui/material';
 
 export const DetailCard = ({ title, data = [], count, fields = [], path, sx = {} }) => {
-  const capitalize = (str) =>
-    str?.toString()?.replace(/\b\w/g, (char) => char.toUpperCase()) || '';
+  const capitalize = (str) => str?.toString()?.replace(/\b\w/g, (char) => char.toUpperCase()) || '';
 
   const safeData = Array.isArray(data) ? data : [];
 
@@ -72,9 +72,19 @@ export const DetailCard = ({ title, data = [], count, fields = [], path, sx = {}
         {safeData.length > 0 ? (
           safeData.map((item, idx) => (
             <Box key={idx} mb={1}>
-              <Typography fontWeight={fields[0]?.bold ? 600 : 400} fontSize="13px">
-                {capitalize(item[fields[0]?.name])}
-              </Typography>
+              <Box display="flex" alignItems="center" gap={1}>
+                <Typography fontWeight={fields[0]?.bold ? 600 : 400} fontSize="13px">
+                  {capitalize(item[fields[0]?.name])}
+                </Typography>
+
+                {fields
+                  .slice(1)
+                  .map((f) =>
+                    f.name === 'starRating' ? <Rating key={f.name} value={Number(item[f.name] || 0)} readOnly  sx={{ fontSize: 14 }} /> : null
+                  )}
+              </Box>
+
+              {/* Other fields below */}
               <Typography
                 fontSize="13px"
                 sx={{
@@ -85,10 +95,12 @@ export const DetailCard = ({ title, data = [], count, fields = [], path, sx = {}
               >
                 {fields
                   .slice(1)
+                  .filter((f) => f.name !== 'starRating')
                   .map((f) => capitalize(item[f.name]))
                   .filter(Boolean)
                   .join(' | ')}
               </Typography>
+
               <Divider sx={{ mt: 1 }} />
             </Box>
           ))

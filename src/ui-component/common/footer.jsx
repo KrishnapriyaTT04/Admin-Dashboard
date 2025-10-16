@@ -2,6 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Link, useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { drawerWidth } from 'store/constant';
+const AppVersion = import.meta.env.VITE_APP_VERSION;
 
 const Footer = () => {
   const theme = useTheme();
@@ -24,15 +25,16 @@ const Footer = () => {
         background: 'linear-gradient(180deg, #019863, #019863)',
         color: '#fff',
         zIndex: 1000,
-         transition: 'width 0.6s ease, margin-left 0.3s ease'
+        transition: 'width 0.6s ease, margin-left 0.3s ease'
       }}
     >
       <Toolbar
         sx={{
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          height: '100%' // ensures text is vertically centered
+          height: '100%' 
         }}
       >
         <Typography variant="body1" sx={{ textAlign: 'center' }}>
@@ -50,6 +52,9 @@ const Footer = () => {
           >
             Frugal Scientific Pvt Ltd
           </Link>
+        </Typography>
+        <Typography color="#dddddd" variant="caption" >
+          Version : {AppVersion}
         </Typography>
       </Toolbar>
     </AppBar>

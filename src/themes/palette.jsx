@@ -4,7 +4,6 @@
  */
 
 export default function themePalette(theme) {
-    console.log('themecolor', theme?.colors);
 
     return {
         mode: theme?.customization?.navType,

@@ -87,7 +87,7 @@ export default function UserRating() {
 
   const renderStars = (rating) => {
   const stars = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 0; i <= 5; i++) {
     stars.push(
       i <= rating ? (
         <StarIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />

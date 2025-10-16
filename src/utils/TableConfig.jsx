@@ -55,11 +55,11 @@ export const facilityHeads = {
       type: 'string',
       class: ' cmn_Cap commonDesc'
     },
-    //   avgStarRating: {
-    //   label: 'Rating', 
-    //   type: 'string',
-    //   class: 'cmn_Cap commonDesc'
-    // },
+      avgStarRating: {
+      label: 'Rating', 
+      type: 'string',
+      class: 'cmn_Cap commonDesc'
+    },
      status:{
       label: 'Status',
       type: 'string',
