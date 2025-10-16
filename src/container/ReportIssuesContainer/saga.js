@@ -10,10 +10,6 @@ import * as actionType from './slice';
 // Base API endpoint for issue reports (adjust as needed for your specific API)
 const ISSUE_API_BASE = `${appConfig.ip}`;
 
-// ====================================================================
-// 1. Get Issue Reports
-// ====================================================================
-
 function* getIssueReportsSaga(action) {
   const token = JSON.parse(localStorage.getItem('klooToken'));
   try {
@@ -77,11 +73,9 @@ function* getIssuesCount() {
   }
 }
 
-
-function* updateIssueStts(action) {
+function* updateIssue(action) {
   const tokenData = JSON.parse(localStorage.getItem('klooToken'));
   const accessToken = tokenData?.accessToken;
-
   try {
     const payload = action.payload;
     const data = payload.values;
@@ -98,17 +92,18 @@ function* updateIssueStts(action) {
       api: `${ISSUE_API_BASE}/issues/${data.id}`,
       method: 'PATCH',
       body: JSON.stringify(updateBody),
-      successAction: actionType.updIssueSttsSuccess(),
-      failAction: actionType.updIssueSttsFail(),
+      successAction: actionType.updIssueSuccess(),
+      failAction: actionType.updIssueFail(),
       authorization: 'Bearer',
       token: accessToken
     };
 
-    const res = yield call(commonApi, params);  
+    const res = yield call(commonApi, params);
+      
     if (res) {
-      yield put(actionType.updIssueSttsSuccess(res));
+      yield put(actionType.updIssueSuccess(res));
 
-      yield call(toast.success, 'Issue Status Updated Successfully!', { autoClose: 3000 });
+      yield call(toast.success, 'Issue Updated Successfully!', { autoClose: 3000 });
 
       if (getUrl) {
         yield put(actionType.getIssueReports(getUrl));
@@ -119,12 +114,12 @@ function* updateIssueStts(action) {
   } catch (error) {
     console.error('Update Issue failed:', error);
     yield put(
-      actionType.updIssueSttsFail({
-        message: error.message || 'Failed to update Issue status.',
+      actionType.updIssueFail({
+        message: error.message || 'Failed to update Issue.',
         status: error.response?.status || 500
       })
     );
-    yield call(toast.error, `Status update failed: ${error.message}`, { autoClose: 3000 });
+    yield call(toast.error, `Issue update failed: ${error.message}`, { autoClose: 3000 });
   }
 }
 
@@ -132,5 +127,5 @@ export default function* issueReportActionWatcher() {
   // Listen for the action types defined in your reportIssueSlice.js
   yield takeEvery(actionType.getIssueReports.type, getIssueReportsSaga);
   yield takeEvery(actionType.getIssuesCount.type, getIssuesCount);
-  yield takeEvery(actionType.updIssueStts.type, updateIssueStts);
+  yield takeEvery(actionType.updIssue.type, updateIssue);
 }

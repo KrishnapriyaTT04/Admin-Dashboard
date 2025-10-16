@@ -8,11 +8,12 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { getIssueReports, getIssuesCount } from 'container/ReportIssuesContainer/slice';
-import { updIssueStts } from 'container/ReportIssuesContainer/slice';
+import { updIssue } from 'container/ReportIssuesContainer/slice';
 
 import { userReport } from 'utils/TableConfig';
 
 import MainCard from 'ui-component/cards/MainCard';
+import EditIssueComment from './EditIssueComment';
 import Pagination from 'utils/TablePagination';
 import TableHead from 'utils/TableHead';
 import TableRows from 'utils/TableRows';
@@ -32,7 +33,7 @@ export default function userReportedIssues() {
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  // const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLModal, setshowXSLModal] = useState(false);
   const [limit, setLimit] = useState(20);
   const [getReqUrl, setGetReqUrl] = useState('');
@@ -76,14 +77,6 @@ export default function userReportedIssues() {
     setPage(0);
   };
 
-  function handleDownloadExcel() {
-    setshowXSLModal(true);
-  }
-
-  const XSLHandler = () => {
-    excelExport();
-    closeXSLModal();
-  };
   const header = ['SL.NO', 'Name', 'Description'];
   function excelExport() {
     downloadExcel({
@@ -96,10 +89,6 @@ export default function userReportedIssues() {
     });
   }
 
-  const closeXSLModal = () => {
-    setshowXSLModal(false);
-  };
-
   const handleViewModal = (item) => {
     setOpen(true);
     setSelectedItem(item);
@@ -110,11 +99,6 @@ export default function userReportedIssues() {
     setSelectedItem(item);
   };
 
-  const handleAddFormModal = (item) => {
-    setFormOpen(true);
-    setSelectedItem({});
-  };
-
   const handlePageClick = (e) => {
     const selectedPage = e.selected;
     const newSkip = selectedPage * limit;
@@ -122,20 +106,6 @@ export default function userReportedIssues() {
     let reqUrl = `issues?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
     setGetReqUrl(reqUrl);
     dispatch(getIssueReports(reqUrl));
-  };
-
-  const closeDeleteModal = () => {
-    setShowDeleteModal(false);
-  };
-
-  const handleDeleteModal = (item) => {
-    setShowDeleteModal(true);
-    setSelectedItem(item);
-  };
-
-  const deleteHandler = () => {
-    setPage(0);
-    closeDeleteModal();
   };
 
   const handlProjectStatusModal = (userItem) => {
@@ -153,7 +123,7 @@ export default function userReportedIssues() {
       status: newStatus,
       id: selectedItem.id
     };
-    dispatch(updIssueStts({ values, getReqestUrl: getReqUrl }));
+    dispatch(updIssue({ values, getReqestUrl: getReqUrl }));
     handleCloseStatusModal();
   };
 
@@ -206,12 +176,12 @@ export default function userReportedIssues() {
               tableLimit={limit}
               currentPage={page + 1}
               hasView={true}
-              hasEdit={false}
+              hasEdit={true}
               hasDelete={false}
               hasStatusChange={true}
               hasMore={false}
               handleViewModel={handleViewModal}
-              handleDeleteModal={handleDeleteModal}
+              // handleDeleteModal={handleDeleteModal}
               handleFormModal={handleFormModal}
               handlProjectStatusModal={handlProjectStatusModal}
               msg="Projects"
@@ -225,17 +195,6 @@ export default function userReportedIssues() {
         </Box>
         {open && <ViewReport drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
 
-        {showDeleteModal && (
-          <ConfirmModal
-            show={showDeleteModal}
-            handleCloseModal={closeDeleteModal}
-            submitHandler={deleteHandler}
-            modalTitle={'Delete Confirmation'}
-            modalText={'Are you sure you want to delete?'}
-            btnsubmitText={'DELETE'}
-          />
-        )}
-
         {/* Status Change Modal */}
         {isStatusModalOpen && selectedItem && (
           <ChangeStatusModal
@@ -244,6 +203,10 @@ export default function userReportedIssues() {
             onClose={handleCloseStatusModal}
             onConfirm={handleUpdateStatus}
           />
+        )}
+
+        {formOpen && (
+          <EditIssueComment drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} getReqUrl={getReqUrl} />
         )}
       </MainCard>
     </>

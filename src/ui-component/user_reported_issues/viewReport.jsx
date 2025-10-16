@@ -47,7 +47,7 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
       <CardContent>
         <Stack direction="row" alignItems="center" spacing={1.5} mb={2}>
           <Avatar sx={{ bgcolor: lightGreen, color: primary, width: 32, height: 32 }}>{icon}</Avatar>
-          <Typography variant="h6" fontWeight={600} color={primary}>
+          <Typography variant="h5" fontWeight={600} color={primary}>
             {title}
           </Typography>
         </Stack>
@@ -134,8 +134,11 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
               <Grid item xs={12} sm={4}>
                 <DetailItem label="Reported On" value={formatDate(item.reportedOn)} isSubtitle />
               </Grid>
-              <Grid item xs={12} sm={12}>
-                <DetailItem label="Description" value={formatDate(item.description)} isSubtitle />
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="Description" value={capitalizeWords(item.description) } isSubtitle />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="Comments" value={capitalizeWords(item.comments)} isSubtitle />
               </Grid>
             </Grid>
           </DetailSection>
