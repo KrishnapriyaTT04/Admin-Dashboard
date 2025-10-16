@@ -14,6 +14,7 @@ const Footer = () => {
       sx={{
         top: 'auto',
         bottom: 0,
+        borderTop:'1px solid #d3d3d3',
         width: {
           xs: '100%',
           md: leftDrawerOpened ? `calc(100% - ${drawerWidth}px)` : '100%'
@@ -22,8 +23,8 @@ const Footer = () => {
           md: leftDrawerOpened ? `${drawerWidth}px` : 0
         },
         height: 50,
-        background: 'linear-gradient(180deg, #019863, #019863)',
-        color: '#fff',
+        background: 'white',
+        color: 'grey',
         zIndex: 1000,
         transition: 'width 0.6s ease, margin-left 0.3s ease'
       }}
@@ -44,7 +45,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             sx={{
-              color: '#fff',
+              color: '#019863 !important',
               textDecoration: 'underline',
               fontWeight: 500,
               '&:hover': { color: '#d0f0e0' }
@@ -53,7 +54,7 @@ const Footer = () => {
             Frugal Scientific Pvt Ltd
           </Link>
         </Typography>
-        <Typography color="#dddddd" variant="caption" >
+        <Typography color="grey" variant="caption" >
           Version : {AppVersion}
         </Typography>
       </Toolbar>

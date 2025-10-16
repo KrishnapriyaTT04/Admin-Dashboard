@@ -21,6 +21,7 @@ import {
   getUsers
 } from 'container/UsersContainer/slice';
 import {dashCount} from 'container/DashboardContainer/slice';
+import MainCard from 'ui-component/cards/MainCard';
 
 const DashboardDefault = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,8 @@ const DashboardDefault = () => {
   }, [dispatch, limit, page]);
 
   return (
-    <Box sx={{ p: 2 }}>
+     <MainCard>
+    <Box>
       <Box
         sx={{
           p: 1.5,
@@ -88,6 +90,7 @@ const DashboardDefault = () => {
       {/* Main Analytics Section */}
       <AnalyticsCard />
     </Box>
+    </MainCard>
   );
 };
 

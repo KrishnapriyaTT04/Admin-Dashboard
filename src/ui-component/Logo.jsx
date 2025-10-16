@@ -1,5 +1,5 @@
 import React from 'react';
-import NavLogo from 'assets/images/kloowhitelogo.png';
+import NavLogo from 'assets/images/klooGreenlogo.svg';
 
 function Logo() {
   return (

@@ -112,7 +112,14 @@ const ResponsiveIcons = () => {
           event.stopPropagation();
           handleLogoutClick();
         }}
-        sx={{ color: 'white' }}
+        sx={{
+          color: 'white',
+          backgroundColor: '#019863', // ✅ green background
+          '&:hover': {
+            backgroundColor: '#018054' // ✅ slightly darker on hover
+          },
+          padding: matchesXs ? '6px' : '8px'
+        }}
       >
         <IconLogout size={matchesXs ? 25 : 30} />
       </IconButton>

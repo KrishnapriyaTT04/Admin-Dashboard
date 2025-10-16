@@ -84,11 +84,11 @@ const NavItem = ({ item, level, lastItem }) => {
         paddingRight: 0,
         marginBottom: lastItem === item?.id && '120px !important',
         '&:hover': {
-          backgroundColor: 'transparent !important',
+          backgroundColor: 'white !important',
           marginRight: leftDrawerOpened ? 0 : '9px'
         },
         '&.Mui-selected': {
-          backgroundColor: 'transparent',
+          backgroundColor: '#019863 !important',
           marginRight: leftDrawerOpened ? 0 : '9px',
           color: '#FFFFFF'
         }
@@ -103,22 +103,49 @@ const NavItem = ({ item, level, lastItem }) => {
           height: '100%',
           borderRadius: `${customization.borderRadius}px`,
           mb: 0.5,
-          alignItems: 'flex-start',
-          backgroundColor: isSelected ? '#ffffff !important' : level > 1 ? 'inherit !important' : 'inherit',
+          alignItems: 'center',
+          gap: '10px',
+          backgroundColor: isSelected ? '#019863 !important' : 'transparent',
           py: level > 1 ? 1 : 1,
           px: leftDrawerOpened ? '' : 3,
           pl: `${level * 10}px`,
           ml: leftDrawerOpened ? 0 : -1,
           cursor: 'pointer',
-          color: isSelected ? '#000000' : 'inherit',
-          '& .MuiListItemIcon-root, & svg': {
-            color: isSelected ? '#000000' : 'inherit'
+          color: isSelected ? 'white' : 'black',
+          position: 'relative', 
+
+          '& .MuiListItemIcon-root': {
+            backgroundColor: isSelected ? 'white' : '#019863',
+            borderRadius: '8px',
+            p: 1,
+            '& svg': {
+              color: isSelected ? '#019863' : 'white'
+            }
           },
+
+          
+          '&:after': {
+            content: '""',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            height: '2px',
+            width: 0, 
+            backgroundColor: '#019863',
+            transition: 'width 0.3s ease' 
+          },
+
           '&:hover': {
-            backgroundColor: '#ffffff',
-            color: '#000000',
-            '& .MuiListItemIcon-root, & svg': {
-              color: '#000000 !important'
+            backgroundColor: 'inherit !important',
+            color: 'black !important',
+            '&:after': {
+              width: '100%' 
+            },
+            '& .MuiListItemIcon-root': {
+              backgroundColor: 'white',
+              '& svg': {
+                color: '#019863 !important'
+              }
             }
           }
         }}
@@ -129,17 +156,19 @@ const NavItem = ({ item, level, lastItem }) => {
             marginRight: leftDrawerOpened ? '-2px' : 2,
             marginLeft: leftDrawerOpened ? '' : largeScreen ? 0 : -0.4,
             minWidth: !item?.icon ? 18 : 36,
-            color: isSelected ? '#000000' : 'inherit'
+            borderRadius: '8px',
+            p: 1
           }}
         >
           {itemIcon}
         </ListItemIcon>
+
         <ListItemText
           primary={
             <Typography
               variant={isSelected ? (largeScreen ? 'selectedSideMenu' : 'h5') : largeScreen ? 'sideMenu' : 'body1'}
               sx={{ fontSize: '14px', fontWeight: 400 }}
-              color={isSelected ? '#000000' : 'inherit'}
+              color={isSelected ? 'white' : 'inherit'}
             >
               {item.title}
             </Typography>
@@ -168,6 +197,7 @@ const NavItem = ({ item, level, lastItem }) => {
           />
         )}
       </Box>
+
       {leftDrawerOpened && (
         <Box
           component="svg"
