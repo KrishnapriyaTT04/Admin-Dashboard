@@ -74,11 +74,11 @@ export default function BackgroundLetterAvatars() {
           <Avatar onClick={handleAvatarClick} />
 
           <Box sx={{ ml: 1 }}>
-            <Typography variant="body1" sx={{ color: '#FFFFFF', fontWeight: 500 }}>
+            <Typography variant="body1" sx={{ color: 'black', fontWeight: 500 }}>
               {name}
             </Typography>
      
-            <Typography variant="body2" sx={{ color: '#D1D5DB', fontWeight: 400 }}>
+            <Typography variant="body2" sx={{ color: 'grey', fontWeight: 400 }}>
               {role.charAt(0).toUpperCase() + role.slice(1)}
             </Typography>
           </Box>
