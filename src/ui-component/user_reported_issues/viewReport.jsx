@@ -1,11 +1,7 @@
 import { Box, Typography, IconButton, Grid, useTheme, Divider, Paper, Chip, Card, CardContent, Stack, Avatar } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import PersonIcon from '@mui/icons-material/Person';
-import {
-  Close as CloseIcon,
-  AttachFile as AttachFileIcon,
-  Business as BusinessIcon,
-} from '@mui/icons-material';
+import { Close as CloseIcon, AttachFile as AttachFileIcon, Business as BusinessIcon } from '@mui/icons-material';
 
 const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
@@ -75,7 +71,6 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
     </Box>
   );
 
-
   return (
     <Drawer
       anchor="right"
@@ -93,16 +88,27 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
       <Box p={3} height="100%" display="flex" flexDirection="column">
         {/* Header */}
         <Box flexGrow={1} overflow="auto" pr={1}>
-           <Card sx={{ mb: 3, bgcolor: '#f0f9f6',borderRadius: 2, color: primary, boxShadow:'none'}}>
+          <Card sx={{ mb: 3, bgcolor: '#f0f9f6', borderRadius: 2, color: primary, boxShadow: 'none' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="h2" fontWeight={700} color={primary} mr={2}>
+                <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0 }}>
+                  <Typography
+                    variant="h2"
+                    fontWeight={700}
+                    color={primary}
+                    mr={2}
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      maxWidth: '300px' 
+                    }}
+                  >
                     {capitalizeWords(item.topic)}
                   </Typography>
                   <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white', bgcolor: primary }} />
                 </Box>
-                <IconButton
+               <IconButton
                   onClick={() => setDrawerOpen(false)}
                   sx={{
                     bgcolor: lightGreen,
@@ -115,8 +121,8 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
               </Box>
 
               <Stack direction="row" flexWrap="wrap">
-                <Typography sx={{fontWeight: 400 }}>
-                  {item.issueId} | {capitalizeWords(item.priority)}
+                <Typography sx={{ fontWeight: 400 }}>
+                  {capitalizeWords(item.facilityTitle)} | {capitalizeWords(item.priority)}
                 </Typography>
               </Stack>
             </CardContent>
@@ -126,19 +132,19 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
           <DetailSection icon={<AttachFileIcon />} title="Basic Information">
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Reporter ID" value={capitalizeWords(item.reportedBy)}  />
+                <DetailItem label="Issue ID" value={formatDate(item.issueId)} />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Reported By" value={capitalizeWords(item.reportedByName)}  />
+                <DetailItem label="Issue" value={capitalizeWords(item.topic)} />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Reported On" value={formatDate(item.reportedOn)}  />
+                 <DetailItem label="Reported By" value={capitalizeWords(item.reportedByName)} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DetailItem label="Description" value={capitalizeWords(item.description) }  />
+                <DetailItem label="Description" value={capitalizeWords(item.description)} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DetailItem label="Comments" value={capitalizeWords(item.comments)}  />
+                <DetailItem label="Comments" value={capitalizeWords(item.comments)} />
               </Grid>
             </Grid>
           </DetailSection>
@@ -147,15 +153,13 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
           <DetailSection icon={<BusinessIcon />} title="Facility Information">
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Facility ID" value={item.facilityId}  />
+                <DetailItem label="Facility ID" value={item.facilityId} />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Facility Title" value={capitalizeWords(item.facilityTitle)}  />
+                <DetailItem label="Facility Title" value={capitalizeWords(item.facilityTitle)} />
               </Grid>
             </Grid>
           </DetailSection>
-
-   
 
           {/*  Audit Trail (Admin) Details */}
           <DetailSection icon={<PersonIcon />} title=" Audit Trail (Admin)">
@@ -166,12 +170,10 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <DetailItem label=" Last Modified" value={item?.modifiedUser || item?.modifiedBy || 'N/A'} />
-                 {formatDate(item?.modifiedOn)}
+                {formatDate(item?.modifiedOn)}
               </Grid>
             </Grid>
           </DetailSection>
-
-       
         </Box>
       </Box>
     </Drawer>

@@ -1,7 +1,21 @@
-
 import React, { useState } from 'react';
 
-import { Box, Typography, IconButton, Grid, useTheme, Chip, Card, CardContent, Stack, Avatar, Drawer,CardMedia,Modal } from '@mui/material';
+import {
+  Box,
+  Typography,
+  IconButton,
+  Grid,
+  useTheme,
+  Chip,
+  Card,
+  CardContent,
+  Stack,
+  Avatar,
+  Drawer,
+  CardMedia,
+  Modal
+} from '@mui/material';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import {
   Close as CloseIcon,
   AttachFile as AttachFileIcon,
@@ -24,10 +38,12 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
   const primary = '#019863';
   const lightGreen = '#e8f5e9';
-  
+
   const attachments = item?.attachments || [];
   const [selectedImage, setSelectedImage] = useState(null);
   const [open, setOpen] = useState(false);
+
+  console.log('==item', item);
 
   const formatFrequency = (frequency) => {
     if (!frequency?.length) return 'Not specified';
@@ -43,7 +59,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       .join(' ');
   }
 
-    const handleImageClick = (attachment) => {
+  const handleImageClick = (attachment) => {
     setSelectedImage(attachment);
     setOpen(true);
   };
@@ -88,7 +104,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
         variant={isSubtitle ? 'h6' : 'body1'}
         sx={{ fontWeight: isSubtitle ? 600 : 500, color: theme.palette.text.primary, ml: icon ? 2.5 : 0 }}
       >
-        {value || 'N/A'}
+        {value !== "undefined" && value !== null ? value : 'N/A'}
       </Typography>
     </Box>
   );
@@ -100,9 +116,8 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       sx={{
         bgcolor: active ? lightGreen : '#f5f5f5',
         color: active ? primary : '#757575',
-        border: '1px solid',
-        borderColor: active ? primary : '#ccc',
-        fontWeight: 600,
+        border: 'none',
+        fontWeight: 400,
         '& .MuiChip-icon': { color: active ? primary : '#757575' }
       }}
       variant="outlined"
@@ -126,7 +141,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       <Box p={3} height="100%" display="flex" flexDirection="column">
         {/* Header */}
         <Box flexGrow={1} overflow="auto" pr={1}>
-          <Card sx={{ mb: 3, bgcolor: '#f0f9f6',borderRadius: 2, color: primary, boxShadow:'none'}}>
+          <Card sx={{ mb: 3, bgcolor: '#f0f9f6', borderRadius: 2, color: primary, boxShadow: 'none' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -146,22 +161,10 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                   <CloseIcon />
                 </IconButton>
               </Box>
-
               <Stack direction="row" flexWrap="wrap">
                 <Typography sx={{ fontWeight: 400 }}>
-                  {capitalizeWords(item.facilityType)} | {capitalizeWords(item.category)}
+                  {item.facilityId || 'N/A'} | {capitalizeWords(item.facilityType)} | {capitalizeWords(item.category)}
                 </Typography>
-              </Stack>
-
-              <Stack direction="row" spacing={3} mt={1} alignItems="center" flexWrap="wrap">
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <PhoneIcon sx={{ fontSize: 20, color: primary, mr: 1 }} />
-                  <Typography sx={{ fontWeight: 400 }}>{item.contactPhone || 'N/A'}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <EmailIcon sx={{ fontSize: 20, color: primary, mr: 1 }} />
-                  <Typography sx={{  fontWeight: 400 }}>{item.contactEmail || 'N/A'}</Typography>
-                </Box>
               </Stack>
             </CardContent>
           </Card>
@@ -170,19 +173,39 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
           <DetailSection icon={<BusinessIcon />} title="Basic Information">
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Facility ID" value={item.facilityId}  />
+                <DetailItem label="Contact Name" value={item.contactName} />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Name" value={item.contactName}  />
+                <DetailItem label="Contact Phone" value={item.contactPhone} />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <DetailItem label="Contact Email" value={item.contactEmail} />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <DetailItem label="Seat Capacity" value={item.seatCapacity} />
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <InfoChip icon={<PaidIcon />} label={`Paid Service: ${item.isPaid ? 'Yes' : 'No'}`} active={item.isPaid} />
+              <Grid item xs={12} sm={8}>
+                <DetailItem label="Operating Days" value={formatFrequency(item.frequency)} />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              {!item.is24H ? (
+                <>
+                  <Grid item xs={12} sm={3}>
+                    <DetailItem label="Opening Time" value={item.openingTime} />
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <DetailItem label="Closing Time" value={item.closingTime} />
+                  </Grid>
+                </>
+              ) : (
+                <Grid item xs={12} sm={3}>
+                  <InfoChip icon={<AccessTimeIcon />} label={'Open 24 Hours'} active={item.is24H} />
+                </Grid>
+              )}
+              <Grid item xs={12} sm={3}>
                 <InfoChip icon={<AccessTimeIcon />} label={`24 Hours: ${item.is24H ? 'Yes' : 'No'}`} active={item.is24H} />
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <InfoChip icon={<AttachMoneyIcon />} label={`Paid Service: ${item.isPaid ? 'Yes' : 'No'}`} active={item.isPaid} />
               </Grid>
             </Grid>
 
@@ -221,29 +244,6 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
             </Box>
           </DetailSection>
 
-          {/* Operating Hours */}
-          <DetailSection icon={<ScheduleIcon />} title="Operating Hours">
-            <Grid container spacing={2}>
-              {!item.is24H ? (
-                <>
-                  <Grid item xs={12} sm={6}>
-                    <DetailItem label="Opening Time" value={item.openingTime} icon={<AccessTimeIcon />} />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <DetailItem label="Closing Time" value={item.closingTime} icon={<AccessTimeIcon />} />
-                  </Grid>
-                </>
-              ) : (
-                <Grid item xs={12}>
-                  <Chip icon={<AccessTimeIcon />} label="Open 24 Hours" sx={{ bgcolor: lightGreen, color: primary }} />
-                </Grid>
-              )}
-              <Grid item xs={12}>
-                <DetailItem label="Operating Days" value={formatFrequency(item.frequency)} />
-              </Grid>
-            </Grid>
-          </DetailSection>
-
           {/* Location Details */}
           <DetailSection icon={<LocationOnIcon />} title="Location Details">
             <Grid container spacing={2}>
@@ -260,7 +260,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 <DetailItem label="State" value={item.state} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DetailItem label="District" value={`${item.district || 'N/A'} (${item.districtCode || 'N/A'})`} />
+                <DetailItem label="District" value={`${item.district || 'N/A'}`} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <DetailItem label="Pincode" value={item.pinCode} />
@@ -282,137 +282,150 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
 
           {/* Additional Information */}
           <DetailSection icon={<AttachFileIcon />} title="Additional Information">
-            <DetailItem label="Remarks" value={item.remarks} />
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="Remarks" value={item.remarks} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="Attatchments" value={attachments.length > 0 ? '' : 'N/A'} />
+                <Box>
+                  {/* Image Grid */}
+                  <Grid container>
+                    {attachments.map((attachment, index) => (
+                      <Grid item xs={6} sm={4}>
+                        <Card
+                          sx={{
+                            cursor: 'pointer',
+                            transition: 'all 0.3s',
+                            '&:hover': {
+                              transform: 'scale(1.05)',
+                              boxShadow: 3
+                            }
+                          }}
+                          onClick={() => handleImageClick(attachment)}
+                        >
+                          <Box sx={{ position: 'relative' }}>
+                            <CardMedia
+                              component="img"
+                              height="120"
+                              image={attachment.attachmentUrl}
+                              alt={attachment.attachmentName}
+                              sx={{
+                                objectFit: 'cover',
+                                width: '100%',
+                                borderRadius: 1
+                              }}
+                            />
 
+                            {/* 🔹 Overlay Title */}
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                width: '100%',
+                                bgcolor: 'rgba(0,0,0,0.6)',
+                                color: '#fff',
+                                px: 1,
+                                py: 0.5,
+                                fontSize: '0.75rem',
+                                textAlign: 'center',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                borderBottomLeftRadius: 4,
+                                borderBottomRightRadius: 4
+                              }}
+                            >
+                              {attachment.attachmentName || 'Untitled'}
+                            </Box>
 
+                            {/* Zoom icon */}
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: 4,
+                                right: 4,
+                                backgroundColor: 'rgba(0,0,0,0.5)',
+                                borderRadius: '50%',
+                                padding: '4px'
+                              }}
+                            >
+                              <ZoomInIcon sx={{ color: 'white', fontSize: 16 }} />
+                            </Box>
+                          </Box>
+                        </Card>
+                      </Grid>
+                    ))}
+                  </Grid>
 
-            <Box sx={{ p: 2 }}>
-      {/* Image Grid */}
-      <Grid container spacing={2}>
-        {attachments.map((attachment, index) => (
-          <Grid item xs={6} sm={4} md={3} key={index}>
-            <Card 
-              sx={{ 
-                cursor: 'pointer',
-                transition: 'all 0.3s',
-                '&:hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: 3
-                }
-              }}
-              onClick={() => handleImageClick(attachment)}
-            >
-              <Box sx={{ position: 'relative' }}>
-                <CardMedia
-                  component="img"
-                  height="120"
-                  image={attachment.attachmentUrl}
-                  alt={attachment.attachmentName}
-                  sx={{ 
-                    objectFit: 'cover',
-                    width: '100%'
-                  }}
-                />
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: 4,
-                    right: 4,
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    borderRadius: '50%',
-                    padding: '4px'
-                  }}
-                >
-                  <ZoomInIcon sx={{ color: 'white', fontSize: 16 }} />
+                  <Modal
+                    open={open}
+                    onClose={handleClose}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      p: 2
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        position: 'relative',
+                        maxWidth: '90vw',
+                        maxHeight: '90vh',
+                        bgcolor: 'background.paper',
+                        borderRadius: 2,
+                        boxShadow: 24,
+                        p: 1
+                      }}
+                    >
+                      <IconButton
+                        onClick={handleClose}
+                        sx={{
+                          position: 'absolute',
+                          top: 8,
+                          right: 8,
+                          bgcolor: 'rgba(0,0,0,0.5)',
+                          color: 'white',
+                          zIndex: 1,
+                          '&:hover': {
+                            bgcolor: 'rgba(0,0,0,0.7)'
+                          }
+                        }}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+
+                      {selectedImage && (
+                        <Box>
+                          <img
+                            src={selectedImage.attachmentUrl}
+                            alt={selectedImage.attachmentName}
+                            style={{
+                              maxWidth: '100%',
+                              maxHeight: '80vh',
+                              objectFit: 'contain',
+                              display: 'block'
+                            }}
+                          />
+
+                          <Box sx={{ p: 2 }}>
+                            <Typography variant="h6">{selectedImage.attachmentName}</Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Uploaded: {new Date(selectedImage.attachedOn).toLocaleString()}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              Type: {selectedImage.attachmentType}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                    </Box>
+                  </Modal>
                 </Box>
-              </Box>
-              
-              <Box sx={{ p: 1 }}>
-                <Typography 
-                  variant="caption" 
-                  component="div"
-                  sx={{ 
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  {attachment.attachmentName}
-                </Typography>
-                <Typography variant="caption" color="textSecondary">
-                  {new Date(attachment.attachedOn).toLocaleDateString()}
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          p: 2
-        }}
-      >
-        <Box sx={{
-          position: 'relative',
-          maxWidth: '90vw',
-          maxHeight: '90vh',
-          bgcolor: 'background.paper',
-          borderRadius: 2,
-          boxShadow: 24,
-          p: 1
-        }}>
-          <IconButton
-            onClick={handleClose}
-            sx={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              bgcolor: 'rgba(0,0,0,0.5)',
-              color: 'white',
-              zIndex: 1,
-              '&:hover': {
-                bgcolor: 'rgba(0,0,0,0.7)'
-              }
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-
-          {selectedImage && (
-            <Box>
-              <img
-                src={selectedImage.attachmentUrl}
-                alt={selectedImage.attachmentName}
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '80vh',
-                  objectFit: 'contain',
-                  display: 'block'
-                }}
-              />
-              
-              <Box sx={{ p: 2 }}>
-                <Typography variant="h6">
-                  {selectedImage.attachmentName}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Uploaded: {new Date(selectedImage.attachedOn).toLocaleString()}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Type: {selectedImage.attachmentType}
-                </Typography>
-              </Box>
-            </Box>
-          )}
-        </Box>
-      </Modal>
-    </Box>
+              </Grid>
+            </Grid>
           </DetailSection>
         </Box>
       </Box>

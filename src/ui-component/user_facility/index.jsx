@@ -326,27 +326,7 @@ const renderStars = (rating) => {
                 variant="outlined"
                 onClick={handleExcelModal}
                 startIcon={<FileUploadOutlined />}
-                sx={{
-                  color: '#242121',
-                  backgroundColor: 'white',
-                  borderColor: '#3dcd58',
-                  width: '180px',
-                  // py: 1,
-                  borderRadius: '30px',
-                  whiteSpace: 'nowrap', 
-                  textOverflow: 'ellipsis', 
-                  overflow: 'hidden',
-                  '&:hover': {
-                    color: '#fcf9f9 !important',
-                    backgroundColor: '#3dcd58',
-                    borderColor: '#3dcd58'
-                  },
-                  '&:active': {
-                    color: '#fcf9f9 !important',
-                    backgroundColor: '#3dcd58',
-                    borderColor: '#3dcd58'
-                  }
-                }}
+                 sx={{ ...cmnstyle.cmnBtn, ...cmnstyle.cmnBtnOutline, px: 3 }}
               >
                 Import Facilities
               </Button>
