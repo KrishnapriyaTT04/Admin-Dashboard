@@ -101,12 +101,17 @@ export const usersHeads = {
 };
 
 export const userReport = {
-  keys: ['issueId', 'reportedByName', 'topic', 'priority', 'status'],
+  keys: ['issueId','facilityTitle', 'reportedByName', 'topic', 'priority', 'status'],
   config: {
     issueId: {
       label: 'Issue ID',
       type: 'string',
       class: ' commonDesc'
+    },
+     facilityTitle: {
+      label: 'Facility Title',
+      type: 'string',
+      class: ' cmn_Cap commonDesc'
     },
     reportedByName: {
       label: 'Reported By',
@@ -118,11 +123,11 @@ export const userReport = {
       type: 'string',
       class: ' cmn_Cap commonDesc'
     },
-    priority: {
-      label: 'Priority',
-      type: 'string',
-      class: ' cmn_Cap commonDesc'
-    },
+    // priority: {
+    //   label: 'Priority',
+    //   type: 'string',
+    //   class: ' cmn_Cap commonDesc'
+    // },
     status:{
       label: 'Status',
       type: 'string',

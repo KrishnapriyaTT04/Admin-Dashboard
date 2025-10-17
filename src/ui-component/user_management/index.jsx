@@ -200,6 +200,7 @@ export default function Users() {
           facility={selectedItem}
           onClose={handleCloseStatusModal}
           onConfirm={handleUpdateStatus}
+          title="Change User Status"
         />
       )}
     </MainCard>

@@ -202,6 +202,7 @@ export default function userReportedIssues() {
             facility={selectedItem}
             onClose={handleCloseStatusModal}
             onConfirm={handleUpdateStatus}
+            title="Change Issue Status"
           />
         )}
 

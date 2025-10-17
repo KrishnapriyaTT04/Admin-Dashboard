@@ -23,7 +23,7 @@ const STATUS_OPTIONS = [
   { value: 'open', label: 'Open' }
 ];
 
-const StatusChangeModal = ({ open, facility, onClose, onConfirm }) => {
+const StatusChangeModal = ({ open, facility, onClose, onConfirm ,title = "Change Facility Status"}) => {
   const theme = useTheme();
   const [newStatus, setNewStatus] = useState('');
 
@@ -50,7 +50,7 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm }) => {
       <DialogTitle id="status-change-dialog-title" sx={{ pb: 1 }}>
         <Box display="flex" alignItems="center" gap={1}>
           <WarningIcon color="warning" />
-          <Typography variant="h6">Change Facility Status</Typography>
+          <Typography variant="h6">{title}</Typography>
         </Box>
       </DialogTitle>
 

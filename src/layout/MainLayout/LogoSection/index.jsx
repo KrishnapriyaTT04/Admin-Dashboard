@@ -15,7 +15,7 @@ const LogoSection = () => {
   // const defaultId = useSelector((state) => state.customization.defaultId);
   // const dispatch = useDispatch();
   return (
-    <Box sx={{ height: '55px', display: 'flex', justifyContent: 'left' }}>
+    <Box sx={{ height: '55px', display: 'flex', justifyContent: 'left',alignItems:'center' }}>
       <Logo />
     </Box>
   );
