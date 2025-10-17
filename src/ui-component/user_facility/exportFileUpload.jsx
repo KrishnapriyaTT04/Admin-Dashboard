@@ -37,7 +37,9 @@ const UploadBulkFile = ({ drawerOpen, setDrawerOpen }) => {
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null); 
   const [fileName, setFileName] = useState(''); 
-      const publicCsvPath = "assets/files/facility_example.csv"; 
+      // const publicCsvPath = "assets/files/facility_example.csv"; 
+        const publicCsvPath = '/facility_example.csv';
+
 
 
   const handleFileSelection = (event) => {
