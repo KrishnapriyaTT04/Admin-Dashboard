@@ -331,11 +331,11 @@ const renderStars = (rating) => {
                   backgroundColor: 'white',
                   borderColor: '#3dcd58',
                   width: '180px',
-                  py: 1,
+                  // py: 1,
                   borderRadius: '30px',
-                  whiteSpace: 'nowrap', // 🚀 keeps text in one line
-                  textOverflow: 'ellipsis', // optional, trims if overflowing
-                  overflow: 'hidden', // optional, prevents bulge
+                  whiteSpace: 'nowrap', 
+                  textOverflow: 'ellipsis', 
+                  overflow: 'hidden',
                   '&:hover': {
                     color: '#fcf9f9 !important',
                     backgroundColor: '#3dcd58',
