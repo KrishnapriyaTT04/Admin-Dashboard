@@ -5,12 +5,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useFormikContext } from 'formik';
 
 function ImageAttachmentManager({ selectedNewFiles, onNewFilesAdded, onRemoveNewFile }) {
-    // Access Formik state for existing, saved attachments (URLs)
     const { values, setFieldValue } = useFormikContext(); 
     const fileInputRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
 
-    // --- Handlers for Drag & Drop ---
     const handleDragOver = (event) => {
         event.preventDefault(); 
         setIsDragging(true);
@@ -19,24 +17,17 @@ function ImageAttachmentManager({ selectedNewFiles, onNewFilesAdded, onRemoveNew
     const handleDrop = (event) => {
         event.preventDefault();
         setIsDragging(false);
-        // Pass FileList up to parent to manage the 'selectedNewFiles' state
         onNewFilesAdded(event.dataTransfer.files);
     };
 
-    // --- Handler for Click Selection ---
     const handleFileChange = (event) => {
         onNewFilesAdded(event.target.files);
         event.target.value = null; 
     };
 
-    // ----------------------------------------------------
-    // Handler for removing an EXISTING (saved) attachment URL from Formik state
-    // ----------------------------------------------------
     const handleRemoveExistingAttachment = (urlToRemove) => {
-        // Filter the 'attachments' array stored in Formik values
         const updatedAttachments = values.attachments.filter(att => att.attachmentUrl !== urlToRemove);
         
-        // Update Formik state. This change is FINALIZED on form submission.
         setFieldValue('attachments', updatedAttachments);
     };
 
@@ -82,12 +73,7 @@ function ImageAttachmentManager({ selectedNewFiles, onNewFilesAdded, onRemoveNew
                     </Typography>
                 </Paper>
             </Grid>
-            
-            {/* ---------------------------------------------------- */}
-            {/* ATTACHMENT PREVIEWS (Combining Existing URLs & New Files) */}
-            {/* ---------------------------------------------------- */}
-            
-            {/* Ensure Grid is used for layout inside the main Grid item */}
+
             {(values.attachments.length > 0 || selectedNewFiles.length > 0) && (
                 <Grid container item xs={12} spacing={2} sx={{ mb: 3 }}>
                     

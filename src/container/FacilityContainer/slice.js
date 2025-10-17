@@ -158,11 +158,7 @@ const facilitySlice = createSlice({
         uploadBulkFacilitiesSuccess: (state, action) => {
             state.bulkLoading = false;
             state.bulkSuccess = true;
-            // Optional: Store detailed response if the API provides it
-            // state.bulkResult = action.payload;
-            
-            // NOTE: If the bulk update impacts the list, the Saga should dispatch 
-            // getFacilities() next, which will refill state.list
+
         },
         uploadBulkFacilitiesFail: (state, action) => {
             state.bulkLoading = false;
@@ -213,16 +209,14 @@ const facilitySlice = createSlice({
       state.uploadImagesError = null;
     },
     
-    // Images uploaded successfully
     uploadImagesSuccess: (state, action) => {
       state.uploadingImages = false;
-      state.imageUrls = action.payload; // Store the uploaded image URLs
+      state.imageUrls = action.payload; 
     },
     
-    // Images upload failed
       uploadImagesFail: (state, action) => {
       state.uploadingImages = false;
-      state.uploadImagesError = action.payload; // action.payload is { message, status }
+      state.uploadImagesError = action.payload; 
       state.imageUrls = [];
       },
 
