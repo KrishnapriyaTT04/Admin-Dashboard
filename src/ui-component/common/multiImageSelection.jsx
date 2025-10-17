@@ -7,22 +7,34 @@
 // import CloseIcon from '@mui/icons-material/Close';
 
 // function ImageDropzone({ selectedFiles, onFilesAdded, onFileRemoved }) {
-//   const fileInputRef = useRef(null);
+//   const initialFileInputRef = useRef(null);
+//   const addMoreFileInputRef = useRef(null);
 //   const [isDragging, setIsDragging] = React.useState(false);
 
 //   // --- Handlers for Click Selection ---
-//   const handleFileChange = (event) => {
-//     if (event.target.files && event.target.files.length > 0) {
-//       onFilesAdded(event.target.files);
+//   const handleFileChange = (event, inputType) => {
+//     const files = event.target.files;
+//     if (files && files.length > 0) {
+//       onFilesAdded(files);
+      
+//       // Reset the specific input
+//       if (inputType === 'initial' && initialFileInputRef.current) {
+//         initialFileInputRef.current.value = '';
+//       } else if (inputType === 'addMore' && addMoreFileInputRef.current) {
+//         addMoreFileInputRef.current.value = '';
+//       }
 //     }
-//     event.target.value = null; // Reset input
 //   };
 
 //   const handleUploadClick = () => {
-//     fileInputRef.current.click();
+//     initialFileInputRef.current?.click();
 //   };
 
-//   // --- Improved Drag & Drop Handlers ---
+//   const handleAddMoreClick = () => {
+//     addMoreFileInputRef.current?.click();
+//   };
+
+//   // --- Drag & Drop Handlers ---
 //   const handleDragOver = (event) => {
 //     event.preventDefault();
 //     event.stopPropagation();
@@ -38,8 +50,6 @@
 //   const handleDragLeave = (event) => {
 //     event.preventDefault();
 //     event.stopPropagation();
-    
-//     // Only set dragging to false if leaving the drop zone
 //     if (!event.currentTarget.contains(event.relatedTarget)) {
 //       setIsDragging(false);
 //     }
@@ -50,30 +60,36 @@
 //     event.stopPropagation();
 //     setIsDragging(false);
     
-//     if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
-//       onFilesAdded(event.dataTransfer.files);
+//     const files = event.dataTransfer.files;
+//     if (files && files.length > 0) {
+//       onFilesAdded(files);
 //     }
 //   };
 
-//   // Separate click handler for the "Add More" button
-//   const handleAddMoreClick = () => {
-//     fileInputRef.current.click();
-//   };
-    
 //   return (
 //     <Box sx={{ p: 3, maxWidth: 800, margin: 'auto' }}>
       
-//       {/* Hidden File Input */}
+//       {/* Hidden File Input for Initial Selection */}
 //       <input
 //         type="file"
 //         multiple
 //         accept="image/*"
-//         ref={fileInputRef}
-//         onChange={handleFileChange}
+//         ref={initialFileInputRef}
+//         onChange={(e) => handleFileChange(e, 'initial')}
 //         style={{ display: 'none' }} 
 //       />
 
-//       {/* Drag & Drop Area - Only for drag operations */}
+//       {/* Hidden File Input for Add More */}
+//       <input
+//         type="file"
+//         multiple
+//         accept="image/*"
+//         ref={addMoreFileInputRef}
+//         onChange={(e) => handleFileChange(e, 'addMore')}
+//         style={{ display: 'none' }} 
+//       />
+
+//       {/* Drag & Drop Area */}
 //       <Paper
 //         variant="outlined"
 //         onDragOver={handleDragOver}
@@ -121,7 +137,7 @@
           
 //           <Grid container spacing={2}>
 //             {selectedFiles.map((file, index) => (
-//               <Grid item key={`${file.name}-${index}`}>
+//               <Grid item key={`${file.name}-${index}-${file.lastModified}`}>
 //                 <Paper 
 //                   elevation={3} 
 //                   sx={{ 
@@ -133,13 +149,16 @@
 //                 >
 //                   <img 
 //                     src={URL.createObjectURL(file)} 
-//                     alt={`Preview ${index}`} 
+//                     alt={`Preview ${file.name}`} 
 //                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
 //                   />
                   
 //                   <IconButton 
 //                     size="small"
-//                     onClick={() => onFileRemoved(file.name)} 
+//                     onClick={(e) => {
+//                       e.stopPropagation();
+//                       onFileRemoved(file.name);
+//                     }} 
 //                     sx={{ 
 //                       position: 'absolute', 
 //                       top: 2, 
@@ -165,184 +184,123 @@
 // export default ImageDropzone;
 
 
-import React, { useRef } from 'react';
-import { Button, Box, Typography, Grid, Paper, IconButton } from '@mui/material';
+
+
+
+
+
+
+
+
+
+
+
+import React, { useRef, useState } from 'react';
+import { Box, Paper, Typography, Grid, IconButton } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CloseIcon from '@mui/icons-material/Close';
 
-function ImageDropzone({ selectedFiles, onFilesAdded, onFileRemoved }) {
-  const initialFileInputRef = useRef(null);
-  const addMoreFileInputRef = useRef(null);
-  const [isDragging, setIsDragging] = React.useState(false);
+export default function DualImageUploader2({ selectedFiles, onFilesAdded, onFileRemoved }) {
+  const browseInputRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  // --- Handlers for Click Selection ---
-  const handleFileChange = (event, inputType) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      onFilesAdded(files);
-      
-      // Reset the specific input
-      if (inputType === 'initial' && initialFileInputRef.current) {
-        initialFileInputRef.current.value = '';
-      } else if (inputType === 'addMore' && addMoreFileInputRef.current) {
-        addMoreFileInputRef.current.value = '';
-      }
-    }
+  // --- Handle file selection (browse)
+  const handleBrowseChange = (e) => {
+    onFilesAdded(e.target.files);
+    e.target.value = ''; // reset to allow reselecting same files
   };
 
-  const handleUploadClick = () => {
-    initialFileInputRef.current?.click();
-  };
-
-  const handleAddMoreClick = () => {
-    addMoreFileInputRef.current?.click();
-  };
-
-  // --- Drag & Drop Handlers ---
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragEnter = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (!event.currentTarget.contains(event.relatedTarget)) {
-      setIsDragging(false);
-    }
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
+  // --- Handle drop files
+  const handleDrop = (e) => {
+    e.preventDefault();
     setIsDragging(false);
-    
-    const files = event.dataTransfer.files;
-    if (files && files.length > 0) {
-      onFilesAdded(files);
-    }
+    onFilesAdded(e.dataTransfer.files);
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: 800, margin: 'auto' }}>
-      
-      {/* Hidden File Input for Initial Selection */}
+    <Box>
+      {/* Hidden input for browse */}
       <input
         type="file"
         multiple
         accept="image/*"
-        ref={initialFileInputRef}
-        onChange={(e) => handleFileChange(e, 'initial')}
-        style={{ display: 'none' }} 
+        ref={browseInputRef}
+        onChange={handleBrowseChange}
+        style={{ display: 'none' }}
       />
 
-      {/* Hidden File Input for Add More */}
-      <input
-        type="file"
-        multiple
-        accept="image/*"
-        ref={addMoreFileInputRef}
-        onChange={(e) => handleFileChange(e, 'addMore')}
-        style={{ display: 'none' }} 
-      />
-
-      {/* Drag & Drop Area */}
+      {/* --- Browse Area --- */}
       <Paper
         variant="outlined"
-        onDragOver={handleDragOver}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleUploadClick}
+        onClick={() => browseInputRef.current.click()}
         sx={{
-          p: 4,
+          p: 3,
+          mb: 2,
           textAlign: 'center',
           cursor: 'pointer',
-          border: `2px dashed ${isDragging ? 'primary.main' : 'grey.400'}`,
-          backgroundColor: isDragging ? 'primary.light' : 'background.paper',
-          transition: 'all 0.3s',
-          mb: 3,
-          '&:hover': {
-            backgroundColor: 'grey.50',
-          }
+          border: '2px dashed #aaa',
+          '&:hover': { borderColor: 'primary.main', backgroundColor: 'grey.50' },
         }}
       >
-        <CloudUploadIcon color="action" sx={{ fontSize: 40, mb: 1 }} />
-        <Typography variant="h6">
-          Drag & drop images here or click to browse
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          (Supports multiple files)
+        <CloudUploadIcon sx={{ fontSize: 36, mb: 1 }} />
+        <Typography variant="body1">Click to browse images</Typography>
+      </Paper>
+
+      {/* --- Drag & Drop Area --- */}
+      <Paper
+        variant="outlined"
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={handleDrop}
+        sx={{
+          p: 3,
+          textAlign: 'center',
+          border: `2px dashed ${isDragging ? 'green' : '#ccc'}`,
+          backgroundColor: isDragging ? 'rgba(0,255,0,0.05)' : 'transparent',
+        }}
+      >
+        <Typography variant="body1">
+          Drag & drop images here
         </Typography>
       </Paper>
-      
-      {/* Image Previews */}
+
+      {/* --- Previews --- */}
       {selectedFiles.length > 0 && (
-        <Box sx={{ mb: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h6">
-              Selected Images ({selectedFiles.length})
-            </Typography>
-            <Button 
-              variant="outlined" 
-              onClick={handleAddMoreClick}
-              startIcon={<CloudUploadIcon />}
-            >
-              Add More Images
-            </Button>
-          </Box>
-          
-          <Grid container spacing={2}>
-            {selectedFiles.map((file, index) => (
-              <Grid item key={`${file.name}-${index}-${file.lastModified}`}>
-                <Paper 
-                  elevation={3} 
-                  sx={{ 
-                    position: 'relative', 
-                    width: 120, 
-                    height: 120,
-                    overflow: 'hidden',
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          {selectedFiles.map((file) => (
+            <Grid item key={file.name + file.lastModified}>
+              <Box
+                sx={{
+                  width: 100,
+                  height: 100,
+                  position: 'relative',
+                  border: '1px solid #ddd',
+                  borderRadius: 1,
+                  overflow: 'hidden',
+                }}
+              >
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={file.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                <IconButton
+                  size="small"
+                  onClick={() => onFileRemoved(file.name)}
+                  sx={{
+                    position: 'absolute',
+                    top: 2,
+                    right: 2,
+                    bgcolor: 'rgba(255,255,255,0.7)',
                   }}
                 >
-                  <img 
-                    src={URL.createObjectURL(file)} 
-                    alt={`Preview ${file.name}`} 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                  
-                  <IconButton 
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onFileRemoved(file.name);
-                    }} 
-                    sx={{ 
-                      position: 'absolute', 
-                      top: 2, 
-                      right: 2, 
-                      bgcolor: 'rgba(255, 255, 255, 0.9)',
-                      '&:hover': {
-                        bgcolor: 'rgba(255, 255, 255, 1)',
-                      }
-                    }}
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
       )}
     </Box>
   );
 }
-
-export default ImageDropzone;

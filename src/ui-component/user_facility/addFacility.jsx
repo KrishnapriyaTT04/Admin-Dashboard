@@ -182,89 +182,8 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
     return () => clearTimeout(timer);
   }, [dispatch]);
 
-  const handleFilesAdded = (fileList) => {
-    const newFiles = Array.from(fileList).filter((file) => file.type.startsWith('image/'));
 
-    setSelectedFiles((prevFiles) => {
-      // Create a Set of existing file names for quick lookup
-      const existingFileNames = new Set(prevFiles.map((file) => file.name));
-
-      // Filter out duplicates from new files
-      const uniqueNewFiles = newFiles.filter((file) => !existingFileNames.has(file.name));
-
-      return [...prevFiles, ...uniqueNewFiles];
-    });
-  };
-
-  // Handler to REMOVE a file
-  const handleFileRemoved = (fileName) => {
-    setSelectedFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
-  };
-
-  // Handler for file input change
-  //   const handleFileChange = (event) => {
-  //     if (event.target.files && event.target.files.length > 0) {
-  //       handleFilesAdded(event.target.files);
-  //     }
-  //     // Reset the input to allow same file selection again
-  //     event.target.value = '';
-  //   };
-
-  //   const handleUploadClick = () => {
-  //     fileInputRef.current?.click();
-  //   };
-
-  const handleAddMoreClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  // Drag & Drop handlers
-  const handleDragOver = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragEnter = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (!event.currentTarget.contains(event.relatedTarget)) {
-      setIsDragging(false);
-    }
-  };
-
-  //   const handleDrop = (event) => {
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //     setIsDragging(false);
-
-  //     if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
-  //       handleFilesAdded(event.dataTransfer.files);
-  //     }
-  //   };
-
-  const handleUploadSubmit = () => {
-    console.log('Final files for upload:', selectedFiles);
-    const formData = new FormData();
-    selectedFiles.forEach((file) => {
-      formData.append('images', file);
-    });
-    // Your API call here
-    // fetch('/api/upload-images', { method: 'POST', body: formData });
-
-    // Optional: Clear files after upload
-    // setSelectedFiles([]);
-  };
-
-  const handleClearAll = () => {
-    setSelectedFiles([]);
-  };
+  
 
   const handleNewFilesAdded = useCallback((fileList) => {
     const filesArray = Array.from(fileList).filter((file) => file.type.startsWith('image/'));
@@ -277,25 +196,10 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
   }, []);
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragging(false);
-    if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
-      handleNewFilesAdded(event.dataTransfer.files); // 🎯 Use the new handler
-    }
-  };
 
-  const handleFileChange = (event) => {
-    if (event.target.files && event.target.files.length > 0) {
-      handleNewFilesAdded(event.target.files); // 🎯 Use the new handler
-    }
-    event.target.value = '';
-  };
 
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
+
+ 
 
   const submit = (values) => {
     if (values.is24H == true) {
@@ -1059,13 +963,5 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
 };
 
 export default UpdateForm;
-
-
-
-
-
-
-
-
 
 
