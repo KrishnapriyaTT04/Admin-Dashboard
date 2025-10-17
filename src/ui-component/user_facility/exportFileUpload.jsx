@@ -311,9 +311,10 @@ const UploadBulkFile = ({ drawerOpen, setDrawerOpen }) => {
     variant="contained"
     color="success" 
     size="large"
+    sx={{ color:'white'}}
     startIcon={<DownloadIcon />} 
 >
-    Download  Example
+    Download  sample
 </Button>
 
 
