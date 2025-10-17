@@ -23,8 +23,9 @@ import { createFacility ,updateFacility, getMasterFacilities,getMasterFacilityTy
 import { districtsData } from '../common/district' 
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import ImageAttachmentManager from 'ui-component/common/existingImageComponent';
 
-import ImageDropzone from '../common/multiImageSelection'; 
+// import ImageDropzone from '../common/multiImageSelection'; 
 
 
 
@@ -46,7 +47,7 @@ const baseInitialValues = {
   seatCapacity: 1,ratingCount:0,reviewCount:0, remarks: '', status: 'active', frequency: [],
   contactName:'',contactEmail:'',contactPhone:'',
   city: '', state: 'kerala',stateId: 'kl', district: '',districtCode: '', pinCode: '', geoLoc: ['', ''], landmark: ''
-  ,address1:'',address2:'',features: []
+  ,address1:'',address2:'',features: [], attachments: []
 };
 
 const validationSchema = Yup.object({
@@ -75,6 +76,7 @@ const validationSchema = Yup.object({
   features:Yup.array(),
   address1:Yup.string().required('Address is required'),
   address2:Yup.string(),
+  attachments: Yup.array(),
 });
 
 const getInitialValues = (item) => (
@@ -108,7 +110,8 @@ const getInitialValues = (item) => (
     ratingCount: item?.ratingCount ?? baseInitialValues.ratingCount,
     reviewCount:item?.reviewCount ?? baseInitialValues.reviewCount,
     address1:item?.address1 || baseInitialValues.address1,
-     address2:item?.address2 || baseInitialValues.address2,
+    address2:item?.address2 || baseInitialValues.address2,
+    attachments: item?.attachments || baseInitialValues.attachments,
     id: item?.id || '', 
 });
 
@@ -120,9 +123,11 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
   const featureOptions = useSelector((state) => state.facility?.masterList || []);
   const masterFacilityTypeList = useSelector((state) => state.facility?.masterFacilityTypeList || []);
   const [shouldRender, setShouldRender] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [isDragging, setIsDragging] = useState(false);
+//   const [selectedFiles, setSelectedFiles] = useState([]);
+//   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+   const [selectedNewFiles, setSelectedNewFiles] = useState([]);
+
     useEffect(() => {
    let reqUrl =`/master-facility-features`
        dispatch(getMasterFacilities(reqUrl));
@@ -136,54 +141,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
 }, [dispatch]); 
 
 
-
-
-//  // Improved handler to ADD files with duplicate checking
-//   const handleFilesAdded = useCallback((fileList) => {
-//     const newFiles = Array.from(fileList).filter(file => 
-//       file.type.startsWith('image/')
-//     );
-    
-//     setSelectedFiles(prevFiles => {
-//       // Create a Set of existing file names for quick lookup
-//       const existingFileNames = new Set(prevFiles.map(file => file.name));
-      
-//       // Filter out duplicates from new files
-//       const uniqueNewFiles = newFiles.filter(file => 
-//         !existingFileNames.has(file.name)
-//       );
-      
-//       return [...prevFiles, ...uniqueNewFiles];
-//     });
-//   }, []);
-
-
-
-//   // Handler to REMOVE a file
-//   const handleFileRemoved = useCallback((fileName) => {
-//     setSelectedFiles(prevFiles => prevFiles.filter(file => file.name !== fileName));
-//   }, []);
-
-//   const handleUploadSubmit = () => {
-//     console.log("Final files for upload:", selectedFiles);
-//     const formData = new FormData();
-//     selectedFiles.forEach(file => {
-//       formData.append('images', file); 
-//     });
-    
-//     // Your API call here
-//     // fetch('/api/upload-images', { method: 'POST', body: formData });
-    
-//     // Clear files on success if needed
-//     // setSelectedFiles([]);
-//   };
-
-//   const handleClearAll = () => {
-//     setSelectedFiles([]);
-//   };
-
-
- // Handler to ADD files
   const handleFilesAdded = (fileList) => {
     const newFiles = Array.from(fileList).filter(file => file.type.startsWith('image/'));
     
@@ -204,17 +161,17 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
   };
 
   // Handler for file input change
-  const handleFileChange = (event) => {
-    if (event.target.files && event.target.files.length > 0) {
-      handleFilesAdded(event.target.files);
-    }
-    // Reset the input to allow same file selection again
-    event.target.value = '';
-  };
+//   const handleFileChange = (event) => {
+//     if (event.target.files && event.target.files.length > 0) {
+//       handleFilesAdded(event.target.files);
+//     }
+//     // Reset the input to allow same file selection again
+//     event.target.value = '';
+//   };
 
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
+//   const handleUploadClick = () => {
+//     fileInputRef.current?.click();
+//   };
 
   const handleAddMoreClick = () => {
     fileInputRef.current?.click();
@@ -241,15 +198,15 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     }
   };
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDragging(false);
+//   const handleDrop = (event) => {
+//     event.preventDefault();
+//     event.stopPropagation();
+//     setIsDragging(false);
     
-    if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
-      handleFilesAdded(event.dataTransfer.files);
-    }
-  };
+//     if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+//       handleFilesAdded(event.dataTransfer.files);
+//     }
+//   };
 
   const handleUploadSubmit = () => {
     console.log("Final files for upload:", selectedFiles);
@@ -271,6 +228,43 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
   };
 
 
+
+    const handleNewFilesAdded = useCallback((fileList) => {
+        const filesArray = Array.from(fileList).filter(file => file.type.startsWith('image/'));
+        setSelectedNewFiles(prevFiles => [...prevFiles, ...filesArray]);
+    }, []);
+
+    const handleRemoveNewFile = useCallback((fileName) => {
+        // Remove based on file name (used as identifier)
+        setSelectedNewFiles(prevFiles => prevFiles.filter(file => file.name !== fileName));
+    }, []);
+   const [isDragging, setIsDragging] = useState(false);
+
+
+
+
+
+
+   const handleDrop = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsDragging(false);
+        if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+            handleNewFilesAdded(event.dataTransfer.files); // 🎯 Use the new handler
+        }
+    };
+    
+    const handleFileChange = (event) => {
+        if (event.target.files && event.target.files.length > 0) {
+            handleNewFilesAdded(event.target.files); // 🎯 Use the new handler
+        }
+        event.target.value = '';
+    };
+
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    };
+
   const submit = (values) => {
       if(values.is24H==true){
        values.openingTime="00:00";
@@ -278,7 +272,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
       }
 
       console.log('Updating Facility:', values);
-                  console.log("Final files for upload:", selectedFiles);
+                //   console.log("Final files for upload:", selectedFiles);
 
     //   return;
    values.geoLoc = values.geoLoc.map(str => parseFloat(str)); 
@@ -288,9 +282,9 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
          delete values.ratingCount
          delete values.reviewCount
 
-         if(selectedFiles.length>0){
+         if(selectedNewFiles.length>0){
            const  isCreateOrUpdate ='update'
-                     dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles,isCreateOrUpdate})); 
+                     dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles:selectedNewFiles,isCreateOrUpdate})); 
          }else{
       dispatch(updateFacility({values,getReqestUrl})); 
 
@@ -910,12 +904,24 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
     </Box> */}
 
 
-     <Box sx={{ p: 3,  margin: 'auto' }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        Facility Details and Image Upload
-      </Typography>
+    <Grid item xs={12}>
+        <Box sx={{ borderBottom: '1px solid #eee', paddingBottom: '10px', marginTop: '10px' }}>
+            <Typography variant="h5">Image Upload</Typography>
+        </Box>
+    </Grid>
 
-      {/* Hidden File Input */}
+
+     <Grid item xs={12}>
+                             <ImageAttachmentManager
+                                selectedNewFiles={selectedNewFiles}
+                                onNewFilesAdded={handleNewFilesAdded}
+                                onRemoveNewFile={handleRemoveNewFile}
+                            />
+                        </Grid>
+
+    
+     {/* <Box sx={{ p: 3,  margin: 'auto' }}>
+
       <input
         type="file"
         multiple
@@ -925,7 +931,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
         style={{ display: 'none' }}
       />
 
-      {/* Drag & Drop Area */}
       <Paper
         variant="outlined"
         onDragOver={handleDragOver}
@@ -937,7 +942,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
           p: 4,
           textAlign: 'center',
           cursor: 'pointer',
-          border: `2px dashed ${isDragging ? 'primary.main' : 'grey.400'}`,
+          border: `10px dashed ${isDragging ? 'primary.main' : 'grey.400'}`,
           backgroundColor: isDragging ? 'primary.light' : 'background.paper',
           transition: 'all 0.3s',
           mb: 3,
@@ -955,7 +960,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
         </Typography>
       </Paper>
 
-      {/* Image Previews */}
       {selectedFiles.length > 0 && (
         <Box sx={{ mb: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -1011,7 +1015,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
         </Box>
       )}
 
-      {/* Action Buttons */}
       {selectedFiles.length > 0 && (
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 3 }}>
           <Button 
@@ -1021,16 +1024,10 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
           >
             Clear All ({selectedFiles.length})
           </Button>
-          <Button 
-            variant="contained" 
-            color="primary" 
-            onClick={handleUploadSubmit}
-          >
-            Upload {selectedFiles.length} Images to Server
-          </Button>
+
         </Box>
       )}
-    </Box>
+    </Box> */}
     
     
 </Grid>
