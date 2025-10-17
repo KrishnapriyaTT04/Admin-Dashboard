@@ -75,7 +75,6 @@ function* createFacilitySaga(action) {
 }
 
 function* updateFacilitySaga(action) {
-    console.log("-------------updateFacilitySaga------------action------",action);
     
   const token = JSON.parse(localStorage.getItem('klooToken'));
   try {
@@ -169,10 +168,8 @@ ${res.failedRecords}`,
       { autoClose: 3000 }
     );
 
-    // CRITICAL: After a bulk update, you must refetch the list to show the changes
-    // yield put(actionType.getFacilities());
+
   } catch (error) {
-    // 6. Dispatch failure and show error toast
     yield put(
       actionType.uploadBulkFacilitiesFail({
         message: error.message || 'Failed to upload and update facilities.',
@@ -188,22 +185,19 @@ function* getMasterFacilitiesSaga(action) {
 
   try {
     const params = {
-      // API endpoint for fetching all issue reports
       api: `${FACILITY_API_BASE}${action.payload}`,
       method: 'GET',
       successAction: actionType.getMasterFacilitiesSuccess(),
       failAction: actionType.getMasterFacilitiesFail(),
       authorization: 'Bearer',
-      token: `${token?.accessToken}` // Use optional chaining for safer access
+      token: `${token?.accessToken}`
     };
 
     const res = yield call(commonApi, params);
 
-    // Assuming the API returns an array or an object containing the list
     if (res && Array.isArray(res.data)) {
       yield put(actionType.getMasterFacilitiesSuccess(res.data));
     } else if (res) {
-      // Handle case where API response is valid but not the expected array structure
       yield put(actionType.getMasterFacilitiesSuccess(res));
     } else {
       throw new Error('Invalid response data structure for issue report list.');
@@ -226,10 +220,8 @@ function* getMasterFacilityTypeSaga(action) {
 
   try {
     const params = {
-      // API endpoint for fetching facility types (uses payload for the URL)
       api: `${FACILITY_API_BASE}${action.payload}`,
       method: 'GET',
-      // 🔑 Use the new action creators for facility types
       successAction: actionType.getMasterFacilityTypeSuccess(),
       failAction: actionType.getMasterFacilityTypeFail(),
       authorization: 'Bearer',
@@ -238,12 +230,9 @@ function* getMasterFacilityTypeSaga(action) {
 
     const res = yield call(commonApi, params);
 
-    // Assuming the API returns an array or an object containing the list
     if (res && Array.isArray(res.data)) {
-      // 🔑 Dispatch success with the data
       yield put(actionType.getMasterFacilityTypeSuccess(res.data));
     } else if (res) {
-      // Handle case where API response is valid but not the expected array structure
       yield put(actionType.getMasterFacilityTypeSuccess(res));
     } else {
       throw new Error('Invalid response data structure for master facility types.');
@@ -251,7 +240,6 @@ function* getMasterFacilityTypeSaga(action) {
   } catch (error) {
     console.error('Fetch Master Facility Types failed:', error);
 
-    // 🔑 Dispatch fail action
     yield put(
       actionType.getMasterFacilityTypeFail({
         message: error.message || 'Failed to fetch facility types.',
@@ -355,6 +343,5 @@ export default function* facilityActionWatcher() {
   yield takeEvery(actionType.getMasterFacilities.type, getMasterFacilitiesSaga);
   yield takeEvery(actionType.getMasterFacilityType.type, getMasterFacilityTypeSaga);
   yield takeEvery(actionType.uploadImagesStart.type, uploadImagesStart);
-
   
 }
