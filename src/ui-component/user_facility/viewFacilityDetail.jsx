@@ -104,7 +104,8 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
         variant={isSubtitle ? 'h6' : 'body1'}
         sx={{ fontWeight: isSubtitle ? 600 : 500, color: theme.palette.text.primary, ml: icon ? 2.5 : 0 }}
       >
-        {value !== "undefined" && value !== null ? value : 'N/A'}
+        {value !== undefined && value !== null && value !== '' ? value : 'N/A'}
+        {/* {value !== undefined && value !== null && value !== '' ? value : 'N/A'} */}
       </Typography>
     </Box>
   );
@@ -287,7 +288,8 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 <DetailItem label="Remarks" value={item.remarks} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DetailItem label="Attatchments" value={attachments.length > 0 ? '' : 'N/A'} />
+                <DetailItem label="Attachments" value={attachments && attachments.length > 0 ? 'Available' : 'N/A'} />
+
                 <Box>
                   {/* Image Grid */}
                   <Grid container>
