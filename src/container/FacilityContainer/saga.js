@@ -55,13 +55,14 @@ function* createFacilitySaga(action) {
     };
 
     const res = yield call(commonApi, params);
-
-    if (res?.message === 'success') {
       yield call(toast.success, 'Facility added successfully!', { autoClose: 3000 });
-      yield put(actionType.createFacilitySuccess(res.data));
-      yield put(actionType.getFacilities());
-    } else {
-    }
+
+    // if (res?.message === 'success') {
+    //   yield call(toast.success, 'Facility added successfully!', { autoClose: 3000 });
+    //   yield put(actionType.createFacilitySuccess(res.data));
+    //   yield put(actionType.getFacilities());
+    // } else {
+    // }
   } catch (error) {
     console.error('Create Facility failed:', error);
     yield put(
