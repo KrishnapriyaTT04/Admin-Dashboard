@@ -123,7 +123,7 @@ const TableRows = ({
                   <Tooltip
                     title={keyItem === 'status' || keyItem === 'revision' ? '' : String(cellContent(keyItem, index, row)) || ''}
                     placement="top"
-                    disableHoverListener={keyItem === 'starRating'}
+                    disableHoverListener={keyItem === 'starRating' || keyItem === 'avgStarRating'}
                     componentsProps={{
                       tooltip: {
                         sx: { textTransform: 'capitalize' }

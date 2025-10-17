@@ -97,14 +97,14 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       <Box p={3} height="100%" display="flex" flexDirection="column">
         {/* Header */}
         <Box flexGrow={1} overflow="auto" pr={1}>
-          <Card sx={{ mb: 3, bgcolor: primary, color: 'white', borderRadius: 2 }}>
+          <Card sx={{ mb: 3, bgcolor: '#f0f9f6', borderRadius: 2, boxShadow: 'none' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="h2" fontWeight={700} color="white" mr={2}>
+                  <Typography variant="h2" fontWeight={700} color={primary} mr={2}>
                     {getFullName()}
                   </Typography>
-                  <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white' }} />
+                  <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white', bgcolor:primary }} />
                 </Box>
                 <IconButton
                   onClick={() => setDrawerOpen(false)}
@@ -120,12 +120,12 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
 
               <Stack direction="row" spacing={3} mt={1} alignItems="center" flexWrap="wrap">
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <PhoneIcon sx={{ fontSize: 20, color: lightGreen, mr: 1 }} />
-                  <Typography sx={{ color: 'white', fontWeight: 400 }}>{item.phone || 'N/A'}</Typography>
+                  <PhoneIcon sx={{ fontSize: 20, color: primary, mr: 1 }} />
+                  <Typography sx={{ color: primary, fontWeight: 400 }}>{item.phone || 'N/A'}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <EmailIcon sx={{ fontSize: 20, color: lightGreen, mr: 1 }} />
-                  <Typography sx={{ color: 'white', fontWeight: 400 }}>{item.email || 'N/A'}</Typography>
+                  <EmailIcon sx={{ fontSize: 20, color: primary, mr: 1 }} />
+                  <Typography sx={{ color: primary, fontWeight: 400 }}>{item.email || 'N/A'}</Typography>
                 </Box>
               </Stack>
             </CardContent>
@@ -138,11 +138,11 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 <DetailItem
                   label="User Type"
                   value={item.userType ? item.userType.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()) : 'N/A'}
-                  isSubtitle
+                  
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DetailItem label="Role" value={capitalizeWords(item.role)} isSubtitle />
+                <DetailItem label="Role" value={capitalizeWords(item.role)}  />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <DetailItem label="Created On" value={formatDate(item.createdOn)} />
