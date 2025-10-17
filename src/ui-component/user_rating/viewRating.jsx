@@ -1,14 +1,11 @@
-import { Box, Typography, IconButton, Grid, useTheme, Divider,Card, CardContent, Stack,Avatar , Paper, Chip } from '@mui/material';
+import { Box, Typography, IconButton, Grid, useTheme, Divider, Card, CardContent, Stack, Avatar, Paper, Chip } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import PersonIcon from '@mui/icons-material/Person';
-import {
-  Close as CloseIcon,
-  Business as BusinessIcon,
-} from '@mui/icons-material';
+import { Close as CloseIcon, Business as BusinessIcon } from '@mui/icons-material';
 
 const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
-    const primary = '#019863';
+  const primary = '#019863';
   const lightGreen = '#e8f5e9';
 
   const formatDate = (dateString) => {
@@ -74,83 +71,91 @@ const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
     </Box>
   );
 
-
   return (
-     <Drawer
-          anchor="right"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          PaperProps={{
-            sx: {
-              width: { xs: '100%', sm: '80%', md: '70%', lg: 800 },
-              background: '#fff',
-              boxShadow: '-4px 0 16px rgba(0,0,0,0.08)',
-              borderLeft: `4px solid ${primary}`
-            }
-          }}
-        >
-          <Box p={3} height="100%" display="flex" flexDirection="column">
-            {/* Header */}
-            <Box flexGrow={1} overflow="auto" pr={1}>
-               <Card sx={{ mb: 3, bgcolor: '#f0f9f6',borderRadius: 2, color: primary, boxShadow:'none'}}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography variant="h2" fontWeight={700} color={primary} mr={2}>
-                        {capitalizeWords(item.comments)}
-                      </Typography>
-                    <IconButton
-                      onClick={() => setDrawerOpen(false)}
-                      sx={{
-                        bgcolor: lightGreen,
-                        color: primary,
-                        '&:hover': { bgcolor: '#ffffff' }
-                      }}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Box>
-    
-                  <Stack direction="row" flexWrap="wrap">
-                    <Typography sx={{ color: 'white', fontWeight: 400 }}>
-                      {item.starRating}
-                    </Typography>
-                  </Stack>
-                </CardContent>
-              </Card>
-  
-    
-              {/* Facility Information */}
-              <DetailSection icon={<BusinessIcon />} title="Facility Information">
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={4}>
-                    <DetailItem label="Facility ID" value={item.facilityId}  />
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <DetailItem label="Facility Title" value={capitalizeWords(item.facilityTitle)}  />
-                  </Grid>
-                </Grid>
-              </DetailSection>
-    
-       
-    
-              {/*  Audit Trail (Admin) Details */}
-              <DetailSection icon={<PersonIcon />} title=" Audit Trail (Admin)">
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <DetailItem label="Created" value={item?.createdUser || item?.createdBy || 'N/A'} />
-                    {formatDate(item?.createdOn)}
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <DetailItem label=" Last Modified" value={item?.modifiedUser || item?.modifiedBy || 'N/A'} />
-                     {formatDate(item?.modifiedOn)}
-                  </Grid>
-                </Grid>
-              </DetailSection>
-    
-           
-            </Box>
-          </Box>
-        </Drawer>
+    <Drawer
+      anchor="right"
+      open={drawerOpen}
+      onClose={() => setDrawerOpen(false)}
+      PaperProps={{
+        sx: {
+          width: { xs: '100%', sm: '80%', md: '70%', lg: 800 },
+          background: '#fff',
+          boxShadow: '-4px 0 16px rgba(0,0,0,0.08)',
+          borderLeft: `4px solid ${primary}`
+        }
+      }}
+    >
+      <Box p={3} height="100%" display="flex" flexDirection="column">
+        {/* Header */}
+        <Box flexGrow={1} overflow="auto" pr={1}>
+          <Card sx={{ mb: 3, bgcolor: '#f0f9f6', borderRadius: 2, color: primary, boxShadow: 'none' }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0 }}>
+                  <Typography
+                    variant="h2"
+                    fontWeight={700}
+                    color={primary}
+                    mr={2}
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      maxWidth: '350px'
+                    }}
+                  >
+                    {capitalizeWords(item.comments)}
+                  </Typography>
+                </Box>
+                <IconButton
+                  onClick={() => setDrawerOpen(false)}
+                  sx={{
+                    bgcolor: lightGreen,
+                    color: primary,
+                    '&:hover': { bgcolor: '#ffffff' }
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Stack direction="row" flexWrap="wrap">
+                <Typography sx={{ color: 'white', fontWeight: 400 }}>{item.starRating}</Typography>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          {/* Basic Information */}
+          <DetailSection icon={<BusinessIcon />} title="Basic Information">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <DetailItem label="Facility ID" value={item.facilityId} />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <DetailItem label="Facility Title" value={capitalizeWords(item.facilityTitle)} />
+              </Grid>
+                 <Grid item xs={12}>
+                <DetailItem label="Comments" value={capitalizeWords(item.comments)} />
+              </Grid>
+            </Grid>
+          </DetailSection>
+
+          {/*  Audit Trail (Admin) Details */}
+          <DetailSection icon={<PersonIcon />} title=" Audit Trail (Admin)">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <DetailItem label="Created" value={item?.createdUser || item?.createdBy || 'N/A'} />
+                {formatDate(item?.createdOn)}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DetailItem label=" Last Modified" value={item?.modifiedUser || item?.modifiedBy || 'N/A'} />
+                {formatDate(item?.modifiedOn)}
+              </Grid>
+            </Grid>
+          </DetailSection>
+        </Box>
+      </Box>
+    </Drawer>
   );
 };
 
