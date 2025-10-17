@@ -114,9 +114,9 @@ const ResponsiveIcons = () => {
         }}
         sx={{
           color: 'white',
-          backgroundColor: '#019863', // ✅ green background
+          backgroundColor: '#019863', 
           '&:hover': {
-            backgroundColor: '#018054' // ✅ slightly darker on hover
+            backgroundColor: '#018054' 
           },
           padding: matchesXs ? '6px' : '8px'
         }}

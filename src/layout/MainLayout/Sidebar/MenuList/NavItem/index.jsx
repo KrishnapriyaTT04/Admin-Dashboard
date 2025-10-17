@@ -82,14 +82,15 @@ const NavItem = ({ item, level, lastItem }) => {
       sx={{
         paddingY: 0,
         paddingRight: 0,
-        marginBottom: lastItem === item?.id && '120px !important',
+  
+        marginBottom: lastItem ===  item?.id ? '120px !important' : '6px',
         '&:hover': {
           backgroundColor: 'white !important',
-          marginRight: leftDrawerOpened ? 0 : '9px'
+          marginRight: leftDrawerOpened ? 0 : '0px'
         },
         '&.Mui-selected': {
           backgroundColor: '#019863 !important',
-          marginRight: leftDrawerOpened ? 0 : '9px',
+          marginRight: leftDrawerOpened ? 0 : '0px',
           color: '#FFFFFF'
         }
       }}
@@ -102,7 +103,7 @@ const NavItem = ({ item, level, lastItem }) => {
           width: '100%',
           height: '100%',
           borderRadius: `${customization.borderRadius}px`,
-          mb: 0.5,
+
           alignItems: 'center',
           gap: '10px',
           backgroundColor: isSelected ? '#019863 !important' : 'transparent',

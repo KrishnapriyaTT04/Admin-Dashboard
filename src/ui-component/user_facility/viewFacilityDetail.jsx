@@ -126,14 +126,14 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       <Box p={3} height="100%" display="flex" flexDirection="column">
         {/* Header */}
         <Box flexGrow={1} overflow="auto" pr={1}>
-          <Card sx={{ mb: 3, bgcolor: primary, color: 'white', borderRadius: 2 }}>
+          <Card sx={{ mb: 3, bgcolor: '#f0f9f6',borderRadius: 2, color: primary, boxShadow:'none'}}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="h2" fontWeight={700} color="white" mr={2}>
+                  <Typography variant="h2" fontWeight={700} color={primary} mr={2}>
                     {item.title}
                   </Typography>
-                  <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white' }} />
+                  <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white', background: primary }} />
                 </Box>
                 <IconButton
                   onClick={() => setDrawerOpen(false)}
@@ -148,19 +148,19 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
               </Box>
 
               <Stack direction="row" flexWrap="wrap">
-                <Typography sx={{ color: 'white', fontWeight: 400 }}>
+                <Typography sx={{ fontWeight: 400 }}>
                   {capitalizeWords(item.facilityType)} | {capitalizeWords(item.category)}
                 </Typography>
               </Stack>
 
               <Stack direction="row" spacing={3} mt={1} alignItems="center" flexWrap="wrap">
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <PhoneIcon sx={{ fontSize: 20, color: lightGreen, mr: 1 }} />
-                  <Typography sx={{ color: 'white', fontWeight: 400 }}>{item.contactPhone || 'N/A'}</Typography>
+                  <PhoneIcon sx={{ fontSize: 20, color: primary, mr: 1 }} />
+                  <Typography sx={{ fontWeight: 400 }}>{item.contactPhone || 'N/A'}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <EmailIcon sx={{ fontSize: 20, color: lightGreen, mr: 1 }} />
-                  <Typography sx={{ color: 'white', fontWeight: 400 }}>{item.contactEmail || 'N/A'}</Typography>
+                  <EmailIcon sx={{ fontSize: 20, color: primary, mr: 1 }} />
+                  <Typography sx={{  fontWeight: 400 }}>{item.contactEmail || 'N/A'}</Typography>
                 </Box>
               </Stack>
             </CardContent>
