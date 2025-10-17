@@ -30,19 +30,19 @@ const AnalyticsCard = () => {
         <Grid container spacing={2.5} alignItems="stretch">
           <Grid item xs={12} sm={3}>
             <Link to="/userManagment" style={{ textDecoration: 'none' }}>
-              <Card title="Users" count={dashCount.userCount} color="#2055a8" bgTheme="#e3f2fd" icon={<UserOutlined />} />
+              <Card title="Active Users" count={dashCount.userCount} color="#2055a8" bgTheme="#e3f2fd" icon={<UserOutlined />} />
             </Link>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <Link to="/facility" style={{ textDecoration: 'none' }}>
-              <Card title="Facilities" count={dashCount.facilityCount} color="#006064" bgTheme="#e0f7fa" icon={<HomeOutlined />} />
+              <Card title="Active Facilities" count={dashCount.facilityCount} color="#006064" bgTheme="#e0f7fa" icon={<HomeOutlined />} />
             </Link>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <Link to="/reportedIssues" style={{ textDecoration: 'none' }}>
-              <Card title="Issues" count={dashCount.issueCount} color="#f2b13b" bgTheme="#f2b13b17" icon={<WarningOutlined />} />
+              <Card title="Open Issues" count={dashCount.issueCount} color="#f2b13b" bgTheme="#f2b13b17" icon={<WarningOutlined />} />
             </Link>
           </Grid>
 
