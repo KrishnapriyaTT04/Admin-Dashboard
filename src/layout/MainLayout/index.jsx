@@ -71,8 +71,8 @@ const MainLayout = () => {
   <Box
     sx={{
       display: 'flex',
-      flexDirection: 'column',   // stack main content + footer vertically
-      minHeight: '100vh',        // ensures footer sticks to bottom on short pages
+      flexDirection: 'column',   
+      minHeight: '100vh',       
       cursor: isDraftOrPending ? 'not-allowed' : ''
     }}
     onClick={() => (!flag && isDraftOrPending ? setOpenPendingModal(true) : '')}
