@@ -292,9 +292,9 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage,getReqestUrl }) =
 
     } else {
          delete values.id; 
-          if(selectedFiles.length>0){
+          if(selectedNewFiles.length>0){
              const  isCreateOrUpdate ='create'
-               dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles,isCreateOrUpdate})); 
+               dispatch(uploadImagesStart({values,getReqestUrl,selectedFiles:selectedNewFiles,isCreateOrUpdate})); 
           }else{
         dispatch(createFacility(values));
           }
