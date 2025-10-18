@@ -13,12 +13,10 @@ import StarIcon from '@mui/icons-material/Star';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
-
-import ChangeStatusModal from '../common/commonStatusChange'
-
+import ChangeStatusModal from '../common/commonStatusChange';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
-import { getFacilities, updateFacility, getFacilitiesCount} from 'container/FacilityContainer/slice';
+import { getFacilities, updateFacility, getFacilitiesCount } from 'container/FacilityContainer/slice';
 
 import { facilityHeads } from 'utils/TableConfig';
 
@@ -59,9 +57,7 @@ export default function Facility() {
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
 
-
   const facilityList = useSelector((state) => state.facility?.list || []);
-  
 
   let flattenedFacilityList = [];
 
@@ -89,9 +85,6 @@ export default function Facility() {
   //   phone: facility.contactInfo?.phone || 'N/A',
   //   // include other fields you need
   // }));
-
-
-  
 
   const searchfilterObject = {
     limit: limit,
@@ -138,13 +131,12 @@ export default function Facility() {
     setPage(0);
   };
 
-
   // Function to open the modal
   const handleStatusChangeModal = (facilityItem) => {
-    console.log("--------------------------facilityItem----------------------",getReqUrl);
-    
+    console.log('--------------------------facilityItem----------------------', getReqUrl);
+
     setSelectedFacility(facilityItem); // Save the facility data
-    setIsStatusModalOpen(true);        // Open the modal
+    setIsStatusModalOpen(true); // Open the modal
   };
 
   // Function to close the modal
@@ -153,20 +145,19 @@ export default function Facility() {
     setSelectedFacility(null);
   };
 
-    const handleUpdateStatus = (newStatus) => {
-      // 💡 Implementation for updating status here
-            console.log(`Updating facility 11${selectedFacility.id} to status: ${getReqUrl}`);
+  const handleUpdateStatus = (newStatus) => {
+    // 💡 Implementation for updating status here
+    console.log(`Updating facility 11${selectedFacility.id} to status: ${getReqUrl}`);
 
-           let values ={
-            "status": newStatus,
-            "id":selectedFacility.id
-           }
-            dispatch(updateFacility({values,getReqestUrl:getReqUrl})); 
-      
-      console.log(`Updating facility ${selectedFacility.id} to status: ${getReqUrl}`);
-      handleCloseStatusModal(); // Close after action
+    let values = {
+      status: newStatus,
+      id: selectedFacility.id
+    };
+    dispatch(updateFacility({ values, getReqestUrl: getReqUrl }));
+
+    console.log(`Updating facility ${selectedFacility.id} to status: ${getReqUrl}`);
+    handleCloseStatusModal(); // Close after action
   };
-
 
   // function handleDownloadExcel() {
   //   setShowXSLModal(true);
@@ -240,22 +231,20 @@ export default function Facility() {
     closeDeleteModal();
   };
 
-const renderStars = (rating) => {
-  const stars = [];
-  for (let i = 1; i <= 5; i++) {
-    if (rating >= i) {
-      stars.push(<StarIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
-    } else if (rating >= i - 0.5) {
-      stars.push(<StarHalfIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
-    } else {
-      stars.push(<StarBorderIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(<StarIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
+      } else if (rating >= i - 0.5) {
+        stars.push(<StarHalfIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
+      } else {
+        stars.push(<StarBorderIcon key={i} sx={{ color: '#FFD700', fontSize: '18px' }} />);
+      }
     }
-  }
 
-  return <Box sx={{ display: 'flex', justifyContent: 'left' }}>{stars}</Box>;
-};
-
-
+    return <Box sx={{ display: 'flex', justifyContent: 'left' }}>{stars}</Box>;
+  };
 
   const displayedData = facilityList.map((item) => {
     return {
@@ -264,18 +253,15 @@ const renderStars = (rating) => {
     };
   });
 
-  console.log("==displayedData", displayedData);
-  
-
+  console.log('==displayedData', displayedData);
 
   return (
     <>
       <MainCard>
-        <Grid container direction={'row'} justifyContent={'space-between'} alignItems={'center'} spacing={1}>
-          <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
-            Facilities
-          </Typography>
-        </Grid>
+        <Typography variant="h2" component="h5" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
+          Facilities
+        </Typography>
+
         <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
           {/* Left Button */}
           <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
@@ -326,7 +312,7 @@ const renderStars = (rating) => {
                 variant="outlined"
                 onClick={handleExcelModal}
                 startIcon={<FileUploadOutlined />}
-                 sx={{ ...cmnstyle.cmnBtn, ...cmnstyle.cmnBtnOutline, px: 3 }}
+                sx={{ ...cmnstyle.cmnBtn, ...cmnstyle.cmnBtnOutline, px: 3 }}
               >
                 Import Facilities
               </Button>
@@ -363,7 +349,7 @@ const renderStars = (rating) => {
         ) : (
           <Typography>No data found</Typography>
         )}
-      {/* <TableContainer>
+        {/* <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="project table">
             <TableHead keys={keys} config={config} />
             <TableRows
@@ -386,7 +372,7 @@ const renderStars = (rating) => {
             />
           </Table>
         </TableContainer> */}
-       
+
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
@@ -398,19 +384,18 @@ const renderStars = (rating) => {
         )}
         {selectedFacility && (
           <ChangeStatusModal
-              open={isStatusModalOpen}
-              facility={selectedFacility} 
-              onClose={handleCloseStatusModal}
-              onConfirm={handleUpdateStatus} // Pass the function to execute on confirm
+            open={isStatusModalOpen}
+            facility={selectedFacility}
+            onClose={handleCloseStatusModal}
+            onConfirm={handleUpdateStatus} // Pass the function to execute on confirm
           />
-          
-      )}
+        )}
         {showDeleteModal && (
           <StatusChangeModal
-              open={isStatusModalOpen}
-              facility={selectedFacility} // Pass the selected data
-              onClose={handleCloseStatusModal}
-              onConfirm={handleUpdateStatus} // Pass the function to execute on confirm
+            open={isStatusModalOpen}
+            facility={selectedFacility} // Pass the selected data
+            onClose={handleCloseStatusModal}
+            onConfirm={handleUpdateStatus} // Pass the function to execute on confirm
           />
           // <ConfirmModal
           //   show={showDeleteModal}

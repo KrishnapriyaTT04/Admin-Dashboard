@@ -68,7 +68,7 @@ const ResponsiveIcons = () => {
       {/* Settings Icon */}
       {userDtls?.message?.roles ? (
         <IconButton
-          sx={{ color: 'white', pointerEvents: isDraftOrPending ? 'none' : 'auto', cursor: isDraftOrPending ? 'not-allowed' : 'pointer' }}
+          sx={{ color: '#fff',bgcolor:'#019863', pointerEvents: isDraftOrPending ? 'none' : 'auto', cursor: isDraftOrPending ? 'not-allowed' : 'pointer' }}
           onClick={handleMenuOpen}
         >
           <IconSettings size={matchesXs ? 25 : 30} />

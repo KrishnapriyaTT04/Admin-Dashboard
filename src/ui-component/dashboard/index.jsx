@@ -48,7 +48,7 @@ const DashboardDefault = () => {
   }, [dispatch, limit, page]);
 
   return (
-     <MainCard>
+     <MainCard sx={{boxShadow:'none'}}>
     <Box>
       <Box
         sx={{

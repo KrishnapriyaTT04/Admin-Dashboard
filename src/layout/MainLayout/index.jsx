@@ -92,7 +92,7 @@ const MainLayout = () => {
     >
       <Toolbar
         sx={{
-          background: 'white'
+          background: '#f0f9f6'
         }}
       >
         <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
@@ -109,7 +109,6 @@ const MainLayout = () => {
           marginRight: '0px',
           pointerEvents: isDraftOrPending ? 'none' : '',
           opacity: isDraftOrPending ? 0.5 : '',
-          backgroundColor:'#0198632e'
         }}
         theme={theme}
         open={leftDrawerOpened}
