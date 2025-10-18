@@ -107,11 +107,9 @@ export default function Users() {
   return (
     <MainCard>
       {/* Header */}
-      <Grid container direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Typography variant="h2" sx={{ color: theme.palette.primary.dark, fontWeight: 500 }}>
           Users
         </Typography>
-      </Grid>
 
       {/* Search */}
       <Grid container sx={{ width: '100%', alignItems: 'center', justifyContent: 'center', mt: 0, mb: 0 }}>

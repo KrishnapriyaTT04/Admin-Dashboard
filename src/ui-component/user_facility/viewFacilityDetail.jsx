@@ -147,7 +147,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="h2" fontWeight={700} color={primary} mr={2}>
-                    {item.title}
+                    {capitalizeWords(item.title)}
                   </Typography>
                   <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white', background: primary }} />
                 </Box>

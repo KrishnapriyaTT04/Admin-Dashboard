@@ -14,7 +14,7 @@ const Footer = () => {
       sx={{
         top: 'auto',
         bottom: 0,
-        borderTop:'1px solid #d3d3d3',
+        borderTop:'1px solid #d3d3d380',
         width: {
           xs: '100%',
           md: leftDrawerOpened ? `calc(100% - ${drawerWidth}px)` : '100%'

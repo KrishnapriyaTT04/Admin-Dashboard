@@ -22,7 +22,7 @@ const MainCard = React.forwardRef(
   (
     {
       border = false,
-      boxShadow,
+      // boxShadow,
       children,
       content = true,
       contentClass = '',
@@ -44,9 +44,6 @@ const MainCard = React.forwardRef(
         sx={{
           border: border ? '1px solid' : 'none',
           borderColor: 'divider',
-          ':hover': {
-            boxShadow: boxShadow ? shadow || '0 2px 14px 0 rgb(32 40 45 / 8%)' : 'inherit'
-          },
           ...sx
         }}
       >
