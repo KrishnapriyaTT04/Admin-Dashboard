@@ -85,6 +85,35 @@ const reportIssueSlice = createSlice({
       };
     },
 
+    updIssueStts: (state) => {
+      state.operationLoading = true;
+      state.operationSuccess = false;
+      state.operationError = null;
+    },
+
+    updIssueSttsSuccess: (state, action) => {
+      state.operationLoading = false;
+      const index = state.list.findIndex((u) => u.id === action.payload.id);
+
+      if (index !== -1) {
+        state.list = [
+          ...state.list.slice(0, index),
+          action.payload, 
+          ...state.list.slice(index + 1) 
+        ];
+      }
+
+      state.operationSuccess = true;
+    },
+
+    updIssueSttsFail: (state, action) => {
+      state.operationLoading = false;
+      state.operationError = {
+        message: action.payload.message || 'Failed to update user',
+        status: action.payload.status || 500
+      };
+    },
+
 
         updIssuecmt: (state) => {
           state.operationLoading = true;
@@ -129,7 +158,10 @@ export const {
   updIssueFail,
   updIssuecmt,
   updIssuecmtSuccess,
-  updIssuecmtFail 
+  updIssuecmtFail ,
+  updIssueStts,
+  updIssueSttsSuccess,
+  updIssueSttsFail
 
 } = reportIssueSlice.actions;
 

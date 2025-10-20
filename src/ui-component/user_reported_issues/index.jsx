@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import SearchIcon from '@mui/icons-material/Search';
 
 import { getIssueReports, getIssuesCount } from 'container/ReportIssuesContainer/slice';
-import { updIssue } from 'container/ReportIssuesContainer/slice';
+import { updIssueStts } from 'container/ReportIssuesContainer/slice';
 
 import { userReport } from 'utils/TableConfig';
 
@@ -120,10 +120,9 @@ export default function userReportedIssues() {
 
   const handleUpdateStatus = (newStatus) => {
     let values = {
-      status: newStatus,
       id: selectedItem.id
     };
-    dispatch(updIssue({ values, getReqestUrl: getReqUrl }));
+    dispatch(updIssueStts({ values, getReqestUrl: getReqUrl }));
     handleCloseStatusModal();
   };
 

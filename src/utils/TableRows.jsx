@@ -168,34 +168,38 @@ const TableRows = ({
                       </IconButton>
                     </Tooltip>
                   )}
-                  {hasEdit &&
-                    row.status !== 'publish' &&
-                    row.status !== 'deleted' &&
-                    row.status !== 'completed' &&
-                    row.status !== 'closed' && (
-                      <Tooltip title="Edit">
-                        <IconButton
-                          color="info"
-                          onClick={() => handleFormModal(row)}
-                          size="small"
-                          sx={{ ...style.cmnIcon, ...style.cmnEditIcon }}
-                        >
-                          <EditIcon sx={style.cmnSvg} />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  {hasStatusChange && (
-                    <Tooltip title="Change status">
+                  {hasEdit && row.status !== 'publish' && row.status !== 'deleted' && row.status !== 'completed' && (
+                    <Tooltip title="Edit">
                       <IconButton
-                        color="warning"
-                        onClick={() => handlProjectStatusModal(row)}
+                        color="info"
+                        onClick={() => handleFormModal(row)}
                         size="small"
-                        sx={{ ...style.cmnIcon, ...style.cmnStatusIcon }}
+                        sx={{ ...style.cmnIcon, ...style.cmnEditIcon }}
                       >
-                        <BlockIcon fontSize="small" sx={style.cmnSvg} />
+                        <EditIcon sx={style.cmnSvg} />
                       </IconButton>
                     </Tooltip>
                   )}
+                  {hasStatusChange && (
+                    <Tooltip title={row.status === 'closed' ? 'Already closed — cannot change' : 'Change status'}>
+                      <span>
+                        <IconButton
+                          color="warning"
+                          onClick={() => row.status !== 'closed' && handlProjectStatusModal(row)}
+                          size="small"
+                          sx={{
+                            ...style.cmnIcon,
+                            ...style.cmnStatusIcon,
+                            opacity: row.status === 'closed' ? 0.5 : 1,
+                            cursor: row.status === 'closed' ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          <BlockIcon fontSize="small" sx={style.cmnSvg} />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                  )}
+
                   {hasDelete && row.status !== 'publish' && (
                     <Tooltip title="Delete">
                       <IconButton
