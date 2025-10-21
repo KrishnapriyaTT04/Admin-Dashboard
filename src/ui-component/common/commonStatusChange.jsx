@@ -62,7 +62,8 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm ,title = "Change
             sx={{
               ml: 1,
               fontWeight: 600,
-              color: theme.palette.primary.main
+              color: theme.palette.primary.main,
+              textTransform: 'capitalize'
             }}
           >
             {facility.status || 'N/A'}
