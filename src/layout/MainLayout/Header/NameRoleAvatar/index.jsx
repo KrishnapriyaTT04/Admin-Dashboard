@@ -134,7 +134,8 @@ export default function BackgroundLetterAvatars() {
               <span
                 style={{
                   color: status === 'active' ? '#22c55e' : '#ef4444',
-                  fontWeight: 600
+                  fontWeight: 600,
+                  textTransform: 'capitalize'
                 }}
               >
                 {status}
