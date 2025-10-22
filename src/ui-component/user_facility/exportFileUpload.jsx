@@ -635,7 +635,7 @@ const UploadBulkFile = ({ drawerOpen, setDrawerOpen }) => {
     },
     {
       name: 'Features',
-      description: 'List available features (e.g., Parking, Wheel Chair, etc.) and separate multiple features with **commas**.',
+      description: 'List available features (e.g., Parking, Wheel Chair, etc.) and separate multiple features with commas.',
       format: 'Parking,Wheel Chair,Indian Type',
       required: false
     }

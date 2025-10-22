@@ -1,4 +1,4 @@
-import { padding } from '@mui/system';
+import { bgcolor, padding } from '@mui/system';
 import colors from 'assets/scss/_themes-vars.module.scss';
 
 const style = (theme) => ({
@@ -72,6 +72,12 @@ const style = (theme) => ({
       color: '#23282c'
     }
   },
+
+  firstLetterCap: {
+  '&::first-letter': {
+    textTransform: 'uppercase',
+  }
+},
   chipLabel: {
     '&.MuiChip-root': {
       // color: '#fff',

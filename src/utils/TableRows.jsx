@@ -57,6 +57,7 @@ const TableRows = ({
   const theme = useTheme();
   const style = styles(theme);
 
+
   const user = JSON.parse(localStorage.getItem('PsbUser'));
 
   const cellContent = (keyItem, index, row) => {
@@ -113,8 +114,10 @@ const TableRows = ({
               return (
                 <TableCell
                   key={index}
+                //  className={style.firstLetterCap}
                   sx={{
-                    textTransform: 'capitalize',
+                    ...style.firstLetterCap,
+                    // textTransform: 'capitalize',
                     ...(keyItem === 'projectId' ? {} : { maxWidth: '155px' }),
                     padding: '10px !important',
                     textAlign: config[keyItem]?.align === 'right' ? 'right' : 'left'

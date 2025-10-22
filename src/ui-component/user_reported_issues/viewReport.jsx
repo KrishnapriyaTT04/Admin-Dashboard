@@ -31,6 +31,11 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
       .join(' ');
   }
 
+  function capitalizeFirstWord(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
   const DetailSection = ({ icon, title, children }) => (
     <Card
       variant="outlined"
@@ -135,16 +140,16 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
                 <DetailItem label="Issue ID" value={formatDate(item.issueId)} />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Issue" value={capitalizeWords(item.topic)} />
+                <DetailItem label="Issue" value={capitalizeFirstWord(item.topic)} />
               </Grid>
               <Grid item xs={12} sm={4}>
                  <DetailItem label="Reported By" value={capitalizeWords(item.reportedByName)} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DetailItem label="Description" value={capitalizeWords(item.description)} />
+                <DetailItem label="Description" value={capitalizeFirstWord(item.description)} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DetailItem label="Comments" value={capitalizeWords(item.comments)} />
+                <DetailItem label="Comments" value={capitalizeFirstWord(item.comments)} />
               </Grid>
             </Grid>
           </DetailSection>
