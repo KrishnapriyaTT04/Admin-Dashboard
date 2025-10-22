@@ -137,7 +137,7 @@ const ViewReport = ({ drawerOpen, setDrawerOpen, item }) => {
           <DetailSection icon={<AttachFileIcon />} title="Basic Information">
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>
-                <DetailItem label="Issue ID" value={formatDate(item.issueId)} />
+                <DetailItem label="Issue ID" value={item.issueId} />
               </Grid>
               <Grid item xs={12} sm={4}>
                 <DetailItem label="Issue" value={capitalizeFirstWord(item.topic)} />
