@@ -109,7 +109,7 @@ export default function BackgroundLetterAvatars() {
         }}
       >
         <Stack direction="column" alignItems="center" spacing={1.2}>
-          <Avatar {...stringAvatar(name)} sx={{ width: 60, height: 60, bgcolor: '#019863', color: '#fff' }} />
+          <Avatar {...stringAvatar(name)} sx={{ width: 60, height: 60, bgcolor: '#039123', color: '#fff' }} />
           <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#364152' }}>
             {name}
           </Typography>

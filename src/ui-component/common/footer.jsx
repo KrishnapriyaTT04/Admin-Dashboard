@@ -45,7 +45,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             sx={{
-              color: '#019863 !important',
+              color: '#039123 !important',
               textDecoration: 'underline',
               fontWeight: 500,
               '&:hover': { color: '#d0f0e0' }

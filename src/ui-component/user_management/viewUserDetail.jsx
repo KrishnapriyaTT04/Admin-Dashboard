@@ -8,7 +8,7 @@ import {
 
 const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
-  const primary = '#019863';
+  const primary = '#039123';
   const lightGreen = '#e8f5e9';
 
   const formatDate = (dateString) => {

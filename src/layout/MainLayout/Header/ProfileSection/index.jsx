@@ -68,7 +68,7 @@ const ResponsiveIcons = () => {
       {/* Settings Icon */}
       {userDtls?.message?.roles ? (
         <IconButton
-          sx={{ color: '#fff',bgcolor:'#019863', pointerEvents: isDraftOrPending ? 'none' : 'auto', cursor: isDraftOrPending ? 'not-allowed' : 'pointer' }}
+          sx={{ color: '#fff',bgcolor:'#039123', pointerEvents: isDraftOrPending ? 'none' : 'auto', cursor: isDraftOrPending ? 'not-allowed' : 'pointer' }}
           onClick={handleMenuOpen}
         >
           <IconSettings size={matchesXs ? 25 : 30} />
@@ -114,7 +114,7 @@ const ResponsiveIcons = () => {
         }}
         sx={{
           color: 'white',
-          backgroundColor: '#019863', 
+          backgroundColor: '#039123', 
           '&:hover': {
             backgroundColor: '#018054' 
           },
@@ -156,11 +156,11 @@ const ResponsiveIcons = () => {
             sx={{
               textTransform: 'none',
               borderRadius: 2,
-              borderColor: '#019863',
-              color: '#019863',
+              borderColor: '#039123',
+              color: '#039123',
               '&:hover': {
                 borderColor: '#017a53',
-                backgroundColor: '#0198630a'
+                backgroundColor: '#0391230a'
               }
             }}
           >
@@ -175,7 +175,7 @@ const ResponsiveIcons = () => {
             sx={{
               textTransform: 'none',
               borderRadius: 2,
-              backgroundColor: '#019863',
+              backgroundColor: '#039123',
               '&:hover': {
                 backgroundColor: '#017a53'
               }

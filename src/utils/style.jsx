@@ -23,7 +23,7 @@ const style = (theme) => ({
   },
 
   cmnViewIcon: {
-    backgroundColor: '#019863',
+    backgroundColor: '#30a049',
 
     '&:hover': {
       backgroundColor: '#30a049'

@@ -41,8 +41,8 @@ export const DetailCard = ({ title, data = [], count, fields = [], path, sx = {}
             <span
               style={{
                 fontSize: '10px',
-                border: '1px solid #019863',
-                color: '#019863',
+                border: '1px solid #039123',
+                color: '#039123',
                 borderRadius: '10px',
                 background: '#f2f5f8',
                 padding: '3px 7px'

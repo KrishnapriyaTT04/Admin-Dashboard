@@ -130,7 +130,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }) => {
               ? {
                   '& .MuiDrawer-paper': {
                     width: width,
-                    backgroundColor: 'transparent linear-gradient(180deg, #019863, #019863) 0 0 no-repeat',
+                    backgroundColor: '#039123',
                     paddingTop: '10px',
                     borderRight: 'none',
                     [theme.breakpoints.up('md')]: {

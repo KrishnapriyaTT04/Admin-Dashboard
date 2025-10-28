@@ -64,7 +64,7 @@ const DashboardDefault = () => {
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Box
             sx={{
-              background: '#019863',
+              background: '#039123',
               color: '#fff',
               borderRadius: '50%',
               height: 40,

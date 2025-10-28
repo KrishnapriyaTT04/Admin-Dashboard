@@ -123,15 +123,15 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm ,title = "Change
             fontWeight: 400,
             fontSize: 12,
             color: 'white !important',
-            backgroundImage: 'linear-gradient(180deg, #019863, #019863)',
+            backgroundColor: '#039123',
             borderRadius: 2,
-            border: '1px solid #019863',
+            border: '1px solid #039123',
             boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
             transition: 'all 0.3s ease',
             '&:hover': {
               backgroundColor: 'transparent',
-              color: '#019863',
-              border: '1px solid #019863',
+              color: '#039123',
+              border: '1px solid #039123',
             }
           }}
           disabled={!newStatus || newStatus === facility.status}

@@ -19,7 +19,7 @@ const Pagination = ({ countPagination, page, handlePageClick }) => {
           boundaryCount={2}
           sx={{
             '& .MuiPaginationItem-root.Mui-selected': {
-              backgroundColor: '#019863',
+              backgroundColor: '#039123',
               color: '#fff'
             }
           }}

@@ -125,15 +125,15 @@ const AuthLogin = (props) => {
                     fontWeight: 600,
                     fontSize: 16,
                     color: '#fff',
-                    backgroundColor: '#019863',
+                    backgroundColor: '#039123',
                     borderRadius: 2,
-                    border: '1px solid #019863',
+                    border: '1px solid #039123',
                     boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: 'white',
-                      color: '#019863',
-                      border: '1px solid #019863'
+                      color: '#039123',
+                      border: '1px solid #039123'
                     }
                   }}
                 >

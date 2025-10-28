@@ -36,7 +36,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 
 const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
-  const primary = '#019863';
+  const primary = '#039123';
   const lightGreen = '#e8f5e9';
 
   const attachments = item?.attachments || [];
