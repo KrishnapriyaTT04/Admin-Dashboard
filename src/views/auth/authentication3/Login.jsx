@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import FormikTextField from 'ui-component/common/loginInput';
 import { userLogin } from 'container/LoginContainer/slice';
 
-import logo from 'assets/images/auth/kloo-icon.svg';
+import logo from 'assets/images/kloo_New_logo.svg';
 const AppVersion = import.meta.env.VITE_APP_VERSION;
 
 const AuthLogin = (props) => {
@@ -63,7 +63,7 @@ const AuthLogin = (props) => {
         }}
       >
         <Box sx={{ mb: 3, display: 'flex', justifyContent: 'center' }}>
-          <Box component="img" src={logo} alt="Kloo Logo" sx={{ height: { xs: 35, sm: 45 }, maxWidth: '100%' }} />
+          <Box component="img" src={logo} alt="Kloo Logo" sx={{ height: { xs: 35, sm: 65 }, maxWidth: '100%' }} />
         </Box>
 
         <Typography
