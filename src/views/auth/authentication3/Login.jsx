@@ -63,7 +63,7 @@ const AuthLogin = (props) => {
         }}
       >
         <Box sx={{ mb: 3, display: 'flex', justifyContent: 'center' }}>
-          <Box component="img" src={logo} alt="Kloo Logo" sx={{ height: { xs: 35, sm: 45 }, maxWidth: '100%' }} />
+          <Box component="img" src={logo} alt="Kloo Logo" sx={{ height: { xs: 35, sm: 65 }, maxWidth: '100%' }} />
         </Box>
 
         <Typography

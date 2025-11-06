@@ -1433,7 +1433,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
                       <Field name="features">
                         {({ field, form, meta }) => (
                           <FormControl fullWidth error={meta.touched && !!meta.error}>
-                            <InputLabel>Features</InputLabel>
+                            <InputLabel style={{backgroundColor:"white"}}>Features</InputLabel>
                             <Select
                               {...field}
                               multiple

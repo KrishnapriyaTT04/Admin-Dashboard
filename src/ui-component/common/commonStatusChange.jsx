@@ -130,7 +130,7 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm ,title = "Change
             transition: 'all 0.3s ease',
             '&:hover': {
               backgroundColor: 'transparent',
-              color: '#039123',
+              color: 'black !important',
               border: '1px solid #039123',
             }
           }}
