@@ -21,8 +21,6 @@ const getStatusColor = (status) => {
       return { text: '#ffffff', bg: '#808080' };
     case 'draft':
       return { text: '#ffffff', bg: '#808080' };
-    case 'publish':
-    case 'completed':
     case 'closed':
       return { text: '#ffffff', bg: '#00cc99' };
     case 'deleted':
