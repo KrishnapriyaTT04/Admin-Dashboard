@@ -227,6 +227,7 @@ export default function Type() {
               tableLimit={limit} 
               hasView={true}
               hasEdit={false}
+              hasComment={false}
               hasDelete={false}
               hasStatusChange={false}
               hasMore={false}

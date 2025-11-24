@@ -157,6 +157,7 @@ export default function Users() {
             currentPage={page + 1}
             tableLimit={limit}
             hasView
+            hasComment={false}
             hasEdit={false}
             hasDelete={false}
             hasStatusChange={true}

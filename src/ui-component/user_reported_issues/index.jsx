@@ -174,7 +174,8 @@ export default function userReportedIssues() {
               tableLimit={limit}
               currentPage={page + 1}
               hasView={true}
-              hasEdit={true}
+              hasEdit={false} 
+              hasComment={true}
               hasDelete={false}
               hasStatusChange={true}
               hasMore={false}

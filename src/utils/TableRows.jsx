@@ -13,6 +13,7 @@ import {
   Close as CloseIcon,
   SwapHoriz as SwapHorizIcon
 } from '@mui/icons-material';
+import CommentIcon from '@mui/icons-material/Comment';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import { renderItem } from './ItemDisplay';
 import NoDataMsg from './NodataMsg';
@@ -34,6 +35,7 @@ const TableRows = ({
   hasProjectShare = false,
   hasDelete = true,
   hasEdit = true,
+  hasComment = true,
   hasRevision = false,
   hasView = true,
   hasProjectView = false,
@@ -56,7 +58,7 @@ const TableRows = ({
 }) => {
   const theme = useTheme();
   const style = styles(theme);
-
+  console.log('==data', data);
 
   const user = JSON.parse(localStorage.getItem('PsbUser'));
 
@@ -114,7 +116,7 @@ const TableRows = ({
               return (
                 <TableCell
                   key={index}
-                //  className={style.firstLetterCap}
+                  //  className={style.firstLetterCap}
                   sx={{
                     ...style.firstLetterCap,
                     // textTransform: 'capitalize',
@@ -183,6 +185,19 @@ const TableRows = ({
                       </IconButton>
                     </Tooltip>
                   )}
+                  {hasComment && (
+                    <Tooltip title="Reply">
+                      <IconButton
+                        color="info"
+                        onClick={() => handleFormModal(row)}
+                        size="small"
+                        sx={{ ...style.cmnIcon, ...style.cmnEditIcon }}
+                      >
+                        <CommentIcon sx={style.cmnSvg} />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+
                   {hasStatusChange && (
                     <Tooltip title={row.status === 'closed' ? 'Already closed — cannot change' : 'Change status'}>
                       <span>

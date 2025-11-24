@@ -9,10 +9,11 @@ const getStatusColor = (status) => {
   switch (status) {
     case 'open': 
     case 'active':
-      return { text: '#039123', bg: '#0391232e' };
+      return { text: '#019863', bg: '#0198632e' };
     case 'inactive':
-    case 'closed':  
-      return { text: 'red', bg: '#ff00001a' };
+      return { text: '#6c757d', bg: '#6c757d2e' };
+    case 'inProgress':
+      return { text: '#f39c12', bg: '#f39c1236' };
     case 'cancelled':
       return { text: '#ffffff', bg: '#f86c6b' };
     case 'created':

@@ -165,6 +165,7 @@ export default function UserRating() {
               tableLimit={limit}
               hasView={true}
               hasEdit={false}
+              hasComment={false}
               hasDelete={false}
               hasStatusChange={false}
               hasMore={false}

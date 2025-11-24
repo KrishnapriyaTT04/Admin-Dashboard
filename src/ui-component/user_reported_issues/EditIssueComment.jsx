@@ -68,7 +68,7 @@ const EditIssueComment = ({ drawerOpen, setDrawerOpen, item, getReqUrl }) => {
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h3" fontWeight={700} color={primary}>
-            Issue Comment
+            Comment
           </Typography>
           <IconButton
             onClick={() => setDrawerOpen(false)}
@@ -80,7 +80,7 @@ const EditIssueComment = ({ drawerOpen, setDrawerOpen, item, getReqUrl }) => {
       </CardContent>
     </Card>
 
-    <DetailSection icon={<ChatIcon />} title="Comment">
+    <DetailSection icon={<ChatIcon />} title="Issue">
       <Box sx={{ mb: 3 }}>
         <Typography variant="subtitle1" gutterBottom>
           Topic

@@ -332,6 +332,7 @@ export default function Facility() {
                 currentPage={page + 1}
                 tableLimit={limit}
                 hasView={true}
+                hasComment={false}
                 hasEdit={true}
                 hasDelete={false}
                 hasStatusChange={true}
