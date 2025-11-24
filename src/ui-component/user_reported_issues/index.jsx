@@ -119,8 +119,10 @@ export default function userReportedIssues() {
   };
 
   const handleUpdateStatus = (newStatus) => {
+    
     let values = {
-      id: selectedItem.id
+      id: selectedItem.id,
+       status:newStatus
     };
     dispatch(updIssueStts({ values, getReqestUrl: getReqUrl }));
     handleCloseStatusModal();
@@ -202,6 +204,7 @@ export default function userReportedIssues() {
             onClose={handleCloseStatusModal}
             onConfirm={handleUpdateStatus}
             title="Change Issue Status"
+            type="issue"
           />
         )}
 

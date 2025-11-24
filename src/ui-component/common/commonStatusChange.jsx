@@ -20,13 +20,13 @@ const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   { value: 'closed', label: 'Close' },
-  { value: 'open', label: 'Open' }
+  { value: 'open', label: 'Open' },
+  { value: 'inProgress', label: 'In Progress' }
 ];
 
-const StatusChangeModal = ({ open, facility, onClose, onConfirm ,title = "Change Facility Status"}) => {
+const StatusChangeModal = ({ open, facility, onClose, onConfirm, type , title = 'Change Facility Status' }) => {
   const theme = useTheme();
   const [newStatus, setNewStatus] = useState('');
-
 
   useEffect(() => {
     if (facility) {
@@ -74,17 +74,17 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm ,title = "Change
           <InputLabel id="new-status-label">New Status</InputLabel>
           <Select labelId="new-status-label" value={newStatus} onChange={(e) => setNewStatus(e.target.value)} label="New Status">
             {STATUS_OPTIONS.filter((option) => {
-              if (facility.status === 'open' || facility.status === 'closed') {
-                return option.value === 'open' || option.value === 'closed';
+              if (type === 'issue') {
+                return ['open', 'closed', 'inProgress'].includes(option.value);
               } else {
-                return option.value === 'active' || option.value === 'inactive';
+                if (facility.status === 'open' || facility.status === 'closed') {
+                  return option.value === 'open' || option.value === 'closed';
+                } else {
+                  return option.value === 'active' || option.value === 'inactive';
+                }
               }
             }).map((option) => (
-              <MenuItem
-                key={option.value}
-                value={option.value}
-                disabled={option.value === facility.status}
-              >
+              <MenuItem key={option.value} value={option.value} disabled={option.value === facility.status}>
                 {option.label}
               </MenuItem>
             ))}
@@ -131,7 +131,7 @@ const StatusChangeModal = ({ open, facility, onClose, onConfirm ,title = "Change
             '&:hover': {
               backgroundColor: 'transparent',
               color: 'black !important',
-              border: '1px solid #039123',
+              border: '1px solid #039123'
             }
           }}
           disabled={!newStatus || newStatus === facility.status}

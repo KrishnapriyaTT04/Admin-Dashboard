@@ -89,8 +89,19 @@ function* updateUserSaga(action) {
 
         let updateBody = { ...userData };
         delete updateBody.id;
-
-        const params = {
+        let params;
+        if(updateBody.status =="inactive"){
+            params = {
+            api: `${USER_API_BASE}/users/inactive/${userData.id}`,
+            method: 'PATCH',
+            // body: JSON.stringify(updateBody),
+            successAction: actionType.updateUserSuccess(),
+            failAction: actionType.updateUserFail(),
+            authorization: 'Bearer',
+            token: accessToken
+        };
+        }else{
+             params = {
             api: `${USER_API_BASE}/users/${userData.id}`,
             method: 'PATCH',
             body: JSON.stringify(updateBody),
@@ -99,6 +110,9 @@ function* updateUserSaga(action) {
             authorization: 'Bearer',
             token: accessToken
         };
+        }
+
+        
 
         const res = yield call(commonApi, params);
         

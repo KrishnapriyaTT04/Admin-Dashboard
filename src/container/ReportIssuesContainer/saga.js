@@ -137,15 +137,17 @@ function* updateIssueStatus(action) {
 
     let updateBody = { ...data };
     delete updateBody.id;
+    let updateBody2 = { status:updateBody.status };
 
     const params = {
-      api: `${ISSUE_API_BASE}/issues/close/${data.id}`,
+      api: `${ISSUE_API_BASE}/issues/${data.id}`,
       method: 'PATCH',
-      // body: JSON.stringify(updateBody),
+      body: JSON.stringify(updateBody2),
       successAction: actionType.updIssueSttsSuccess(),
       failAction: actionType.updIssueSttsFail(),
       authorization: 'Bearer',
       token: accessToken
+      
     };
 
     const res = yield call(commonApi, params);

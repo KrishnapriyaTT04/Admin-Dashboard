@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
-import Logo from 'assets/images/logov2.svg';
+import Logo from 'assets/images/logo.svg';
 import { Box } from '@mui/material';
 //  import styles from './authentication/auth-forms/style';
 import styles from '../../../utils/style';

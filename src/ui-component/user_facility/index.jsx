@@ -253,8 +253,6 @@ export default function Facility() {
     };
   });
 
-  console.log('==displayedData', displayedData);
-
   return (
     <>
       <MainCard>
@@ -379,7 +377,8 @@ export default function Facility() {
         </Box>
         {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
 
-        {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem} />}
+        {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem}  getReqestUrl={getReqUrl}/>}
+
         {formOpen && (
           <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} getReqestUrl={getReqUrl} />
         )}
