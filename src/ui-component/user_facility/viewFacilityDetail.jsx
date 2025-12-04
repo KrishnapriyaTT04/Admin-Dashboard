@@ -202,9 +202,9 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                   <InfoChip icon={<AccessTimeIcon />} label={'Open 24 Hours'} active={item.is24H} />
                 </Grid>
               )}
-              <Grid item xs={12} sm={3}>
+              {/* <Grid item xs={12} sm={3}>
                 <InfoChip icon={<AccessTimeIcon />} label={`24 Hours: ${item.is24H ? 'Yes' : 'No'}`} active={item.is24H} />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={3}>
                 <InfoChip icon={<AttachMoneyIcon />} label={`Paid Service: ${item.isPaid ? 'Yes' : 'No'}`} active={item.isPaid} />
               </Grid>
