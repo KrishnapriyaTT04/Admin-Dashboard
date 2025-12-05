@@ -40,7 +40,6 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const lightGreen = '#e8f5e9';
   const lightYellow = '#f39c1236';
 
-
   const attachments = item?.attachments || [];
   const [selectedImage, setSelectedImage] = useState(null);
   const [open, setOpen] = useState(false);
@@ -217,11 +216,18 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
               <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1, fontWeight: 600 }}>
                 Facility Features
               </Typography>
+
               <Stack
                 direction="row"
-                spacing={1}
                 flexWrap="wrap"
-                sx={{ bgcolor: '#fafafa', borderRadius: 2, p: 2, border: `1px solid ${primary}20` }}
+                useFlexGap
+                sx={{
+                  gap: 1,
+                  bgcolor: '#fafafa',
+                  borderRadius: 2,
+                  p: 2,
+                  border: `1px solid ${primary}20`
+                }}
               >
                 {item.features?.length ? (
                   item.features.map((f, i) => (
@@ -246,39 +252,41 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
               </Stack>
             </Box>
 
-            {item.specialities?.length && (
-                          <Box mt={3}>
-              <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1, fontWeight: 600 }}>
-                Speciality Features
-              </Typography>
-              <Stack
-                direction="row"
-                spacing={1}
-                flexWrap="wrap"
-                sx={{ bgcolor: '#fafafa', borderRadius: 2, p: 2, border: `1px solid ${primary}20` }}
-              >
-                {item.specialities?.length ? (
-                  item.specialities.map((f, i) => (
+            {/* Hide completely when 0 */}
+            {item.specialities && item.specialities.length > 0 && (
+              <Box mt={3}>
+                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1, fontWeight: 600 }}>
+                  Speciality Features
+                </Typography>
+
+                <Stack
+                  direction="row"
+                  flexWrap="wrap"
+                  useFlexGap
+                  sx={{
+                    gap: 1,
+                    bgcolor: '#fafafa',
+                    borderRadius: 2,
+                    p: 2,
+                    border: `1px solid ${primary}20`
+                  }}
+                >
+                  {item.specialities.map((f, i) => (
                     <Chip
                       key={i}
-                      label={f} 
+                      label={f}
                       sx={{
                         bgcolor: lightYellow,
                         color: '#f39c0a',
                         border: `1px solid #f39c0a60`,
                         fontWeight: 500,
                         borderRadius: '8px'
-                      }}  
+                      }}
                     />
-                  ))
-                ) : (
-                  <Typography variant="body2" color="text.secondary">
-                    No additional Speciality Features
-                  </Typography>
-                )}
-              </Stack>
-            </Box>)}
-
+                  ))}
+                </Stack>
+              </Box>
+            )}
           </DetailSection>
 
           {/* Location Details */}
