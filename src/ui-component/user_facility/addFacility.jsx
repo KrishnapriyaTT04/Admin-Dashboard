@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import {
@@ -17,20 +16,20 @@ import {
   Card,
   CardContent,
   Stack,
-  Avatar
+  Avatar,
+  Chip,
+  TextField,
+  Autocomplete
 } from '@mui/material';
-
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import Drawer from '@mui/material/Drawer';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import * as Yup from 'yup';
-import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import FormikSwitch from '../common/toggleSwitch';
 import MapPickerComponent from '../common/locationMapPicker';
-
 
 import {
   Close as CloseIcon,
@@ -42,7 +41,6 @@ import {
 } from '@mui/icons-material';
 
 import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
-
 
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -61,7 +59,6 @@ import { districtsData } from '../common/district';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ImageAttachmentManager from 'ui-component/common/existingImageComponent';
-
 
 const dayMap = [
   { id: 'Monday', label: 'Mon' },
@@ -101,7 +98,8 @@ const baseInitialValues = {
   address1: '',
   address2: '',
   features: [],
-  attachments: []
+  attachments: [],
+  specialities: [] // ⭐ NEW FIELD ADDED HERE
 };
 
 const validationSchema = Yup.object({
@@ -173,6 +171,10 @@ const getInitialValues = (item) => ({
   address1: item?.address1 || baseInitialValues.address1,
   address2: item?.address2 || baseInitialValues.address2,
   attachments: item?.attachments || baseInitialValues.attachments,
+
+  // ⭐ NEW FIELD ADDED HERE
+  specialities: item?.specialities || baseInitialValues.specialities,
+
   id: item?.id || ''
 });
 
@@ -284,7 +286,6 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
           }}
         >
           <Box sx={{ p: 3, height: '100%' }}>
-
             <Card sx={{ mb: 3, bgcolor: '#f0f9f6', borderRadius: 2, color: primary, boxShadow: 'none' }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -354,6 +355,35 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
                         )}
                       </Field>
                     </Grid>
+                    {(values.facilityType === 'Restaurant' || values.facilityType === 'Cafe') && (
+                      <Grid item xs={12}>
+                        <Field name="specialities">
+                          {({ field, form, meta }) => (
+                            <Autocomplete
+                              multiple
+                              freeSolo
+                              options={[]} // optional, can add predefined options
+                              value={field.value || []}
+                              onChange={(event, newValue) => {
+                                // Remove duplicates
+                                const uniqueValues = Array.from(new Set(newValue.map((v) => v.trim()))).filter(Boolean);
+                                form.setFieldValue(field.name, uniqueValues);
+                              }}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Specialities *"
+                                  placeholder="Type and press Enter"
+                                  error={meta.touched && !!meta.error}
+                                  helperText={meta.touched && meta.error}
+                                  fullWidth
+                                />
+                              )}
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                    )}
 
                     <Grid item xs={6}>
                       <Field name="category">
@@ -467,7 +497,7 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
                       <Field name="features">
                         {({ field, form, meta }) => (
                           <FormControl fullWidth error={meta.touched && !!meta.error}>
-                            <InputLabel style={{backgroundColor:"white"}}>Features</InputLabel>
+                            <InputLabel style={{ backgroundColor: 'white' }}>Features</InputLabel>
                             <Select
                               {...field}
                               multiple

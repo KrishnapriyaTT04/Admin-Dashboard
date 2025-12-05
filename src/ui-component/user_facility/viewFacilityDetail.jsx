@@ -38,6 +38,8 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
   const primary = '#039123';
   const lightGreen = '#e8f5e9';
+  const lightYellow = '#f39c1236';
+
 
   const attachments = item?.attachments || [];
   const [selectedImage, setSelectedImage] = useState(null);
@@ -243,6 +245,40 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 )}
               </Stack>
             </Box>
+
+            {item.specialities?.length && (
+                          <Box mt={3}>
+              <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1, fontWeight: 600 }}>
+                Speciality Features
+              </Typography>
+              <Stack
+                direction="row"
+                spacing={1}
+                flexWrap="wrap"
+                sx={{ bgcolor: '#fafafa', borderRadius: 2, p: 2, border: `1px solid ${primary}20` }}
+              >
+                {item.specialities?.length ? (
+                  item.specialities.map((f, i) => (
+                    <Chip
+                      key={i}
+                      label={f} 
+                      sx={{
+                        bgcolor: lightYellow,
+                        color: '#f39c0a',
+                        border: `1px solid #f39c0a60`,
+                        fontWeight: 500,
+                        borderRadius: '8px'
+                      }}  
+                    />
+                  ))
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    No additional Speciality Features
+                  </Typography>
+                )}
+              </Stack>
+            </Box>)}
+
           </DetailSection>
 
           {/* Location Details */}
