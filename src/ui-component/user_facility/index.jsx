@@ -79,8 +79,8 @@ export default function Facility() {
   const [getReqUrl, setGetReqUrl] = useState('');
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState('');
-  const isFilterApplied = selectedDistricts.length > 0 || selectedStatus !== '';
+  const [selectedStatus, setSelectedStatus] = useState([]);
+  const isFilterApplied = selectedDistricts.length > 0 || selectedStatus.length > 0;
 
   const facilityList = useSelector((state) => state.facility?.list || []);
 
@@ -111,33 +111,14 @@ export default function Facility() {
     });
   };
 
+  const handleToggleStatus = (value) => {
+    setSelectedStatus((prev) => (prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]));
+  };
+
   const [filters, setFilters] = useState({
     search: '',
     districts: []
   });
-
-  // const handleApplyDistrictFilter = () => {
-  //   const newWhere = { ...(currentFilter.where || {}) };
-
-  //   if (selectedDistricts.length > 0) {
-  //     // use "inq" as your backend expects; if it needs "in" change accordingly
-  //     newWhere.district = { inq: selectedDistricts };
-  //   } else {
-  //     // no districts selected => remove district filter
-  //     delete newWhere.district;
-  //   }
-
-  //   const newFilter = {
-  //     ...currentFilter,
-  //     limit,
-  //     skip: 0, // always go to first page after applying a new filter
-  //     where: newWhere
-  //   };
-
-  //   setCurrentFilter(newFilter);
-  //   setPage(0);
-  //   setFilterDrawerOpen(false);
-  // };
 
   const handleClearDistricts = () => {
     setSelectedDistricts([]);
@@ -169,11 +150,9 @@ export default function Facility() {
   };
 
   const handleClearFilters = () => {
-    // Clear local states
     setSelectedDistricts([]);
-    setSelectedStatus('');
+    setSelectedStatus([]);
 
-    // Remove filters from currentFilter but keep pagination and limit
     const newFilter = {
       ...currentFilter,
       skip: 0,
@@ -187,16 +166,16 @@ export default function Facility() {
   const handleApplyFilter = () => {
     const newWhere = { ...(currentFilter.where || {}) };
 
-    // District filter
+    // Districts
     if (selectedDistricts.length > 0) {
       newWhere.district = { inq: selectedDistricts };
     } else {
       delete newWhere.district;
     }
 
-    // Status filter
-    if (selectedStatus) {
-      newWhere.status = { inq: [selectedStatus] }; // wrap in array
+    // Status (MULTI)
+    if (selectedStatus.length > 0) {
+      newWhere.status = { inq: selectedStatus };
     } else {
       delete newWhere.status;
     }
@@ -612,49 +591,33 @@ export default function Facility() {
 
             {/* RIGHT — STATUS */}
             <Grid item xs={12} sm={5}>
-              {' '}
-              {/* spacious right side */}
               <Typography sx={{ fontWeight: 700, mb: 2, color: textDark, fontSize: 18 }}>Status</Typography>
-              <RadioGroup
-                value={selectedStatus}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (selectedStatus === value) setSelectedStatus('');
-                  else setSelectedStatus(value);
-                }}
-              >
-                <FormControlLabel
-                  value="draft"
-                  control={<Radio />}
-                  label="Draft"
-                  sx={{ color: 'black' }}
-                  onClick={() => selectedStatus === 'draft' && setSelectedStatus('')}
-                />
 
-                <FormControlLabel
-                  value="inactive"
-                  control={<Radio />}
-                  label="Inactive"
-                  sx={{ color: 'black' }}
-                  onClick={() => selectedStatus === 'inactive' && setSelectedStatus('')}
-                />
-
-                <FormControlLabel
-                  value="active"
-                  control={<Radio />}
-                  label="Active"
-                  sx={{ color: 'black' }}
-                  onClick={() => selectedStatus === 'active' && setSelectedStatus('')}
-                />
-
-                <FormControlLabel
-                  value="rejected"
-                  control={<Radio />}
-                  label="Rejected"
-                  sx={{ color: 'black' }}
-                  onClick={() => selectedStatus === 'rejected' && setSelectedStatus('')}
-                />
-              </RadioGroup>
+              {[
+                { value: 'draft', label: 'Draft' },
+                { value: 'inactive', label: 'Inactive' },
+                { value: 'active', label: 'Active' },
+                { value: 'rejected', label: 'Rejected' }
+              ].map((item) => (
+                <Box
+                  key={item.value}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    p: 1,
+                    borderRadius: 1.5,
+                    transition: '0.2s',
+                    '&:hover': { backgroundColor: bgSoft }
+                  }}
+                >
+                  <Checkbox
+                    checked={selectedStatus.includes(item.value)}
+                    onChange={() => handleToggleStatus(item.value)}
+                    sx={{ color: primary, '&.Mui-checked': { color: primary } }}
+                  />
+                  <Typography sx={{ ml: 1.2, fontSize: 15, color: textDark }}>{item.label}</Typography>
+                </Box>
+              ))}
             </Grid>
           </Grid>
         </Box>

@@ -67,6 +67,7 @@ const TableRows = ({
       return renderItem(row[keyItem], config[keyItem].type, config[keyItem].res, keyItem);
     }
 
+
     return renderItem(
       config[keyItem]?.label === 'Status'
         ? row.status
