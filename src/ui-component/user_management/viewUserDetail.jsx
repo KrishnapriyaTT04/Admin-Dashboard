@@ -1,10 +1,5 @@
 import { Box, Typography, IconButton, Grid, useTheme, Chip, Card, CardContent, Stack, Avatar, Drawer } from '@mui/material';
-import {
-  Close as CloseIcon,
-  Person as PersonIcon,
-  Email as EmailIcon,
-  Phone as PhoneIcon,
-} from '@mui/icons-material';
+import { Close as CloseIcon, Person as PersonIcon, Email as EmailIcon, Phone as PhoneIcon } from '@mui/icons-material';
 
 const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
@@ -25,20 +20,21 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
       return 'Invalid Date';
     }
   };
-
-  
+  const capitalizeWords = (text) => {
+    if (!text) return '';
+    return text
+      .replace(/([A-Z])/g, ' $1') // Add space before uppercase letters
+      .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter of the first word
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
 
   const getFullName = () => {
     return item?.fullName || (item?.firstName && item?.lastName ? `${item.firstName} ${item.lastName}` : 'N/A');
   };
 
-  function capitalizeWords(str) {
-    if (!str) return '';
-    return str
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-  }
+ 
 
   const DetailSection = ({ icon, title, children }) => (
     <Card
@@ -104,7 +100,7 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                   <Typography variant="h2" fontWeight={700} color={primary} mr={2}>
                     {getFullName()}
                   </Typography>
-                  <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white', bgcolor:primary }} />
+                  <Chip label={capitalizeWords(item.status)} variant="filled" sx={{ color: 'white', bgcolor: primary }} />
                 </Box>
                 <IconButton
                   onClick={() => setDrawerOpen(false)}
@@ -138,12 +134,12 @@ const ViewUserDetail = ({ drawerOpen, setDrawerOpen, item }) => {
                 <DetailItem
                   label="User Type"
                   value={item.userType ? item.userType.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()) : 'N/A'}
-                  
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <DetailItem label="Role" value={capitalizeWords(item.role)}  />
+                <DetailItem label="Role" value={capitalizeWords(item.role)} />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <DetailItem label="Created On" value={formatDate(item.createdOn)} />
               </Grid>

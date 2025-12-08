@@ -80,12 +80,6 @@ const style = (theme) => ({
       color: '#23282c'
     }
   },
-
-  firstLetterCap: {
-    '&::first-letter': {
-      textTransform: 'uppercase'
-    }
-  },
   chipLabel: {
     '&.MuiChip-root': {
       // color: '#fff',

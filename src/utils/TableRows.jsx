@@ -67,7 +67,6 @@ const TableRows = ({
       return renderItem(row[keyItem], config[keyItem].type, config[keyItem].res, keyItem);
     }
 
-
     return renderItem(
       config[keyItem]?.label === 'Status'
         ? row.status
@@ -82,6 +81,16 @@ const TableRows = ({
       config[keyItem].res,
       keyItem
     );
+  };
+  const formatRole = (role) => {
+    if (!role) return '';
+    // Insert space before uppercase letters, then capitalize first letter of each word
+    return role
+      .replace(/([A-Z])/g, ' $1') // Add space before uppercase letters
+      .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter of the first word
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   };
 
   const visibleColumnCount = React.useMemo(() => {
@@ -150,10 +159,11 @@ const TableRows = ({
                                   ? `${theme.palette.error.main} !important`
                                   : `${theme.palette.text.primary} !important`
                             : `${theme.palette.text.primary} !important`,
-                        fontWeight: keyItem === 'status' ? 600 : 400
+                        fontWeight: keyItem === 'status' ? 600 : 400,
+                        textTransform: keyItem === 'email' ? 'lowercase' : 'none'
                       }}
                     >
-                      {cellContent(keyItem, index, row)}
+                      {keyItem === 'role' ? formatRole(row[keyItem]) : cellContent(keyItem, index, row)}
                     </Typography>
                   </Tooltip>
                 </TableCell>
