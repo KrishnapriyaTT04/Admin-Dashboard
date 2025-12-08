@@ -355,41 +355,32 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
                         )}
                       </Field>
                     </Grid>
-                    {(values.facilityType === 'Restaurant' ||
-                      values.facilityType === 'Cafe' ||
-                      values.facilityType === 'Banquet Halls' ||
-                      values.facilityType === 'Bar' ||
-                      values.facilityType === 'Resort' ||
-                      values.facilityType === 'Home Stay' ||
-                      values.facilityType === 'Bakery' ||
-                      values.facilityType === 'Residency') && (
-                      <Grid item xs={12}>
-                        <Field name="specialities">
-                          {({ field, form, meta }) => (
-                            <Autocomplete
-                              multiple
-                              freeSolo
-                              options={[]}
-                              value={field.value || []}
-                              onChange={(event, newValue) => {
-                                const uniqueValues = Array.from(new Set(newValue.map((v) => v.trim()))).filter(Boolean);
-                                form.setFieldValue(field.name, uniqueValues);
-                              }}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="Specialities *"
-                                  placeholder="Type and press Enter"
-                                  error={meta.touched && !!meta.error}
-                                  helperText={meta.touched && meta.error}
-                                  fullWidth
-                                />
-                              )}
-                            />
-                          )}
-                        </Field>
-                      </Grid>
-                    )}
+                    <Grid item xs={12}>
+                      <Field name="specialities">
+                        {({ field, form, meta }) => (
+                          <Autocomplete
+                            multiple
+                            freeSolo
+                            options={[]}
+                            value={field.value || []}
+                            onChange={(event, newValue) => {
+                              const uniqueValues = Array.from(new Set(newValue.map((v) => v.trim()))).filter(Boolean);
+                              form.setFieldValue(field.name, uniqueValues);
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Specialities *"
+                                placeholder="Type and press Enter"
+                                error={meta.touched && !!meta.error}
+                                helperText={meta.touched && meta.error}
+                                fullWidth
+                              />
+                            )}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
 
                     <Grid item xs={6}>
                       <Field name="category">
