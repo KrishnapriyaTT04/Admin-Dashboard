@@ -13,9 +13,11 @@ import {
   Avatar,
   Drawer,
   CardMedia,
-  Modal
+  Modal,
+  Button
 } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Close as CloseIcon,
   AttachFile as AttachFileIcon,
@@ -33,12 +35,36 @@ import LocationMapViewer from 'ui-component/common/locationMapView';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import { getFacilities, updateFacility, getFacilitiesCount } from 'container/FacilityContainer/slice';
 
 const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
   const primary = '#039123';
   const lightGreen = '#e8f5e9';
   const lightYellow = '#f39c1236';
+  const dispatch = useDispatch();
+  const getReqUrl = `facilities/${item.id}`;
+
+  const [currentFilter, setCurrentFilter] = useState({
+    limit: 20,
+    skip: 0,
+    order: ['createdOn DESC'],
+    where: {}
+  });
+
+  const handleUpdateStatus = (newStatus) => {
+    const values = {
+      status: newStatus,
+      id: item.id
+    };
+    const getReqestUrl = `facilities?filter=${encodeURIComponent(JSON.stringify(currentFilter))}`;
+
+    const updateUrl = `facilities/${item.id}`;
+
+    dispatch(updateFacility({ values, getReqestUrl }));
+
+    setDrawerOpen(false);
+  };
 
   const attachments = item?.attachments || [];
   const [selectedImage, setSelectedImage] = useState(null);
@@ -177,35 +203,46 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
               <Grid item xs={12} sm={4}>
                 <DetailItem label="Contact Name" value={item.contactName} />
               </Grid>
+
               <Grid item xs={12} sm={4}>
                 <DetailItem label="Contact Phone" value={item.contactPhone} />
               </Grid>
+
               <Grid item xs={12} sm={4}>
                 <DetailItem label="Contact Email" value={item.contactEmail} />
               </Grid>
+
               <Grid item xs={12} sm={4}>
                 <DetailItem label="Seat Capacity" value={item.seatCapacity} />
               </Grid>
+
               <Grid item xs={12} sm={8}>
                 <DetailItem label="Operating Days" value={formatFrequency(item.frequency)} />
               </Grid>
+
               {!item.is24H ? (
                 <>
                   <Grid item xs={12} sm={3}>
                     <DetailItem label="Opening Time" value={item.openingTime} />
                   </Grid>
+
                   <Grid item xs={12} sm={3}>
                     <DetailItem label="Closing Time" value={item.closingTime} />
                   </Grid>
                 </>
               ) : (
                 <Grid item xs={12} sm={3}>
-                  <InfoChip icon={<AccessTimeIcon />} label={'Open 24 Hours'} active={item.is24H} />
+                  <InfoChip icon={<AccessTimeIcon />} label="Open 24 Hours" active={item.is24H} />
                 </Grid>
               )}
-              <Grid item xs={12} sm={3}>
-                <InfoChip icon={<AccessTimeIcon />} label={`24 Hours: ${item.is24H ? 'Yes' : 'No'}`} active={item.is24H} />
-              </Grid>
+
+              {/* Show this ONLY when not 24H */}
+              {!item.is24H && (
+                <Grid item xs={12} sm={3}>
+                  <InfoChip icon={<AccessTimeIcon />} label={`24 Hours: No`} active={false} />
+                </Grid>
+              )}
+
               <Grid item xs={12} sm={3}>
                 <InfoChip icon={<AttachMoneyIcon />} label={`Paid Service: ${item.isPaid ? 'Yes' : 'No'}`} active={item.isPaid} />
               </Grid>
@@ -328,150 +365,161 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
           {/* Additional Information */}
           <DetailSection icon={<AttachFileIcon />} title="Additional Information">
             <Grid container spacing={2}>
+              {/* Remarks */}
               <Grid item xs={12} sm={6}>
                 <DetailItem label="Remarks" value={item.remarks} />
               </Grid>
+
+              {/* Attachments */}
               <Grid item xs={12} sm={6}>
                 <DetailItem label="Attachments" value={attachments && attachments.length > 0 ? 'Available' : 'N/A'} />
 
-                <Box>
-                  {/* Image Grid */}
-                  <Grid container>
-                    {attachments.map((attachment, index) => (
-                      <Grid item xs={6} sm={4}>
-                        <Card
-                          sx={{
-                            cursor: 'pointer',
-                            transition: 'all 0.3s',
-                            '&:hover': {
-                              transform: 'scale(1.05)',
-                              boxShadow: 3
-                            }
-                          }}
-                          onClick={() => handleImageClick(attachment)}
-                        >
-                          <Box sx={{ position: 'relative' }}>
-                            <CardMedia
-                              component="img"
-                              height="120"
-                              image={attachment.attachmentUrl}
-                              alt={attachment.attachmentName}
-                              sx={{
-                                objectFit: 'cover',
-                                width: '100%',
-                                borderRadius: 1
-                              }}
-                            />
-
-                            {/* 🔹 Overlay Title */}
-                            <Box
-                              sx={{
-                                position: 'absolute',
-                                bottom: 0,
-                                left: 0,
-                                width: '100%',
-                                bgcolor: 'rgba(0,0,0,0.6)',
-                                color: '#fff',
-                                px: 1,
-                                py: 0.5,
-                                fontSize: '0.75rem',
-                                textAlign: 'center',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                borderBottomLeftRadius: 4,
-                                borderBottomRightRadius: 4
-                              }}
-                            >
-                              {attachment.attachmentName || 'Untitled'}
-                            </Box>
-
-                            {/* Zoom icon */}
-                            <Box
-                              sx={{
-                                position: 'absolute',
-                                top: 4,
-                                right: 4,
-                                backgroundColor: 'rgba(0,0,0,0.5)',
-                                borderRadius: '50%',
-                                padding: '4px'
-                              }}
-                            >
-                              <ZoomInIcon sx={{ color: 'white', fontSize: 16 }} />
-                            </Box>
-                          </Box>
-                        </Card>
-                      </Grid>
-                    ))}
-                  </Grid>
-
-                  <Modal
-                    open={open}
-                    onClose={handleClose}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      p: 2
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        position: 'relative',
-                        maxWidth: '90vw',
-                        maxHeight: '90vh',
-                        bgcolor: 'background.paper',
-                        borderRadius: 2,
-                        boxShadow: 24,
-                        p: 1
-                      }}
-                    >
-                      <IconButton
-                        onClick={handleClose}
+                {/* Image Grid */}
+                <Grid container spacing={1} mt={1}>
+                  {attachments.map((attachment, index) => (
+                    <Grid item xs={6} sm={4} key={index}>
+                      <Card
                         sx={{
-                          position: 'absolute',
-                          top: 8,
-                          right: 8,
-                          bgcolor: 'rgba(0,0,0,0.5)',
-                          color: 'white',
-                          zIndex: 1,
-                          '&:hover': {
-                            bgcolor: 'rgba(0,0,0,0.7)'
-                          }
+                          cursor: 'pointer',
+                          transition: 'all 0.3s',
+                          '&:hover': { transform: 'scale(1.05)', boxShadow: 3 }
                         }}
+                        onClick={() => handleImageClick(attachment)}
                       >
-                        <CloseIcon />
-                      </IconButton>
-
-                      {selectedImage && (
-                        <Box>
-                          <img
-                            src={selectedImage.attachmentUrl}
-                            alt={selectedImage.attachmentName}
-                            style={{
-                              maxWidth: '100%',
-                              maxHeight: '80vh',
-                              objectFit: 'contain',
-                              display: 'block'
-                            }}
+                        <Box sx={{ position: 'relative' }}>
+                          <CardMedia
+                            component="img"
+                            height="120"
+                            image={attachment.attachmentUrl}
+                            alt={attachment.attachmentName}
+                            sx={{ objectFit: 'cover', width: '100%', borderRadius: 1 }}
                           />
 
-                          <Box sx={{ p: 2 }}>
-                            <Typography variant="h6">{selectedImage.attachmentName}</Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              Uploaded: {new Date(selectedImage.attachedOn).toLocaleString()}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              Type: {selectedImage.attachmentType}
-                            </Typography>
+                          {/* Overlay Title */}
+                          <Box
+                            sx={{
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              width: '100%',
+                              bgcolor: 'rgba(0,0,0,0.6)',
+                              color: '#fff',
+                              px: 1,
+                              py: 0.5,
+                              fontSize: '0.75rem',
+                              textAlign: 'center',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              borderBottomLeftRadius: 4,
+                              borderBottomRightRadius: 4
+                            }}
+                          >
+                            {attachment.attachmentName || 'Untitled'}
+                          </Box>
+
+                          {/* Zoom Icon */}
+                          <Box
+                            sx={{
+                              position: 'absolute',
+                              top: 4,
+                              right: 4,
+                              backgroundColor: 'rgba(0,0,0,0.5)',
+                              borderRadius: '50%',
+                              padding: '4px'
+                            }}
+                          >
+                            <ZoomInIcon sx={{ color: 'white', fontSize: 16 }} />
                           </Box>
                         </Box>
-                      )}
-                    </Box>
-                  </Modal>
-                </Box>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
             </Grid>
+
+            {/* Approve / Reject Buttons (below both Remarks and Attachments) */}
+            {item.status === 'draft' && (
+              <Stack direction="row" spacing={2} mt={3}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => handleUpdateStatus('active')}
+                  sx={{
+                    backgroundColor: '#4caf50',
+                    '&:hover': { backgroundColor: '#43a047' },
+                    py: 1.5,
+                    fontWeight: 600
+                  }}
+                >
+                  Approve
+                </Button>
+
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => handleUpdateStatus('rejected')}
+                  sx={{
+                    backgroundColor: '#f44336',
+                    '&:hover': { backgroundColor: '#d32f2f' },
+                    py: 1.5,
+                    fontWeight: 600
+                  }}
+                >
+                  Reject
+                </Button>
+              </Stack>
+            )}
+
+            {/* Image Modal */}
+            <Modal open={open} onClose={handleClose} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  maxWidth: '90vw',
+                  maxHeight: '90vh',
+                  bgcolor: 'background.paper',
+                  borderRadius: 2,
+                  boxShadow: 24,
+                  p: 1
+                }}
+              >
+                <IconButton
+                  onClick={handleClose}
+                  sx={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    bgcolor: 'rgba(0,0,0,0.5)',
+                    color: 'white',
+                    zIndex: 1,
+                    '&:hover': { bgcolor: 'rgba(0,0,0,0.7)' }
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+
+                {selectedImage && (
+                  <Box>
+                    <img
+                      src={selectedImage.attachmentUrl}
+                      alt={selectedImage.attachmentName}
+                      style={{ maxWidth: '100%', maxHeight: '80vh', objectFit: 'contain', display: 'block' }}
+                    />
+                    <Box sx={{ p: 2 }}>
+                      <Typography variant="h6">{selectedImage.attachmentName}</Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Uploaded: {new Date(selectedImage.attachedOn).toLocaleString()}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Type: {selectedImage.attachmentType}
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            </Modal>
           </DetailSection>
         </Box>
       </Box>

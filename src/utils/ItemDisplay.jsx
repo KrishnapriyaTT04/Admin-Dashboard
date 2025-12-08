@@ -11,6 +11,10 @@ const getStatusColor = (status) => {
       return { text: '#27a5d6', bg: '#27a5d640' };
     case 'active':
       return { text: '#019863', bg: '#0198632e' };
+    case 'rejected':
+      return { text: '#ff0000bd', bg: '#ff00002b' };
+    case 'draft':
+      return { text: '#f39c12', bg: '#f39c1236' };
     case 'inactive':
       return { text: '#6c757d', bg: '#6c757d2e' };
     case 'inProgress':

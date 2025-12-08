@@ -174,12 +174,13 @@ const TableRows = ({
                     </Tooltip>
                   )}
                   {hasEdit && row.status !== 'publish' && row.status !== 'deleted' && row.status !== 'completed' && (
-                    <Tooltip title="Edit">
+                    <Tooltip title={row.status === 'rejected' ? 'Cannot edit rejected facility' : 'Edit'}>
                       <IconButton
                         color="info"
-                        onClick={() => handleFormModal(row)}
+                        onClick={() => row.status !== 'rejected' && handleFormModal(row)}
                         size="small"
                         sx={{ ...style.cmnIcon, ...style.cmnEditIcon }}
+                        disabled={row.status === 'rejected'} // disables click but keeps visible
                       >
                         <EditIcon sx={style.cmnSvg} />
                       </IconButton>
@@ -199,22 +200,16 @@ const TableRows = ({
                   )}
 
                   {hasStatusChange && (
-                    <Tooltip title={row.status === 'closed' ? 'Already closed — cannot change' : 'Change status'}>
-                      <span>
-                        <IconButton
-                          color="warning"
-                          onClick={() => row.status !== 'closed' && handlProjectStatusModal(row)}
-                          size="small"
-                          sx={{
-                            ...style.cmnIcon,
-                            ...style.cmnStatusIcon,
-                            opacity: row.status === 'closed' ? 0.5 : 1,
-                            cursor: row.status === 'closed' ? 'not-allowed' : 'pointer'
-                          }}
-                        >
-                          <BlockIcon fontSize="small" sx={style.cmnSvg} />
-                        </IconButton>
-                      </span>
+                    <Tooltip title={row.status === 'rejected' ? 'Already closed — cannot change' : 'Change status'}>
+                      <IconButton
+                        color="warning"
+                        onClick={() => handlProjectStatusModal(row)} // don’t need conditional here
+                        size="small"
+                        sx={{ ...style.cmnIcon, ...style.cmnStatusIcon }}
+                        disabled={row.status === 'rejected'} // disables button properly
+                      >
+                        <BlockIcon fontSize="small" sx={style.cmnSvg} />
+                      </IconButton>
                     </Tooltip>
                   )}
 

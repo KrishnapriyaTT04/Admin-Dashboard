@@ -52,6 +52,7 @@ export default function BackgroundLetterAvatars() {
   const phone = userData?.phone || 'N/A';
   const role = userData?.role || 'N/A';
   const status = userData?.status || 'N/A';
+  const district = userData?.district || 'N/A';
   const userType = userData?.userType || 'N/A';
 
   return (
@@ -71,15 +72,18 @@ export default function BackgroundLetterAvatars() {
 
         {/* Right side: Avatar + Info + Dropdown */}
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar onClick={handleAvatarClick} />
+          <Avatar onClick={handleAvatarClick}  sx={{ cursor: 'pointer' }}/>
 
           <Box sx={{ ml: 1 }}>
             <Typography variant="body1" sx={{ color: 'black', fontWeight: 500 }}>
               {name}
             </Typography>
-     
-            <Typography variant="body2" sx={{ color: 'grey', fontWeight: 400 }}>
-              {role.charAt(0).toUpperCase() + role.slice(1)}
+
+            <Typography variant="body2" sx={{ color: '#364152' }}>
+              {role
+                .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+                .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize first letter of each word
+                .trim()}
             </Typography>
           </Box>
 
@@ -114,8 +118,12 @@ export default function BackgroundLetterAvatars() {
             {name}
           </Typography>
           <Typography variant="body2" sx={{ color: '#364152' }}>
-            {role.charAt(0).toUpperCase() + role.slice(1)}
+            {role
+              .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+              .replace(/\b\w/g, (char) => char.toUpperCase()) // Capitalize first letter of each word
+              .trim()}
           </Typography>
+
           <Divider sx={{ width: '100%', my: 1, bgcolor: '#475569' }} />
 
           {/* Profile details */}
@@ -126,6 +134,11 @@ export default function BackgroundLetterAvatars() {
             <Typography variant="body2" sx={{ color: '#364152', mb: 0.5 }}>
               <strong>Phone:</strong> {phone}
             </Typography>
+            {district !== 'N/A' && (
+              <Typography variant="body2" sx={{ color: '#364152', mb: 0.5 }}>
+                <strong>District:</strong> {district}
+              </Typography>
+            )}
             {/* <Typography variant="body2" sx={{ color: '#364152', mb: 0.5 }}>
               <strong>User Type:</strong> {userType}
             </Typography> */}

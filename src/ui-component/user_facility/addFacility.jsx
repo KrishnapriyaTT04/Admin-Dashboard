@@ -813,6 +813,25 @@ const UpdateForm = ({ drawerOpen, setDrawerOpen, item, setPage, getReqestUrl }) 
                 {/* Image Attachments */}
                 <DetailSection icon={<AttachFileIcon />} title="Image Attachments">
                   <Grid container spacing={2}>
+                    {/* Remarks Field */}
+                    <Grid item xs={12}>
+                      <Field name="remarks">
+                        {({ field, meta }) => (
+                          <TextField
+                            {...field}
+                            label="Remarks"
+                            fullWidth
+                            multiline
+                            rows={3}
+                            placeholder="Add any additional notes or instructions..."
+                            error={meta.touched && !!meta.error}
+                            helperText={meta.touched && meta.error}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+
+                    {/* Attachments */}
                     <Grid item xs={12}>
                       <ImageAttachmentManager
                         selectedNewFiles={selectedNewFiles}
