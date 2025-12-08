@@ -485,7 +485,7 @@ export default function Facility() {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
-        {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
+        {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} currentFilter={currentFilter} />}
 
         {showXSLModal && (
           <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem} getReqestUrl={getReqUrl} />
@@ -591,7 +591,7 @@ export default function Facility() {
 
             {/* RIGHT — STATUS */}
             <Grid item xs={12} sm={5}>
-              <Typography sx={{ fontWeight: 700, mb: 2, color: textDark, fontSize: 18 }}>Status</Typography>
+              <Typography sx={{ fontWeight: 700, mb: 2, color: textDark, fontSize: 18,textAlign:'center' }}>Status</Typography>
 
               {[
                 { value: 'draft', label: 'Draft' },
@@ -607,7 +607,9 @@ export default function Facility() {
                     p: 1,
                     borderRadius: 1.5,
                     transition: '0.2s',
-                    '&:hover': { backgroundColor: bgSoft }
+                    '&:hover': { backgroundColor: bgSoft },
+                    maxWidth: 200, // limit width of the box
+                    ml: 'auto' // push box to the right
                   }}
                 >
                   <Checkbox

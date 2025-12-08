@@ -37,7 +37,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import { getFacilities, updateFacility, getFacilitiesCount } from 'container/FacilityContainer/slice';
 
-const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
+const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item,currentFilter }) => {
   const theme = useTheme();
   const primary = '#039123';
   const lightGreen = '#e8f5e9';
@@ -45,12 +45,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const dispatch = useDispatch();
   const getReqUrl = `facilities/${item.id}`;
 
-  const [currentFilter, setCurrentFilter] = useState({
-    limit: 20,
-    skip: 0,
-    order: ['createdOn DESC'],
-    where: {}
-  });
+
 
   const handleUpdateStatus = (newStatus) => {
     const values = {
