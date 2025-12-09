@@ -40,8 +40,8 @@ const DashboardDefault = () => {
     dispatch(getFacilities(urls.facilities));
     dispatch(getIssuesCount());
     dispatch(getRatings(urls.feedback));
-    dispatch(getRatingCount());
-    dispatch(getUserCount());
+    dispatch(getRatingCount(`feedbacks/count`));
+    dispatch(getUserCount(`users/count`));
     dispatch(getIssueReports(urls.issues));
     dispatch(getUsers(urls.users));
     dispatch(dashCount());

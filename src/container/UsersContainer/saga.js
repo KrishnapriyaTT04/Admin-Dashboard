@@ -46,6 +46,8 @@ function* getUsersSaga(action) {
 }
 
 function* getUserCount(action) {
+  console.log('actionaction',action);
+  
   const tokenData = JSON.parse(localStorage.getItem('klooToken'));
   const accessToken = tokenData?.accessToken;
   try {
