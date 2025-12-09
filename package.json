@@ -15,6 +15,7 @@
     "build:prod": "vite build --mode production",
     "prod:deploy": "bash scripts/prod-deploy.sh",
     "dev:deploy": "bash scripts/dev-deploy.sh",
+    "build:dev": "vite build --mode development",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
