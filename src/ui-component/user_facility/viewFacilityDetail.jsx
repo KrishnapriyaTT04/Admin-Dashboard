@@ -232,11 +232,11 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item,currentFilter }) =
               )}
 
               {/* Show this ONLY when not 24H */}
-              {!item.is24H && (
+              {/* {!item.is24H && (
                 <Grid item xs={12} sm={3}>
                   <InfoChip icon={<AccessTimeIcon />} label={`24 Hours: No`} active={false} />
                 </Grid>
-              )}
+              )} */}
 
               <Grid item xs={12} sm={3}>
                 <InfoChip icon={<AttachMoneyIcon />} label={`Paid Service: ${item.isPaid ? 'Yes' : 'No'}`} active={item.isPaid} />
@@ -306,7 +306,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item,currentFilter }) =
                   {item.specialities.map((f, i) => (
                     <Chip
                       key={i}
-                      label={f}
+                      label={capitalizeWords(f)}
                       sx={{
                         bgcolor: lightYellow,
                         color: '#f39c0a',
