@@ -32,17 +32,25 @@ const style = (theme) => ({
   cmnEditIcon: {
     backgroundColor: '#27a5d6',
     padding: '3px 3px',
-
     '&:hover': {
       backgroundColor: '#27a5d6'
+    },
+    '&.Mui-disabled': {
+      backgroundColor: '#27a5d6', // keep same color
+      opacity: 0.2, // indicate disabled
+      cursor: 'not-allowed'
     }
   },
   cmnStatusIcon: {
     backgroundColor: 'red',
     padding: '3px 3px',
-
     '&:hover': {
       backgroundColor: '#c70707ff'
+    },
+    '&.Mui-disabled': {
+      backgroundColor: 'red', // keep same
+      opacity: 0.2,
+      cursor: 'not-allowed'
     }
   },
   cmnMoreIcon: {
@@ -72,12 +80,6 @@ const style = (theme) => ({
       color: '#23282c'
     }
   },
-
-  firstLetterCap: {
-  '&::first-letter': {
-    textTransform: 'uppercase',
-  }
-},
   chipLabel: {
     '&.MuiChip-root': {
       // color: '#fff',

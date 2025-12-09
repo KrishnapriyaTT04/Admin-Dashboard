@@ -226,7 +226,13 @@ const UploadBulkFile = ({ drawerOpen, setDrawerOpen, getReqestUrl }) => {
       description: 'List available features (e.g., Parking, Wheel Chair, etc.) and separate multiple features with commas.',
       format: 'Parking,Wheel Chair,Indian Type',
       required: false
-    }
+    },
+    {
+  name: 'Specialities',
+  description: 'List special services or uniqueness (e.g., AC Hall, 24/7 Service, Home Delivery, etc.) and separate multiple values with commas.',
+  format: 'AC Hall,24/7 Service,Home Delivery',
+  required: false
+}
   ];
 
   const DetailSection = ({ icon, children }) => (
@@ -267,7 +273,7 @@ const UploadBulkFile = ({ drawerOpen, setDrawerOpen, getReqestUrl }) => {
         }
       }}
     >
-      <Box sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ p: 3, display: 'flex', flexDirection: 'column' }}>
         <Card sx={{ mb: 3, bgcolor: '#f0f9f6', borderRadius: 2, color: primary, boxShadow: 'none' }}>
           <CardContent>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

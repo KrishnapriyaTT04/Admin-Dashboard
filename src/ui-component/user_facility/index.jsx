@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { TableContainer, Table, TextField, InputAdornment, Button } from '@mui/material';
+import { TableContainer, Table, TextField, InputAdornment, Button, IconButton, RadioGroup, Radio } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
 // import { downloadExcel } from 'react-export-table-to-excel';
 import Grid from '@mui/material/Grid';
@@ -12,8 +13,17 @@ import { FileUploadOutlined } from '@mui/icons-material';
 import StarIcon from '@mui/icons-material/Star';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { districtsData } from '../common/district';
 import ChangeStatusModal from '../common/commonStatusChange';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+import Drawer from '@mui/material/Drawer';
+import Checkbox from '@mui/material/Checkbox';
+import Divider from '@mui/material/Divider';
+import Chip from '@mui/material/Chip';
 
 // import { getEfType, deleteEfType, fetchEmissionFactorTypeXSL } from 'container/EmissionContainer/slice';
 import { getFacilities, updateFacility, getFacilitiesCount } from 'container/FacilityContainer/slice';
@@ -38,6 +48,11 @@ import { Add as AddIcon } from '@mui/icons-material';
 import cmnStyles from '../common/style1';
 
 export default function Facility() {
+  const primary = '#039123';
+  const lightGreen = '#e8f5e9';
+  const textDark = '#364152';
+  const bgSoft = '#f7faf9';
+
   const theme = useTheme();
   const style = styles(theme);
   const cmnstyle = cmnStyles(theme);
@@ -45,17 +60,27 @@ export default function Facility() {
 
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(20);
+  const [currentFilter, setCurrentFilter] = useState({
+    limit,
+    skip: 0,
+    order: ['createdOn DESC'],
+    where: {}
+  });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [open, setOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showXSLUploadModal, setshowXSLUploadModal] = useState(false);
   const [showXSLModal, setShowXSLModal] = useState(false);
   const [getReqUrl, setGetReqUrl] = useState('');
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+  const isFilterApplied = selectedDistricts.length > 0 || selectedStatus.length > 0;
 
   const facilityList = useSelector((state) => state.facility?.list || []);
 
@@ -76,15 +101,41 @@ export default function Facility() {
   let countPagination = Math.ceil(count / limit);
   const { config, keys } = facilityHeads;
 
-  // if(facilityList.length)
+  const handleToggleDistrict = (districtLabel) => {
+    setSelectedDistricts((prev) => {
+      if (prev.includes(districtLabel)) {
+        return prev.filter((d) => d !== districtLabel);
+      } else {
+        return [...prev, districtLabel];
+      }
+    });
+  };
 
-  //    flattenedFacilityList = facilityList.map(facility => ({
-  //   id: facility.id,
-  //   title: facility.title,
-  //   email: facility.contactInfo?.email || 'N/A',
-  //   phone: facility.contactInfo?.phone || 'N/A',
-  //   // include other fields you need
-  // }));
+  const handleToggleStatus = (value) => {
+    setSelectedStatus((prev) => (prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]));
+  };
+
+  const [filters, setFilters] = useState({
+    search: '',
+    districts: []
+  });
+
+  const handleClearDistricts = () => {
+    setSelectedDistricts([]);
+
+    // remove only the district filter, preserve others
+    const newWhere = { ...(currentFilter.where || {}) };
+    delete newWhere.district;
+
+    const newFilter = {
+      ...currentFilter,
+      skip: 0,
+      where: newWhere
+    };
+
+    setCurrentFilter(newFilter);
+    setPage(0);
+  };
 
   const searchfilterObject = {
     limit: limit,
@@ -92,49 +143,98 @@ export default function Facility() {
     order: ['createdOn DESC'],
     where: {
       title: {
-        // Note: The 'like' value must be escaped if it contains special characters,
-        // but JSON.stringify handles basic string quoting.
         like: searchQuery,
-        options: 'i' // Case-insensitive search
+        options: 'i'
       }
     }
   };
 
-  useEffect(() => {
-    //deleted false
-    let reqUrl = `facilities?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
-    let countUrl = `facilities/count`;
-    setGetReqUrl(reqUrl);
-    dispatch(getFacilitiesCount(countUrl));
+  const handleClearFilters = () => {
+    setSelectedDistricts([]);
+    setSelectedStatus([]);
 
+    const newFilter = {
+      ...currentFilter,
+      skip: 0,
+      where: {}
+    };
+
+    setCurrentFilter(newFilter);
+    setPage(0);
+  };
+
+  const handleApplyFilter = () => {
+    const newWhere = { ...(currentFilter.where || {}) };
+
+    // Districts
+    if (selectedDistricts.length > 0) {
+      newWhere.district = { inq: selectedDistricts };
+    } else {
+      delete newWhere.district;
+    }
+
+    // Status (MULTI)
+    if (selectedStatus.length > 0) {
+      newWhere.status = { inq: selectedStatus };
+    } else {
+      delete newWhere.status;
+    }
+
+    const newFilter = {
+      ...currentFilter,
+      limit,
+      skip: 0,
+      where: newWhere
+    };
+
+    setCurrentFilter(newFilter);
+    setPage(0);
+    setFilterDrawerOpen(false);
+  };
+
+  useEffect(() => {
+    // build list URL from currentFilter
+    const encodedFilter = encodeURIComponent(JSON.stringify(currentFilter));
+    const reqUrl = `facilities?filter=${encodedFilter}`;
+    setGetReqUrl(reqUrl);
+
+    // build count URL — if there is a where clause send it to count endpoint
+    const where = currentFilter.where || {};
+    const hasWhere = where && Object.keys(where).length > 0;
+    const countUrl = hasWhere ? `facilities/count?where=${encodeURIComponent(JSON.stringify(where))}` : `facilities/count`;
+
+    // fetch list & count
+    dispatch(getFacilitiesCount(countUrl));
     dispatch(getFacilities(reqUrl));
-  }, [dispatch]);
+  }, [dispatch, currentFilter]);
 
   const searchHandler = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-    const filterObject = {
-      limit: limit,
-      skip: 0,
-      order: ['createdOn DESC'],
-      where: {
-        title: {
-          like: value,
-          options: 'i'
-        }
-      }
+
+    // make a new where that preserves any other filters (like district) and adds/overwrites title
+    const newWhere = { ...(currentFilter.where || {}) };
+
+    if (value && value.trim() !== '') {
+      newWhere.title = { like: value, options: 'i' };
+    } else {
+      // remove title filter if search cleared
+      delete newWhere.title;
+    }
+
+    const newFilter = {
+      ...currentFilter,
+      limit,
+      skip: 0, // reset to first page for new search
+      where: newWhere
     };
 
-    const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
-    let reqUrl = `facilities?filter=${encodedFilter}`;
-    dispatch(getFacilities(reqUrl));
+    setCurrentFilter(newFilter);
     setPage(0);
   };
 
   // Function to open the modal
   const handleStatusChangeModal = (facilityItem) => {
-    console.log('--------------------------facilityItem----------------------', getReqUrl);
-
     setSelectedFacility(facilityItem); // Save the facility data
     setIsStatusModalOpen(true); // Open the modal
   };
@@ -158,11 +258,6 @@ export default function Facility() {
     console.log(`Updating facility ${selectedFacility.id} to status: ${getReqUrl}`);
     handleCloseStatusModal(); // Close after action
   };
-
-  // function handleDownloadExcel() {
-  //   setShowXSLModal(true);
-  //   // dispatch(fetchEmissionFactorTypeXSL({ limit: count }));
-  // }
 
   const XSLHandler = () => {
     excelExport();
@@ -211,9 +306,14 @@ export default function Facility() {
     const selectedPage = e.selected;
     const newSkip = selectedPage * limit;
     setPage(selectedPage);
-    let reqUrl = `facilities?filter={"limit":${limit},"skip":${newSkip},"order":["createdOn DESC"]}`;
-    setGetReqUrl(reqUrl);
-    dispatch(getFacilities(reqUrl));
+
+    const newFilter = {
+      ...currentFilter,
+      skip: newSkip,
+      limit
+    };
+
+    setCurrentFilter(newFilter);
   };
 
   const closeDeleteModal = () => {
@@ -262,8 +362,8 @@ export default function Facility() {
 
         <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
           {/* Left Button */}
-          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' }, alignItems: 'center' }}>
+          <Grid item xs={6} sm={3}>
+            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' } }}>
               <Button
                 variant="outlined"
                 startIcon={<AddIcon />}
@@ -276,7 +376,7 @@ export default function Facility() {
           </Grid>
 
           {/* Search Box */}
-          <Grid item xs={12} sm={4} md={6} lg={6} xl={6}>
+          <Grid item xs={12} sm={3}>
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
               <TextField
                 fullWidth
@@ -286,11 +386,6 @@ export default function Facility() {
                 sx={{ maxWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
-                // onKeyDown={(e) => {
-                //   if (!regex.test(e.key) && e.key !== 'Backspace') {
-                //     e.preventDefault();
-                //   }
-                // }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -303,9 +398,46 @@ export default function Facility() {
             </Box>
           </Grid>
 
+          {/* FILTER BUTTON - NEW */}
+          <Grid item xs={6} sm={3}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<FilterListIcon />}
+                  sx={{
+                    ...cmnstyle.cmnBtn,
+                    ...cmnstyle.cmnBtnOutline,
+                    px: 3,
+                    position: 'relative' // important: makes dot stay inside
+                  }}
+                  onClick={() => setFilterDrawerOpen(true)}
+                >
+                  Filter
+                </Button>
+
+                {isFilterApplied && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 4, // inside button, near top edge
+                      right: 10, // inside button, near right border
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      backgroundColor: '#FF3B30',
+                      border: '2px solid white',
+                      boxShadow: '0 0 3px rgba(0,0,0,0.15)'
+                    }}
+                  />
+                )}
+              </Box>
+            </Box>
+          </Grid>
+
           {/* Export Button */}
-          <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
+          <Grid item xs={12} sm={3}>
+            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' } }}>
               <Button
                 variant="outlined"
                 onClick={handleExcelModal}
@@ -317,6 +449,7 @@ export default function Facility() {
             </Box>
           </Grid>
         </Grid>
+
         {isLoading ? (
           <Typography>Loading facilities...</Typography>
         ) : facilityList.length > 0 ? (
@@ -346,38 +479,17 @@ export default function Facility() {
             </Table>
           </TableContainer>
         ) : (
-          <Typography>No data found</Typography>
+          <Typography sx={{ textAlign: 'center' }}>No data found</Typography>
         )}
-        {/* <TableContainer>
-          <Table sx={{ minWidth: 650 }} aria-label="project table">
-            <TableHead keys={keys} config={config} />
-            <TableRows
-              data={facilityList}
-              keys={keys}
-              config={config}
-              currentPage={page + 1}
-              tableLimit={limit} 
-              hasView={true}
-              hasEdit={true}
-              hasDelete={true}
-              hasStatusChange={false}
-              hasMore={false}
-              handleViewModel={handleViewModal}
-              handleDeleteModal={handleDeleteModal}
-              handleFormModal={handleFormModal}
-              msg="Projects"
-              tableData={facilityList}
-              filter={searchQuery || ''}
-            />
-          </Table>
-        </TableContainer> */}
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, mb: 4 }}>
           {countPagination > 0 && <Pagination page={page} countPagination={countPagination} handlePageClick={handlePageClick} />}
         </Box>
-        {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} />}
+        {open && <ViewFacilityDetail drawerOpen={open} setDrawerOpen={setOpen} item={selectedItem} currentFilter={currentFilter} />}
 
-        {showXSLModal && <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem}  getReqestUrl={getReqUrl}/>}
+        {showXSLModal && (
+          <UploadBulkFile drawerOpen={showXSLModal} setDrawerOpen={setShowXSLModal} item={selectedItem} getReqestUrl={getReqUrl} />
+        )}
 
         {formOpen && (
           <UpdateForm drawerOpen={formOpen} setDrawerOpen={setFormOpen} item={selectedItem} setPage={setPage} getReqestUrl={getReqUrl} />
@@ -397,26 +509,160 @@ export default function Facility() {
             onClose={handleCloseStatusModal}
             onConfirm={handleUpdateStatus} // Pass the function to execute on confirm
           />
-          // <ConfirmModal
-          //   show={showDeleteModal}
-          //   handleCloseModal={closeDeleteModal}
-          //   submitHandler={deleteHandler}
-          //   modalTitle={'Delete Confirmation'}
-          //   modalText={'Are you sure you want to delete?'}
-          //   btnsubmitText={'DELETE'}
-          // />
         )}
-        {/* {showXSLModal && (
-          <ConfirmModal
-            show={showXSLModal}
-            handleCloseModal={closeXSLModal}
-            submitHandler={XSLHandler}
-            modalTitle={'Download Confirmation'}
-            modalText={'Are you sure you want to download?'}
-            btnsubmitText={'DOWNLOAD'}
-          />
-        )} */}
       </MainCard>
+      {/* FILTER DRAWER */}
+      <Drawer
+        anchor="right"
+        open={filterDrawerOpen}
+        onClose={() => setFilterDrawerOpen(false)}
+        PaperProps={{
+          sx: {
+            width: { xs: '100%', sm: 750, md: 820 }, // ⬅️ WIDER, clean layout
+            backgroundColor: '#ffffff',
+            boxShadow: '-4px 0 20px rgba(0,0,0,0.08)',
+            borderLeft: `4px solid ${primary}`,
+            borderRadius: '12px 0 0 12px',
+            overflow: 'hidden'
+          }
+        }}
+      >
+        {/* Drawer Header */}
+        <Box
+          sx={{
+            backgroundColor: lightGreen,
+            p: 2.5,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: `1px solid ${primary}33`
+          }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: 700, color: primary }}>
+            Filters
+          </Typography>
+
+          <IconButton
+            onClick={() => setFilterDrawerOpen(false)}
+            sx={{
+              color: primary,
+              bgcolor: '#ffffff',
+              '&:hover': { bgcolor: '#f1f1f1' },
+              width: 36,
+              height: 36
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        {/* Drawer Content */}
+        <Box sx={{ p: 3, overflowY: 'auto', height: 'calc(100vh - 160px)' }}>
+          <Grid container spacing={4}>
+            {/* LEFT — DISTRICTS */}
+            <Grid item xs={12} sm={7}>
+              {' '}
+              {/* wider left side */}
+              <Typography sx={{ fontWeight: 700, mb: 2, color: textDark, fontSize: 18 }}>Districts</Typography>
+              <Grid container spacing={2}>
+                {districtsData.map((d) => (
+                  <Grid item xs={6} sm={4} key={d.id}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        borderRadius: 2,
+                        p: 1.2,
+                        transition: '0.2s',
+                        '&:hover': { backgroundColor: bgSoft }
+                      }}
+                    >
+                      <Checkbox
+                        checked={selectedDistricts.includes(d.label)}
+                        onChange={() => handleToggleDistrict(d.label)}
+                        sx={{ color: primary, '&.Mui-checked': { color: primary } }}
+                      />
+                      <Typography sx={{ fontSize: 15, color: textDark }}>{d.label}</Typography>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+
+            {/* RIGHT — STATUS */}
+            <Grid item xs={12} sm={5}>
+              <Typography sx={{ fontWeight: 700, mb: 2, color: textDark, fontSize: 18,textAlign:'center' }}>Status</Typography>
+
+              {[
+                { value: 'draft', label: 'Draft' },
+                { value: 'inactive', label: 'Inactive' },
+                { value: 'active', label: 'Active' },
+                { value: 'rejected', label: 'Rejected' }
+              ].map((item) => (
+                <Box
+                  key={item.value}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    p: 1,
+                    borderRadius: 1.5,
+                    transition: '0.2s',
+                    '&:hover': { backgroundColor: bgSoft },
+                    maxWidth: 200, // limit width of the box
+                    ml: 'auto' // push box to the right
+                  }}
+                >
+                  <Checkbox
+                    checked={selectedStatus.includes(item.value)}
+                    onChange={() => handleToggleStatus(item.value)}
+                    sx={{ color: primary, '&.Mui-checked': { color: primary } }}
+                  />
+                  <Typography sx={{ ml: 1.2, fontSize: 15, color: textDark }}>{item.label}</Typography>
+                </Box>
+              ))}
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Sticky Footer */}
+        <Box
+          sx={{
+            p: 3,
+            borderTop: '1px solid #e5e7eb',
+            backgroundColor: '#fff'
+          }}
+        >
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleApplyFilter}
+            sx={{
+              backgroundColor: primary,
+              '&:hover': { backgroundColor: '#027e1d' },
+              mb: 1.5,
+              py: 1.2,
+              fontWeight: 600
+            }}
+          >
+            Apply Filters
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={handleClearFilters}
+            sx={{
+              borderColor: primary,
+              color: primary,
+              py: 1.2,
+              fontWeight: 600,
+              '&:hover': { backgroundColor: lightGreen, borderColor: primary }
+            }}
+          >
+            Clear All
+          </Button>
+        </Box>
+      </Drawer>
     </>
   );
 }

@@ -17,6 +17,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 
 // Define available status options
 const STATUS_OPTIONS = [
+  {value:'draft', label: 'Draft' },
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   { value: 'closed', label: 'Close' },
