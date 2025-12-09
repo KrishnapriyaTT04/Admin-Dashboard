@@ -51,6 +51,7 @@ export default function userReportedIssues() {
 
   useEffect(() => {
     let reqUrl = `issues?filter={"limit":${limit},"skip":${page},"order":["createdOn DESC"]}`;
+    
     setGetReqUrl(reqUrl);
     dispatch(getIssueReports(reqUrl));
     dispatch(getIssuesCount());

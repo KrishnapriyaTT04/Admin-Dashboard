@@ -211,13 +211,19 @@ const TableRows = ({
                   )}
 
                   {hasStatusChange && (
-                    <Tooltip title={row.status === 'rejected' ? 'Already closed — cannot change' : 'Change status'}>
+                    <Tooltip
+                      title={
+                        row.status === 'rejected' || row.status === 'draft'
+                          ? 'This request is closed — status cannot be changed'
+                          : 'Change status'
+                      }
+                    >
                       <IconButton
                         color="warning"
-                        onClick={() => handlProjectStatusModal(row)} // don’t need conditional here
+                        onClick={() => handlProjectStatusModal(row)}
                         size="small"
                         sx={{ ...style.cmnIcon, ...style.cmnStatusIcon }}
-                        disabled={row.status === 'rejected'} // disables button properly
+                        disabled={row.status === 'rejected' || row.status === 'draft'}
                       >
                         <BlockIcon fontSize="small" sx={style.cmnSvg} />
                       </IconButton>

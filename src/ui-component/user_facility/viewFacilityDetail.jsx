@@ -288,7 +288,7 @@ const ViewFacilityDetail = ({ drawerOpen, setDrawerOpen, item,currentFilter }) =
             {item.specialities && item.specialities.length > 0 && (
               <Box mt={3}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1, fontWeight: 600 }}>
-                  Speciality Features
+                  Specialities
                 </Typography>
 
                 <Stack

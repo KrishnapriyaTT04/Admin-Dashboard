@@ -120,34 +120,34 @@ export default function Facility() {
     districts: []
   });
 
-  const handleClearDistricts = () => {
-    setSelectedDistricts([]);
+  // const handleClearDistricts = () => {
+  //   setSelectedDistricts([]);
 
-    // remove only the district filter, preserve others
-    const newWhere = { ...(currentFilter.where || {}) };
-    delete newWhere.district;
+  //   // remove only the district filter, preserve others
+  //   const newWhere = { ...(currentFilter.where || {}) };
+  //   delete newWhere.district;
 
-    const newFilter = {
-      ...currentFilter,
-      skip: 0,
-      where: newWhere
-    };
+  //   const newFilter = {
+  //     ...currentFilter,
+  //     skip: 0,
+  //     where: newWhere
+  //   };
 
-    setCurrentFilter(newFilter);
-    setPage(0);
-  };
+  //   setCurrentFilter(newFilter);
+  //   setPage(0);
+  // };
 
-  const searchfilterObject = {
-    limit: limit,
-    skip: page,
-    order: ['createdOn DESC'],
-    where: {
-      title: {
-        like: searchQuery,
-        options: 'i'
-      }
-    }
-  };
+  // const searchfilterObject = {
+  //   limit: limit,
+  //   skip: page,
+  //   order: ['createdOn DESC'],
+  //   where: {
+  //     title: {
+  //       like: searchQuery,
+  //       options: 'i'
+  //     }
+  //   }
+  // };
 
   const handleClearFilters = () => {
     setSelectedDistricts([]);

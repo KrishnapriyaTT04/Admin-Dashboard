@@ -4,6 +4,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         list: [],
+        districts: [],    
         listLoading: false,
         listError: null,
         listCount: 0,
@@ -41,6 +42,40 @@ const userSlice = createSlice({
         getUserCountFail: (state) => {
             state.listLoading = false;
         },
+
+
+         // --- Districts Actions ---
+        getDistricts: (state) => {
+            state.listLoading = true;
+            state.listError = null;
+        },
+        getDistrictsSuccess: (state, action) => {
+            state.listLoading = false;
+            state.districts = action.payload;
+        },
+        getDistrictsFail: (state, action) => {
+            state.listLoading = false;
+            state.listError = {
+                message: action.payload?.message || 'Failed to fetch districts',
+                status: action.payload?.status || 500
+            };
+        },
+
+
+         createUser: (state) => {
+            state.operationLoading = true;
+            state.operationSuccess = false;
+            state.operationError = null;
+        },
+        createUserSuccess: (state) => {
+            state.operationLoading = false;
+            state.operationSuccess = true;
+        },
+        createUserFail: (state, action) => {
+            state.operationLoading = false;
+            state.operationError = action.payload;
+        },
+
 
         // --- User Update (Status Change) Actions ---
 
@@ -109,7 +144,16 @@ export const {
     updateUserSuccess,
     updateUserFail,
     resetUserListError,
-    resetUserOperationState
+    resetUserOperationState,
+
+    getDistricts,
+    getDistrictsSuccess,
+    getDistrictsFail,
+
+
+    createUser,
+    createUserSuccess,
+    createUserFail
 } = userSlice.actions;
 
 export const selectUserList = (state) => state.user.list;

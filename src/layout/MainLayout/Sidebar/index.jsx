@@ -111,7 +111,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }) => {
           sx={{
             '& .MuiDrawer-paper': {
               [theme.breakpoints.up('md')]: {
-                top: '86px'
+                top: '80px'
               }
             }
           }}

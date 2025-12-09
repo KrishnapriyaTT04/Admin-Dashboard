@@ -42,37 +42,32 @@ export default function UserRating() {
   const { config, keys } = userRating;
 
   // --- API Request Logic ---
-  useEffect(() => {
-    // Construct the filter object for the list API call
-    const filterObject = {
-      limit,
-      skip: page * limit,
-      order: ['createdOn DESC'],
-      where: searchQuery
-        ? {
-            // Searching by facilityTitle, case-insensitive
-            facilityTitle: { like: searchQuery, options: 'i' }
-          }
-        : {}
-    };
+useEffect(() => {
+  // List API filter
+  const filterObject = {
+    limit,
+    skip: page * limit,
+    order: ['createdOn DESC'],
+    where: searchQuery
+      ? { facilityTitle: { like: searchQuery, options: 'i' } }
+      : {}
+  };
 
-    const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
-    const reqUrl = `feedbacks?filter=${encodedFilter}`;
-    
-    // Construct the filter object for the count API call
-    const countFilterObject = searchQuery
-      ? {
-          where: {
-            facilityTitle: { like: searchQuery, options: 'i' }
-          }
-        }
-      : {};
+  const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
+  const reqUrl = `feedbacks?filter=${encodedFilter}`;
 
-    const encodedCountFilter = encodeURIComponent(JSON.stringify(countFilterObject));
-    const countUrl = `feedbacks/count?where=${encodedCountFilter}`;
-    dispatch(getRatings(reqUrl)); 
-    dispatch(getRatingCount());
-  }, [dispatch, searchQuery, page, limit]);
+  // Count API filter — FIXED
+  const countFilterObject = searchQuery
+    ? { facilityTitle: { like: searchQuery, options: 'i' } }
+    : {};
+
+  const encodedCountFilter = encodeURIComponent(JSON.stringify(countFilterObject));
+  const countUrl = `feedbacks/count?where=${encodedCountFilter}`;
+
+  dispatch(getRatings(reqUrl)); 
+  dispatch(getRatingCount(countUrl));
+}, [dispatch, searchQuery, page, limit]);
+
 
   const searchHandler = (e) => {
     const value = e.target.value;

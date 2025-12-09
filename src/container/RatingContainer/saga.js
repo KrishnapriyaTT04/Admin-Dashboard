@@ -63,7 +63,7 @@ function* getRatingCount(action) {
   const accessToken = tokenData?.accessToken;
   try {
     let params = {
-      api: `${RATING_API_BASE}/feedbacks/count`,
+      api: `${RATING_API_BASE}/${action.payload}`,
       method: 'GET',
       successAction: actionType.getRatingCountSuccess(),
       failAction: actionType.getRatingCountFail(),
