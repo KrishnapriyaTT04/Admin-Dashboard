@@ -212,20 +212,24 @@ export default function Facility() {
     const value = e.target.value;
     setSearchQuery(value);
 
-    // make a new where that preserves any other filters (like district) and adds/overwrites title
-    const newWhere = { ...(currentFilter.where || {}) };
+    // start with current where
+    let newWhere = { ...(currentFilter?.where || {}) };
+
+    // Remove previous search OR filter if exist
+    delete newWhere.or;
+    delete newWhere.title;
+    delete newWhere.createdUser;
 
     if (value && value.trim() !== '') {
-      newWhere.title = { like: value, options: 'i' };
-    } else {
-      // remove title filter if search cleared
-      delete newWhere.title;
+      const searchCond = { like: value, options: 'i' };
+
+      newWhere.or = [{ title: searchCond }, { createdUser: searchCond }];
     }
 
     const newFilter = {
       ...currentFilter,
       limit,
-      skip: 0, // reset to first page for new search
+      skip: 0,
       where: newWhere
     };
 
@@ -360,9 +364,9 @@ export default function Facility() {
           Facilities
         </Typography>
 
-        <Grid container spacing={2} sx={{ width: '100%', alignItems: 'center' }}>
+        <Grid container spacing={1} sx={{ width: '100%', alignItems: 'center' }}>
           {/* Left Button */}
-          <Grid item xs={6} sm={3}>
+          <Grid item xs={6} sm={2}>
             <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' } }}>
               <Button
                 variant="outlined"
@@ -376,14 +380,14 @@ export default function Facility() {
           </Grid>
 
           {/* Search Box */}
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={4}>
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: { xs: 1, md: 2 } }}>
               <TextField
                 fullWidth
                 variant="outlined"
                 size="small"
-                placeholder="Search by Title"
-                sx={{ maxWidth: 300, width: '100%' }}
+                placeholder="Search by Title OR  Created User"
+                sx={{ minWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
                 InputProps={{
@@ -591,13 +595,13 @@ export default function Facility() {
 
             {/* RIGHT — STATUS */}
             <Grid item xs={12} sm={5}>
-              <Typography sx={{ fontWeight: 700, mb: 2, color: textDark, fontSize: 18,textAlign:'center' }}>Status</Typography>
+              <Typography sx={{ fontWeight: 700, mb: 2, color: textDark, fontSize: 18, textAlign: 'center' }}>Status</Typography>
 
               {[
                 { value: 'draft', label: 'Draft' },
-                { value: 'inactive', label: 'Inactive' },
                 { value: 'active', label: 'Active' },
-                { value: 'rejected', label: 'Rejected' }
+                 { value: 'rejected', label: 'Rejected' },
+                { value: 'inactive', label: 'Inactive' }
               ].map((item) => (
                 <Box
                   key={item.value}

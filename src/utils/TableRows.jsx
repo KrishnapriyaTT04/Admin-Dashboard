@@ -67,6 +67,10 @@ const TableRows = ({
       return renderItem(row[keyItem], config[keyItem].type, config[keyItem].res, keyItem);
     }
 
+    if (keyItem === 'createdOn' && row[keyItem]) {
+      return new Date(row[keyItem]).toLocaleDateString('en-GB');
+      // formats to: DD/MM/YYYY
+    }
     return renderItem(
       config[keyItem]?.label === 'Status'
         ? row.status

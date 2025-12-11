@@ -41,9 +41,8 @@ export const userRating = {
 };
   
 
-
 export const facilityHeads = {
-  keys: ['title', 'facilityType', 'avgStarRating','status'],
+  keys: ['title', 'facilityType','createdUser','createdOn', 'avgStarRating','status'],
   config: {
     title: {
       label: 'Title',
@@ -55,6 +54,11 @@ export const facilityHeads = {
       type: 'string',
       class: ' cmn_Cap commonDesc'
     },
+    createdUser:{
+      label:"Created By",
+      type:'string',
+      class: ' cmn_Cap commonDesc'
+    },
       avgStarRating: {
       label: 'Rating', 
       type: 'string',
@@ -62,6 +66,11 @@ export const facilityHeads = {
     },
      status:{
       label: 'Status',
+      type: 'string',
+      class: ' cmn_Cap commonDesc'
+    },
+    createdOn:{
+      label: 'Created On',
       type: 'string',
       class: ' cmn_Cap commonDesc'
     }
