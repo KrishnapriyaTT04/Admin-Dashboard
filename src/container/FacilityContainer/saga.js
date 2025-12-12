@@ -342,6 +342,25 @@ function* uploadImagesStart(action) {
   }
 }
 
+
+function* getDraftFacilitiesSaga(action) {
+  try {
+    const params = {
+      api: `${FACILITY_API_BASE}/${action.payload}`,
+      method: 'GET',
+      successAction: actionType.getDraftFacilitiesSuccess(),
+      failAction: actionType.getDraftFacilitiesFail(),
+      authourization: `Bearer`
+    };
+
+    const res = yield call(commonApi, params);
+    yield put(actionType.getDraftFacilitiesSuccess(res));
+  } catch (error) {
+    yield put(actionType.getDraftFacilitiesFail(error));
+  }
+}
+
+
 export default function* facilityActionWatcher() {
   yield takeEvery(actionType.getFacilities.type, getFacilities);
   yield takeEvery(actionType.createFacility.type, createFacilitySaga);
@@ -351,4 +370,6 @@ export default function* facilityActionWatcher() {
   yield takeEvery(actionType.getMasterFacilities.type, getMasterFacilitiesSaga);
   yield takeEvery(actionType.getMasterFacilityType.type, getMasterFacilityTypeSaga);
   yield takeEvery(actionType.uploadImagesStart.type, uploadImagesStart);
+  yield takeEvery(actionType.getDraftFacilities.type, getDraftFacilitiesSaga);
+
 }

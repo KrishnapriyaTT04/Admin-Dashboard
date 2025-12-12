@@ -386,7 +386,7 @@ export default function Facility() {
                 fullWidth
                 variant="outlined"
                 size="small"
-                placeholder="Search by Title OR  Created User"
+                placeholder="Search by Title or  Created User"
                 sx={{ minWidth: 300, width: '100%' }}
                 value={searchQuery}
                 onChange={searchHandler}
