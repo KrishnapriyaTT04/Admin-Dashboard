@@ -9,6 +9,8 @@ const Card = ({ color, bgTheme, title, count, percentage, isLoss, icon }) => {
       <Stack spacing={0.5}>
         <Grid sx={{ pb: 1.5 }} item xs zeroMinWidth>
           <Box
+
+          
             sx={{
               background: color,
               color: '#fff',
