@@ -10,7 +10,7 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 // Redux Slice
-import { getRatings, getRatingCount } from 'container/RatingContainer/slice';
+import {  getRatingCount } from 'container/RatingContainer/slice';
 
 // Table Config
 import { userRating } from 'utils/TableConfig';
@@ -56,7 +56,6 @@ useEffect(() => {
   const encodedFilter = encodeURIComponent(JSON.stringify(filterObject));
   const reqUrl = `feedbacks?filter=${encodedFilter}`;
 
-  // Count API filter — FIXED
   const countFilterObject = searchQuery
     ? { facilityTitle: { like: searchQuery, options: 'i' } }
     : {};
@@ -64,7 +63,6 @@ useEffect(() => {
   const encodedCountFilter = encodeURIComponent(JSON.stringify(countFilterObject));
   const countUrl = `feedbacks/count?where=${encodedCountFilter}`;
 
-  dispatch(getRatings(reqUrl)); 
   dispatch(getRatingCount(countUrl));
 }, [dispatch, searchQuery, page, limit]);
 
@@ -78,7 +76,6 @@ useEffect(() => {
   const handlePageClick = (e) => {
     setPage(e.selected);
   };
-  // --- END API Request Logic ---
 
   const renderStars = (rating) => {
   const stars = [];

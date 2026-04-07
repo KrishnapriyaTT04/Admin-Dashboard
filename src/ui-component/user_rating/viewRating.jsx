@@ -5,7 +5,7 @@ import { Close as CloseIcon, Business as BusinessIcon } from '@mui/icons-materia
 
 const ViewRatingDetail = ({ drawerOpen, setDrawerOpen, item }) => {
   const theme = useTheme();
-  const primary = '#039123';
+  const primary = '#34699c';
   const lightGreen = '#e8f5e9';
 
   const formatDate = (dateString) => {

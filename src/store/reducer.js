@@ -3,12 +3,7 @@ import { combineReducers } from 'redux';
 // reducer import
 import customizationReducer from './customizationReducer';
 import loginReducer from 'container/LoginContainer/slice';
-import facilitiesReducer from 'container/FacilityContainer/slice';
-import userReducer from 'container/UsersContainer/slice';
-import reportIssue from 'container/ReportIssuesContainer/slice'
 import ratingReducer from 'container/RatingContainer/slice';
-import feedbackReducer from 'container/UserFeedbackContainer/slice';
-import dashboardReducer from 'container/DashboardContainer/slice';
 
 
 
@@ -17,13 +12,8 @@ import dashboardReducer from 'container/DashboardContainer/slice';
 
 const reducer = combineReducers({
   login: loginReducer,
-  dashboard: dashboardReducer,
   customization: customizationReducer,
-  facility: facilitiesReducer,
-  user:userReducer,
-  reportIssue:reportIssue,
   rating: ratingReducer,
-  feedback: feedbackReducer
 });
 
 export default reducer;

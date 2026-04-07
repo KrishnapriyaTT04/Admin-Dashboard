@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import FormikTextField from 'ui-component/common/loginInput';
 import { userLogin } from 'container/LoginContainer/slice';
 
-import logo from 'assets/images/logo.svg';
+import logo from 'assets/images/logo3.jpeg';
 const AppVersion = import.meta.env.VITE_APP_VERSION;
 
 const AuthLogin = (props) => {
@@ -63,7 +63,7 @@ const AuthLogin = (props) => {
         }}
       >
         <Box sx={{ mb: 3, display: 'flex', justifyContent: 'center' }}>
-          <Box component="img" src={logo} alt="Kloo Logo" sx={{ height: { xs: 35, sm: 65 }, maxWidth: '100%' }} />
+          <Box component="img" src={logo} alt="FSD" sx={{ height: { xs: 150, sm: 180 }, maxWidth: '100%' }} />
         </Box>
 
         <Typography
@@ -125,15 +125,15 @@ const AuthLogin = (props) => {
                     fontWeight: 600,
                     fontSize: 16,
                     color: '#fff',
-                    backgroundColor: '#039123',
+                    backgroundColor: '#07806dff',
                     borderRadius: 2,
-                    border: '1px solid #039123',
+                    border: '1px solid #07806dff',
                     boxShadow: '0px 4px 10px rgba(0,0,0,0.15)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: 'white',
-                      color: '#039123',
-                      border: '1px solid #039123'
+                      color: '#07806dff',
+                      border: '1px solid #07806dff'
                     }
                   }}
                 >
@@ -153,11 +153,8 @@ const AuthLogin = (props) => {
         <Divider sx={{ my: 3, width: '100%' }} />
 
         <Typography variant="body2" sx={{ textAlign: 'center', padding: '10px', textDecoration: 'none' }}>
-          Designed and Developed by{' '}
-          <Link href="https://frugalscientific.com" target="_blank" rel="noopener noreferrer">
-            Frugal Scientific Pvt Ltd
-          </Link>
-        </Typography>
+         Smart Healthcare Token Management System
+                  </Typography>
         <Typography color="primary.main" fontWeight="100">
           Version : {AppVersion}
         </Typography>

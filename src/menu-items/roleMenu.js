@@ -1,7 +1,20 @@
-import { IconLayoutDashboard, IconScale, IconReceipt2, IconMessageCircle , IconStar, IconAlertTriangle, IconShieldCheck, IconClockHour1, IconFileImport, IconUserExclamation } from '@tabler/icons-react';
-
+import {
+  IconLayoutDashboard,
+  IconUsers,          // Staff
+  IconStethoscope,     //Doctor
+  IconClock,          // Token Queue
+  IconCalendarEvent ,  // Bookings
+  IconUserHeart      //Patients
+} from '@tabler/icons-react';
 // constant
-const icons = { IconLayoutDashboard, IconScale, IconReceipt2, IconStar,  IconMessageCircle, IconAlertTriangle, IconShieldCheck, IconClockHour1, IconFileImport, IconUserExclamation };
+const icons = {
+  IconLayoutDashboard,
+  IconUsers,
+  IconStethoscope,
+  IconClock,
+  IconCalendarEvent,
+  IconUserHeart
+};
 
 const RoleMenu = {
   id: 'dashboard',
@@ -17,30 +30,71 @@ const RoleMenu = {
       breadcrumbs: false
     },
     {
-      id: 'facility',
-      title: 'Facilities',
+      id: 'staff',
+      title: 'Staff',
       type: 'item',
-      url: '/facility',
-      icon: icons.IconShieldCheck,
+      url: '/staff',
+      icon: icons.IconUsers,
       breadcrumbs: false
     },
-        {
-      id: 'userManagment',
-      title: 'Users',
+    {
+      id: 'doctors',
+      title: 'Doctors',
       type: 'item',
-      url: '/userManagment',
-      icon: icons.IconFileImport,
+      url: '/doctors',
+      icon: icons.IconStethoscope,
       breadcrumbs: false
     },
-    
-        {
-      id: 'reportedIssues',
-      title: 'Issues',
+    {
+      id: 'patients',
+      title: 'Patients',
       type: 'item',
-      url: '/reportedIssues',
-      icon: icons.IconAlertTriangle,
+      url: '/patients',
+      icon: icons.IconUserHeart,
       breadcrumbs: false
     },
+    {
+      id: 'tokenQueue',
+      title: 'Token Queue',
+      type: 'item',
+      url: '/tokenQueue',
+      icon: icons.IconClock,
+      breadcrumbs: false
+    },
+    {
+      id: 'bookings',
+      title: 'Bookings',
+      type: 'item',
+      url: '/bookings',
+      icon: icons.IconCalendarEvent,
+      breadcrumbs: false
+    }
+     
+    // {
+    //   id: 'facility',
+    //   title: 'Facilities',
+    //   type: 'item',
+    //   url: '/facility',
+    //   icon: icons.IconShieldCheck,
+    //   breadcrumbs: false
+    // },
+    //     {
+    //   id: 'userManagment',
+    //   title: 'Users',
+    //   type: 'item',
+    //   url: '/userManagment',
+    //   icon: icons.IconFileImport,
+    //   breadcrumbs: false
+    // },
+
+    //     {
+    //   id: 'reportedIssues',
+    //   title: 'Issues',
+    //   type: 'item',
+    //   url: '/reportedIssues',
+    //   icon: icons.IconAlertTriangle,
+    //   breadcrumbs: false
+    // },
     // {
     //   id: 'userfeedback',
     //   title: 'User Feedback',
@@ -49,15 +103,15 @@ const RoleMenu = {
     //   icon: icons.IconMessageCircle ,
     //   breadcrumbs: false
     // },
-        {
-      id: 'rating',
-      title: 'Ratings & Feedback',
-      type: 'item',
-      url: '/rating',
-      icon: icons.IconStar,
-      breadcrumbs: false
-    },
-    
+    //     {
+    //   id: 'rating',
+    //   title: 'Ratings & Feedback',
+    //   type: 'item',
+    //   url: '/rating',
+    //   icon: icons.IconStar,
+    //   breadcrumbs: false
+    // },
+
 
 
 

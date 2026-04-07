@@ -130,7 +130,7 @@ const Sidebar = ({ drawerOpen, drawerToggle }) => {
               ? {
                   '& .MuiDrawer-paper': {
                     width: width,
-                    backgroundColor: '#039123',
+                    backgroundColor: '#34699c',
                     paddingTop: '10px',
                     borderRight: 'none',
                     [theme.breakpoints.up('md')]: {

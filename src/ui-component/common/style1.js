@@ -172,13 +172,13 @@ const style = (theme) => ({
   },
   cmnBtnOutline: {
     '&.MuiButtonBase-root': {
-      borderColor: '#039123',
-      color: '#039123',
+      borderColor: '#34699c',
+      color: '#34699c',
 
       '&:hover': {
-        borderColor: '#039123',
+        borderColor: '#34699c',
         color:'#fff',
-        bgcolor:'#039123'
+        bgcolor:'#34699c'
       }
     }
   },

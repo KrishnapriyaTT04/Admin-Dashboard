@@ -30,30 +30,37 @@ const NavItem = ({ item, level, lastItem }) => {
   const matchesSM = useMediaQuery(theme.breakpoints.down('lg'));
   const largeScreen = useMediaQuery('(min-width:1650px)');
   const leftDrawerOpened = useSelector((state) => state.customization.opened);
+
   const isSelected = customization.isOpen.findIndex((id) => id === item.id) > -1;
 
   const Icon = item.icon;
+
   const itemIcon = item?.icon ? (
-    <Icon stroke={1.5} size="1.3rem" sx={{ color: isSelected ? '#000000' : 'inherit' }} />
+    <Icon
+      stroke={1.5}
+      size="1.3rem"
+      style={{ color: isSelected ? '#2BB6A3' : '#6B7280' }}
+    />
   ) : (
     <FiberManualRecordIcon
       sx={{
         width: isSelected ? 8 : 6,
         height: isSelected ? 8 : 6,
-        color: isSelected ? '#000000' : 'inherit'
+        color: isSelected ? '#2BB6A3' : '#6B7280'
       }}
       fontSize={level > 0 ? 'inherit' : 'medium'}
     />
   );
 
   let itemTarget = '_self';
-  if (item.target) {
-    itemTarget = '_blank';
-  }
+  if (item.target) itemTarget = '_blank';
 
   let listItemProps = {
-    component: forwardRef((props, ref) => <Link ref={ref} {...props} to={item.url} target={itemTarget} />)
+    component: forwardRef((props, ref) => (
+      <Link ref={ref} {...props} to={item.url} target={itemTarget} />
+    ))
   };
+
   if (item?.external) {
     listItemProps = { component: 'a', href: item.url, target: itemTarget };
   }
@@ -63,113 +70,85 @@ const NavItem = ({ item, level, lastItem }) => {
     if (matchesSM) dispatch({ type: SET_MENU, opened: false });
   };
 
-  // active menu item on page load
   useEffect(() => {
     const currentIndex = document.location.pathname
       .toString()
       .split('/')
       .findIndex((id) => id === item.id);
+
     if (currentIndex > -1) {
       dispatch({ type: MENU_OPEN, item });
     }
-    // eslint-disable-next-line
-  }, [pathname]);
+  }, [pathname, dispatch, item]);
 
   return (
     <ListItemButton
       {...listItemProps}
       disabled={item.disabled}
+      selected={isSelected}
+      onClick={() => itemHandler(item)}
       sx={{
         paddingY: 0,
         paddingRight: 0,
-  
-        marginBottom: lastItem ===  item?.id ? '120px !important' : '6px',
-        '&:hover': {
-          backgroundColor: 'white !important',
-          marginRight: leftDrawerOpened ? 0 : '0px'
-        },
+        marginBottom: lastItem === item?.id ? '120px' : '6px',
+
         '&.Mui-selected': {
-          backgroundColor: '#039123 !important',
-          marginRight: leftDrawerOpened ? 0 : '0px',
-          color: '#FFFFFF'
+          backgroundColor: 'rgba(43, 182, 163, 0.12)'
         }
       }}
-      selected={isSelected}
-      onClick={() => itemHandler(item)}
     >
       <Box
         sx={{
           display: 'flex',
           width: '100%',
-          height: '100%',
-          borderRadius: `${customization.borderRadius}px`,
-
           alignItems: 'center',
-          gap: '10px',
-          backgroundColor: isSelected ? '#039123 !important' : 'transparent',
-          py: level > 1 ? 1 : 1,
-          px: leftDrawerOpened ? '' : 3,
+          gap: '12px',
+          borderRadius: `${customization.borderRadius}px`,
+          py: 1,
           pl: `${level * 10}px`,
+          pr: 2,
           ml: leftDrawerOpened ? 0 : -1,
-          cursor: 'pointer',
-          color: isSelected ? 'white' : 'black',
-          position: 'relative', 
 
+          backgroundColor: isSelected
+            ? 'rgba(43, 182, 163, 0.12)'
+            : 'transparent',
+
+          color: isSelected ? '#2BB6A3' : '#111827',
+          position: 'relative',
+          transition: 'all 0.2s ease',
+
+          // 🔹 ICON STYLE (clean - no heavy background)
           '& .MuiListItemIcon-root': {
-            backgroundColor: isSelected ? 'white' : '#039123',
-            borderRadius: '8px',
-            p: 1,
-            '& svg': {
-              color: isSelected ? '#039123' : 'white'
-            }
+            minWidth: 'auto',
+            color: isSelected ? '#2BB6A3' : '#6B7280'
           },
 
-          
-          '&:after': {
-            content: '""',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            height: '2px',
-            width: 0, 
-            backgroundColor: '#039123',
-            transition: 'width 0.3s ease' 
-          },
-
+          // 🔹 HOVER EFFECT
           '&:hover': {
-            backgroundColor: 'inherit !important',
-            color: 'black !important',
-            '&:after': {
-              width: '100%' 
-            },
+            backgroundColor: 'rgba(43, 182, 163, 0.08)',
+            color: '#2BB6A3',
+
             '& .MuiListItemIcon-root': {
-              backgroundColor: 'white',
-              '& svg': {
-                color: '#039123 !important'
-              }
+              color: '#2BB6A3'
             }
           }
         }}
       >
-        <ListItemIcon
-          sx={{
-            my: 'auto',
-            marginRight: leftDrawerOpened ? '-2px' : 2,
-            marginLeft: leftDrawerOpened ? '' : largeScreen ? 0 : -0.4,
-            minWidth: !item?.icon ? 18 : 36,
-            borderRadius: '8px',
-            p: 1
-          }}
-        >
-          {itemIcon}
-        </ListItemIcon>
+        <ListItemIcon>{itemIcon}</ListItemIcon>
 
         <ListItemText
           primary={
             <Typography
-              variant={isSelected ? (largeScreen ? 'selectedSideMenu' : 'h5') : largeScreen ? 'sideMenu' : 'body1'}
-              sx={{ fontSize: '14px', fontWeight: 400 }}
-              color={isSelected ? 'white' : 'inherit'}
+              variant={
+                isSelected
+                  ? largeScreen
+                    ? 'selectedSideMenu'
+                    : 'h6'
+                  : largeScreen
+                  ? 'sideMenu'
+                  : 'body1'
+              }
+              sx={{ fontSize: '14px', fontWeight: 500 }}
             >
               {item.title}
             </Typography>
@@ -180,48 +159,29 @@ const NavItem = ({ item, level, lastItem }) => {
                 variant="caption"
                 sx={{ ...theme.typography.subMenuCaption }}
                 display="block"
-                gutterBottom
-                color={isSelected ? '#000000' : 'inherit'}
               >
                 {item.caption}
               </Typography>
             )
           }
         />
+
         {item.chip && (
           <Chip
-            color={'#fff'}
-            variant={item.chip.variant}
             size={item.chip.size}
             label={item.chip.label}
             avatar={item.chip.avatar && <Avatar>{item.chip.avatar}</Avatar>}
           />
         )}
       </Box>
-
-      {leftDrawerOpened && (
-        <Box
-          component="svg"
-          xmlns="http://www.w3.org/2000/svg"
-          width="0.081"
-          height="0.025"
-          viewBox="0 0 0.3 0.2"
-          sx={{
-            marginLeft: '0px',
-            visibility: isSelected ? 'visible' : 'hidden',
-            display: 'block'
-          }}
-        >
-          <path d="M0.3,0 Q0,0.1 0.3,0.2 Z" fill="white" />
-        </Box>
-      )}
     </ListItemButton>
   );
 };
 
 NavItem.propTypes = {
   item: PropTypes.object,
-  level: PropTypes.number
+  level: PropTypes.number,
+  lastItem: PropTypes.string
 };
 
 export default NavItem;

@@ -39,20 +39,8 @@ const Footer = () => {
         }}
       >
         <Typography variant="body1" sx={{ textAlign: 'center' }}>
-          Designed and Developed by{' '}
-          <Link
-            href="https://frugalscientific.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              color: '#039123 !important',
-              textDecoration: 'underline',
-              fontWeight: 500,
-              '&:hover': { color: '#d0f0e0' }
-            }}
-          >
-            Frugal Scientific Pvt Ltd
-          </Link>
+         Smart Healthcare Token Management System
+         
         </Typography>
         <Typography color="grey" variant="caption" >
           Version : {AppVersion}

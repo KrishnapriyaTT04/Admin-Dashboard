@@ -40,7 +40,7 @@ const ResponsiveIcons = () => {
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
 
   const handleLogoutConfirm = () => {
-    localStorage.removeItem('klooToken');
+    localStorage.removeItem('Token');
     setLogoutOpen(false);
     navigate('/login');
   };
@@ -68,7 +68,7 @@ const ResponsiveIcons = () => {
       {/* Settings Icon */}
       {userDtls?.message?.roles ? (
         <IconButton
-          sx={{ color: '#fff',bgcolor:'#039123', pointerEvents: isDraftOrPending ? 'none' : 'auto', cursor: isDraftOrPending ? 'not-allowed' : 'pointer' }}
+          sx={{ color: '#fff',bgcolor:'#03c1a4ff', pointerEvents: isDraftOrPending ? 'none' : 'auto', cursor: isDraftOrPending ? 'not-allowed' : 'pointer' }}
           onClick={handleMenuOpen}
         >
           <IconSettings size={matchesXs ? 25 : 30} />
@@ -114,9 +114,9 @@ const ResponsiveIcons = () => {
         }}
         sx={{
           color: 'white',
-          backgroundColor: '#039123', 
+          backgroundColor: '#3fb7a5ff', 
           '&:hover': {
-            backgroundColor: '#018054' 
+            backgroundColor: '#0f998eff' 
           },
           padding: matchesXs ? '6px' : '8px'
         }}
@@ -156,11 +156,11 @@ const ResponsiveIcons = () => {
             sx={{
               textTransform: 'none',
               borderRadius: 2,
-              borderColor: '#039123',
-              color: '#039123',
+              borderColor: '#0f998eff',
+              color: '#3fb7a5ff',
               '&:hover': {
-                borderColor: '#017a53',
-                backgroundColor: '#0391230a'
+                borderColor: '#0f998eff',
+                backgroundColor: '#34699c0a'
               }
             }}
           >
@@ -175,9 +175,9 @@ const ResponsiveIcons = () => {
             sx={{
               textTransform: 'none',
               borderRadius: 2,
-              backgroundColor: '#039123',
+              backgroundColor: '#3fb7a5ff',
               '&:hover': {
-                backgroundColor: '#017a53'
+                backgroundColor: '#0f998eff'
               }
             }}
           >

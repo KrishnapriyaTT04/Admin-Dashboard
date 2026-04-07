@@ -9,13 +9,25 @@ function* commonApi(value) {
   let authorization = value.authorization;
 
 
-  if (value.authorization == 'Basic') {
-    authorization = 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password);
-  } else if (value.authorization == 'Bearer') {
-    authorization = 'Bearer ' + value.token;
-  } else {
-    authorization = token;
-  }
+  // if (value.authorization == 'Basic') {
+  //   authorization = 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password);
+  // } else if (value.authorization == 'Bearer') {
+  //   authorization = 'Bearer ' + value.token;
+  // } else {
+  //   authorization = token;
+  // }
+
+
+
+  if (value.authorization === 'Basic') {
+  authorization = 'Basic ' + Base64.btoa(value.body.email + ':' + value.body.password);
+} else if (value.authorization && value.authorization.startsWith('Bearer')) {
+  authorization = value.authorization; // already full "Bearer xxx"
+} else {
+  authorization = token;
+}
+
+
   
 
   const authHeader = { 
@@ -27,21 +39,21 @@ function* commonApi(value) {
     'Content-Type': 'application/json'
   };
 
+  console.log(value);
   
   try {
     const response = yield fetch(`${value.api}`, {
       method: `${value.method}`,
-      headers: value.authourization !== null ? authHeader : noauthHeader,
-      body: value.body ? value.body : null
+      headers: value.authorization !== null ? authHeader : noauthHeader,
+      body: value.body ? value.body : null,
+      credentials: 'include'
     });
         
     if (!response.ok) {
             if(response.status===401){
                 yield call(toast.error, `Session has Expired. Please log in again.`, { autoClose: 3000 });
-                    localStorage.setItem('klooToken', JSON.stringify(''));
-                   yield call(setTimeout, () => {
-                     window.location.reload();
-                   }, 2000); 
+                   
+                   
       }else{
       throw response;
 

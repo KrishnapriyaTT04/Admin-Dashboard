@@ -1,13 +1,13 @@
 {
-  "name": "Kloo",
+  "name": "FSD Project",
   "version": "0.2.1",
   "private": true,
   "author": {
-    "name": "Frugal Scientific Pvt Ltd",
+    "name": "FSD",
     "email": "",
     "url": ""
   },
-  "homepage": "https://kloo.com/",
+  "homepage": "",
   "scripts": {
     "start": "env-cmd -f .env vite",
     "build": "vite build",

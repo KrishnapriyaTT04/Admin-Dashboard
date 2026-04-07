@@ -8,16 +8,17 @@ import appConfig from '../../config';
 import * as actionType from './slice';
 
 function* login(action) {
+
   const loginReq = {
-    client_id: action.payload.client_id,
-    client_secret: action.payload.client_secret,
-    username: action.payload.email,
+    // client_id: action.payload.client_id,
+    // client_secret: action.payload.client_secret,
+    email: action.payload.email,
     password: action.payload.password
   };
 
   try {
     const params = {
-      api: `${appConfig.ip}/auth/login/admin`,
+      api: `${appConfig.ip}/vendors/login`,
       method: 'POST',
       successAction: actionType.loginSuccess(),
       failAction: actionType.loginFail(),
@@ -28,36 +29,38 @@ function* login(action) {
     const res = yield call(commonApi, params);
 
     if (res) {
-      localStorage.setItem('klooToken', JSON.stringify(res));
 
       yield call(toast.success, 'Login successful', { autoClose: 3000 });
 
       yield call(userMe);
 
-      yield call(action.payload.navigate, '/dashboard');
+      // yield call(action.payload.navigate, '/dashboard/default');
+      // yield call(action.payload.navigate, '/');
+      yield call(action.payload.navigate, '/');
     } else {
       yield call(toast.error, 'Login failed. Please try again.', { autoClose: 3000 });
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Login failed:', error);
     yield call(toast.error, 'Login failed. Please try again.', { autoClose: 3000 });
   }
 }
 
+
 function* userMe() {
-  const token = JSON.parse(localStorage.getItem('klooToken'));
   try {
     const params = {
-      api: `${appConfig.ip}/users/me`,
+      api: `${appConfig.ip}/vendors/`,
       method: 'GET',
       successAction: actionType.userMeSuccess(),
       failAction: actionType.userMeFail(),
       authorization: `Bearer`,
-      token: `${token?.accessToken}`
+     
     };
 
     const res = yield call(commonApi, params);
-    
+
     yield put(actionType.userMeSuccess(res));
   } catch (error) {
     console.error('Fetch User failed:', error);

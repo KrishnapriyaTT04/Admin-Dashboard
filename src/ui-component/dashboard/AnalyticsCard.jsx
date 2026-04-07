@@ -1,119 +1,200 @@
 import React from 'react';
-import { Grid, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { blueGrey } from '@mui/material/colors';
-import { UserOutlined, HomeOutlined, WarningOutlined, MessageOutlined } from '@ant-design/icons';
-import Card from './card';
-import { DetailCard } from './DetailCard';
-import { ClockCircleOutlined } from '@ant-design/icons';
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  LinearProgress,
+  Chip
+} from '@mui/material';
+
+// ✅ OLD ICONS (as you used before)
+import {
+  UserOutlined,
+  HomeOutlined,
+  WarningOutlined,
+  MessageOutlined,
+  ClockCircleOutlined
+} from '@ant-design/icons';
 
 const AnalyticsCard = () => {
-  const facilityList = useSelector((state) => state.facility?.list || []);
-  const issueList = useSelector((state) => state.reportIssue?.list || []);
-  const feedbackList = useSelector((state) => state.rating?.list || []);
-  const usersList = useSelector((state) => state.user?.list || []);
-  const dashCount = useSelector((state) => state?.dashboard?.dashCount);
-  const draftFacilities = useSelector((state) => state.facility?.draftList || []);
+  const stats = [
+    {
+      title: 'Tokens issued today',
+      value: '1,284',
+      change: '+12% vs yesterday',
+      icon: <UserOutlined />,
+      color: '#4CAF50',
+      bg: '#E8F5E9'
+    },
+    {
+      title: 'Active bookings',
+      value: '347',
+      change: '+8 in last hour',
+      icon: <HomeOutlined />,
+      color: '#2196F3',
+      bg: '#E3F2FD'
+    },
+    {
+      title: 'Avg wait time',
+      value: '22 min',
+      change: '-4 min vs target',
+      icon: <ClockCircleOutlined />,
+      color: '#F44336',
+      bg: '#FFEBEE'
+    },
+    {
+      title: 'Tokens completed',
+      value: '937',
+      change: '73% completion rate',
+      icon: <MessageOutlined />,
+      color: '#009688',
+      bg: '#E0F2F1'
+    }
+  ];
 
-  const draftCount = draftFacilities.length;
+  const queue = [
+    { id: 'T-0042', name: 'Arya Menon', dept: 'Cardiology', time: '8 min', status: 'In progress' },
+    { id: 'T-0118', name: 'Rahul Krishnan', dept: 'Orthopaedics', time: '24 min', status: 'Waiting' },
+    { id: 'T-0219', name: 'Deepa Suresh', dept: 'Neurology', time: '41 min', status: 'Waiting' },
+    { id: 'T-0301', name: 'Sujith Nair', dept: 'General OPD', time: '57 min', status: 'Delayed' }
+  ];
 
-  console.log('FacilityList in Dashboar = ', facilityList);
+  const departments = [
+    { name: 'General OPD', value: 412 },
+    { name: 'Cardiology', value: 287 },
+    { name: 'Orthopaedics', value: 198 },
+    { name: 'Neurology', value: 163 },
+    { name: 'Gynaecology', value: 144 },
+    { name: 'Radiology', value: 80 }
+  ];
 
-  const counts = {
-    facilities: useSelector((state) => state.facility?.listCount || 0),
-    issues: useSelector((state) => state.reportIssue?.listCount || 0),
-    feedback: useSelector((state) => state?.rating?.listCount || 0),
-    users: useSelector((state) => state.user?.listCount || 0)
+  const getStatusColor = (status) => {
+    if (status === 'In progress') return 'success';
+    if (status === 'Waiting') return 'warning';
+    return 'error';
   };
 
   return (
-    <Grid container item xs={12} spacing={2.5}>
-      {/* ================== ROW 1 : 5 SMALL CARDS ================== */}
-      <Grid item xs={12}>
-        <Grid container spacing={2.5}>
-          <Grid item xs={12} sm={6} md={2.4}>
-            <Link to="/userManagment" style={{ textDecoration: 'none' }}>
-              <Card title="Active Users" count={dashCount.userCount} color="#2055a8" bgTheme="#e3f2fd" icon={<UserOutlined />} />
-            </Link>
-          </Grid>
+    <Grid container spacing={3}>
+      {/* ===== TOP STATS ===== */}
+      {stats.map((item, index) => (
+        <Grid item xs={12} sm={6} md={3} key={index}>
+          <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
+            <CardContent>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.title}
+                  </Typography>
+                  <Typography variant="h5" fontWeight="bold">
+                    {item.value}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: item.color }}>
+                    {item.change}
+                  </Typography>
+                </Box>
 
-          <Grid item xs={12} sm={6} md={2.4}>
-            <Link to="/facility" style={{ textDecoration: 'none' }}>
-              <Card title="Active Facilities" count={dashCount.facilityCount} color="#006064" bgTheme="#e0f7fa" icon={<HomeOutlined />} />
-            </Link>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={2.4}>
-            <Link to="/facility" style={{ textDecoration: 'none' }}>
-              <Card
-                title="Draft Facilities"
-                count={draftCount}
-                color="#546E7A" // Blue-grey text/icon
-               bgTheme="#ECEFF1"// Soft blue-grey background
-                icon={<ClockCircleOutlined />}
-              />
-            </Link>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={2.4}>
-            <Link to="/reportedIssues" style={{ textDecoration: 'none' }}>
-              <Card title="Open Issues" count={dashCount.issueCount} color="#e83766" bgTheme="#e837661c" icon={<WarningOutlined />} />
-            </Link>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={2.4}>
-            <Link to="/rating" style={{ textDecoration: 'none' }}>
-              <Card title="Feedback" count={dashCount.feedbackCount} color="#5E35B1" bgTheme="#EDE7F6" icon={<MessageOutlined />} />
-            </Link>
-          </Grid>
+                {/* ICON */}
+                <Box
+                  sx={{
+                    backgroundColor: item.bg,
+                    color: item.color,
+                    p: 1.5,
+                    borderRadius: '50%',
+                    fontSize: 20
+                  }}
+                >
+                  {item.icon}
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
         </Grid>
+      ))}
+
+      {/* ===== LEFT: TOKEN QUEUE ===== */}
+      <Grid item xs={12} md={12}>
+        <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
+          <CardContent>
+            <Box display="flex" justifyContent="space-between" mb={2}>
+              <Box display="flex" alignItems="center" gap={1}>
+                <UserOutlined />
+                <Typography variant="h6">Active token queue</Typography>
+              </Box>
+
+              <Typography variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
+                See all →
+              </Typography>
+            </Box>
+
+            {queue.map((row, index) => (
+              <Box
+                key={index}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                mb={2}
+                p={1.5}
+                sx={{
+                  borderRadius: 2,
+                  '&:hover': { backgroundColor: '#f9f9f9' }
+                }}
+              >
+                <Box>
+                  <Typography fontWeight="bold">{row.id}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {row.name}
+                  </Typography>
+                </Box>
+
+                <Typography>{row.dept}</Typography>
+                <Typography>{row.time}</Typography>
+
+                <Chip
+                  label={row.status}
+                  color={getStatusColor(row.status)}
+                  size="small"
+                />
+              </Box>
+            ))}
+          </CardContent>
+        </Card>
       </Grid>
 
-      {/* ================== ROW 2 : 4 DETAIL CARDS ================== */}
-      <Grid item xs={12}>
-        <Grid container spacing={2.5}>
-          <Grid item xs={12} md={3}>
-            <DetailCard
-              title="Facilities"
-              path="/facility"
-              count={counts.facilities}
-              data={facilityList}
-              fields={[{ name: 'title', bold: true }, { name: 'facilityType' }, { name: 'city' }]}
-            />
-          </Grid>
+      {/* ===== RIGHT: DEPARTMENT LOAD ===== */}
+      {/* <Grid item xs={12} md={4}>
+        <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
+          <CardContent>
+            <Box display="flex" alignItems="center" gap={1} mb={2}>
+              <HomeOutlined />
+              <Typography variant="h6">
+                Department load today
+              </Typography>
+            </Box>
 
-          <Grid item xs={12} md={3}>
-            <DetailCard
-              title="Issues"
-              path="/reportedIssues"
-              count={counts.issues}
-              data={issueList}
-              fields={[{ name: 'reportedByName', bold: true }, { name: 'topic' }]}
-            />
-          </Grid>
+            {departments.map((dept, index) => (
+              <Box key={index} mb={2}>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography variant="body2">{dept.name}</Typography>
+                  <Typography variant="body2">{dept.value}</Typography>
+                </Box>
 
-          <Grid item xs={12} md={3}>
-            <DetailCard
-              title="Feedback"
-              path="/rating"
-              count={counts.feedback}
-              data={feedbackList}
-              fields={[{ name: 'createdUser', bold: true }, { name: 'starRating' }, { name: 'comments' }]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <DetailCard
-              title="Users"
-              path="/userManagment"
-              count={counts.users}
-              data={usersList}
-              fields={[{ name: 'firstName', bold: true }, { name: 'phone' }, { name: 'userType' }]}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
+                <LinearProgress
+                  variant="determinate"
+                  value={(dept.value / 500) * 100}
+                  sx={{
+                    height: 8,
+                    borderRadius: 5,
+                    mt: 0.5
+                  }}
+                />
+              </Box>
+            ))}
+          </CardContent>
+        </Card>
+      </Grid> */}
     </Grid>
   );
 };

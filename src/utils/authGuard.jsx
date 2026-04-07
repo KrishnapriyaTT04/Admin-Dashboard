@@ -6,19 +6,19 @@ import { loginSuccess } from 'container/LoginContainer/slice';
 
 const AuthGuard = ({ children, user }) => {
   const dispatch = useDispatch();
-  const isAuthenticated = JSON.parse(localStorage.getItem('klooToken'));
+ 
   const checkUser = true;
 
   useEffect(() => {
-    dispatch(loginSuccess(isAuthenticated));
+    dispatch(loginSuccess());
   }, [user]);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace={true} />;
-  } else if (!checkUser && user != null) {
-    return <Navigate to="/not-found" replace={true} />;
-  } else {
-  }
+  // if (!isAuthenticated) {
+  //   return <Navigate to="/login" replace={true} />;
+  // } else if (!checkUser && user != null) {
+  //   return <Navigate to="/not-found" replace={true} />;
+  // } else {
+  // }
 
   return children;
 };

@@ -1,10 +1,10 @@
 import React from 'react';
-import NavLogo from 'assets/images/logo.svg';
+import NavLogo from 'assets/images/logo3-bg.png';
 
 function Logo() {
   return (
     <div>
-      <img src={NavLogo} alt="Kloo" loading="lazy" height={60} />
+      <img src={NavLogo} alt="FSD" loading="lazy" height={80} />
     </div>
   );
 }
