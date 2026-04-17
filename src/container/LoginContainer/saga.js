@@ -18,7 +18,7 @@ function* login(action) {
 
   try {
     const params = {
-      api: `${appConfig.ip}/vendors/login`,
+      api: `${appConfig.ip}/vendor/login`,
       method: 'POST',
       successAction: actionType.loginSuccess(),
       failAction: actionType.loginFail(),
@@ -51,7 +51,7 @@ function* login(action) {
 function* userMe() {
   try {
     const params = {
-      api: `${appConfig.ip}/vendors/`,
+      api: `${appConfig.ip}/vendor/profile`,
       method: 'GET',
       successAction: actionType.userMeSuccess(),
       failAction: actionType.userMeFail(),
