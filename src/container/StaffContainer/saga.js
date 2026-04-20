@@ -39,7 +39,7 @@ import * as actionType from './slice';
 function* fetchStaff() {
   try {
     const params = {
-      api: `${appConfig.ip}/staff`, // ✅ correct GET endpoint
+      api: `${appConfig.ip}/staff/all`, // ✅ correct GET endpoint
       method: 'GET',
       successAction: actionType.getStaffSuccess(), // ✅ must call
       failAction: actionType.getStaffFail(),
