@@ -130,7 +130,8 @@ import Loadable from 'ui-component/Loadable';
 import AuthGuard from 'utils/authGuard';
 
 // ✅ Import your new Staff Page
-import StaffPage from 'views/staff';
+// import StaffPage from 'views/staff';
+// import AddDoctorForm from 'ui-component/staff/AddStaffsForm'
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('ui-component/dashboard')));

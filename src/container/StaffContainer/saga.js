@@ -1,35 +1,3 @@
-// import { takeEvery, call, put } from 'redux-saga/effects';
-// import commonApi from '../api';
-// import appConfig from '../../config';
-// import * as actionType from './slice';
-
-// function* fetchStaff() {
-//   try {
-//     const params = {
-//       api: `${appConfig.ip}/staff/signup`,
-//       method: 'POST',
-//       successAction: actionType.addStaffSuccess,
-//       failAction: actionType.addStaffFail,
-//       authorization: `Bearer ${localStorage.getItem("token")}`
-//     };
-
-//     const res = yield call(commonApi, params);
-
-//     if (res) {
-//       yield put(actionType.addStaffSuccess(res));
-//     }
-
-//   } catch (error) {
-//     yield put(actionType.addStaffFail(error.message));
-//   }
-// }
-
-// export default function* staffActionWatcher() {
-//   yield takeEvery(actionType.getStaff.type, fetchStaff);
-// }
-
-
-
 import { takeEvery, call, put } from 'redux-saga/effects';
 import commonApi from '../api';
 import appConfig from '../../config';
@@ -39,7 +7,7 @@ import * as actionType from './slice';
 function* fetchStaff() {
   try {
     const params = {
-      api: `${appConfig.ip}/staff`, // ✅ correct GET endpoint
+      api: `${appConfig.ip}/staff/all`, // ✅ correct GET endpoint
       method: 'GET',
       successAction: actionType.getStaffSuccess(), // ✅ must call
       failAction: actionType.getStaffFail(),

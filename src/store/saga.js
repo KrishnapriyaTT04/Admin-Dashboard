@@ -23,7 +23,7 @@ import LoginActionWatcher from 'container/LoginContainer/saga';
 // import ratingActionWatcher from 'container/RatingContainer/saga';
 
 import staffActionWatcher from 'container/StaffContainer/saga';
-// import doctorActionWatcher from 'container/DoctorContainer/saga';
+import doctorsWatcher from 'container/DoctorContainer/saga';
 // import patientActionWatcher from 'container/PatientContainer/saga';
 
 function* rootSaga() {
@@ -31,7 +31,7 @@ function* rootSaga() {
     call(LoginActionWatcher),
     // call(ratingActionWatcher),
     call(staffActionWatcher),
-    // call(doctorActionWatcher),
+    call(doctorsWatcher),
     // call(patientActionWatcher)
   ]);
 }

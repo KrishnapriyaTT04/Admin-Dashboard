@@ -6,11 +6,18 @@ import {
   DialogActions,
   TextField,
   Button,
-  Grid
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addStaff } from 'container/StaffContainer/slice';
 
-const AddStaffForm = ({ open, handleClose, refreshStaff }) => {
+const AddStaffForm = ({ open, handleClose }) => {
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     customId: '',
     firstName: '',
@@ -28,26 +35,9 @@ const AddStaffForm = ({ open, handleClose, refreshStaff }) => {
     });
   };
 
-  const handleSubmit = async () => {
-    try {
-      await axios.post('http://localhost:7000/api/staff', formData);
-
-      refreshStaff();
-      handleClose();
-
-      setFormData({
-        customId: '',
-        firstName: '',
-        lastName: '',
-        phone: '',
-        department: '',
-        email: '',
-        password: ''
-      });
-
-    } catch (err) {
-      console.error(err);
-    }
+  const handleSubmit = () => {
+    dispatch(addStaff(formData)); // ✅ saga handles API
+    handleClose();
   };
 
   return (
@@ -56,14 +46,38 @@ const AddStaffForm = ({ open, handleClose, refreshStaff }) => {
 
       <DialogContent>
         <Grid container spacing={2} mt={1}>
-
           <Grid item xs={6}>
-            <TextField fullWidth label="Custom ID" name="customId" type="number" onChange={handleChange} />
+            <TextField fullWidth label="Custom ID" name="customId" onChange={handleChange} />
           </Grid>
 
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <TextField fullWidth label="Department" name="department" onChange={handleChange} />
-          </Grid>
+          </Grid> */}
+
+          <Grid item xs={6}>
+  <FormControl fullWidth>
+    <InputLabel>Department</InputLabel>
+    <Select
+      name="department"
+      value={formData.department}
+      label="Department"
+      onChange={handleChange}
+    >
+      <MenuItem value="Hospital Management">Hospital Management</MenuItem>
+      <MenuItem value="Human Resource (HR) Department">Human Resource (HR) Department</MenuItem>
+      <MenuItem value="Finance & Accounts Department">Finance & Accounts Department</MenuItem>
+      <MenuItem value="Medical Records Department (MRD)">Medical Records Department (MRD)</MenuItem>
+      <MenuItem value="Quality Assurance Department">Quality Assurance Department</MenuItem>
+      <MenuItem value="Public Relations (PR) Department">Public Relations (PR) Department</MenuItem>
+      <MenuItem value="Information Technology (IT) Department">Information Technology (IT) Department</MenuItem>
+      <MenuItem value="Purchase & Supply Department">Purchase & Supply Department</MenuItem>
+      <MenuItem value="Maintenance Department">Maintenance Department</MenuItem>
+      <MenuItem value="Housekeeping Department">Housekeeping Department</MenuItem>
+      <MenuItem value="Security Department">Security Department</MenuItem>
+      <MenuItem value="Biomedical Engineering Department">Biomedical Engineering Department</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
 
           <Grid item xs={6}>
             <TextField fullWidth label="First Name" name="firstName" onChange={handleChange} />
@@ -74,7 +88,7 @@ const AddStaffForm = ({ open, handleClose, refreshStaff }) => {
           </Grid>
 
           <Grid item xs={6}>
-            <TextField fullWidth label="Phone" name="phone" type="number" onChange={handleChange} />
+            <TextField fullWidth label="Phone" name="phone" onChange={handleChange} />
           </Grid>
 
           <Grid item xs={6}>
@@ -84,14 +98,12 @@ const AddStaffForm = ({ open, handleClose, refreshStaff }) => {
           <Grid item xs={12}>
             <TextField fullWidth label="Password" name="password" type="password" onChange={handleChange} />
           </Grid>
-
         </Grid>
       </DialogContent>
 
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-
-        <Button
+       <Button
           variant="contained"
           onClick={handleSubmit}
           sx={{

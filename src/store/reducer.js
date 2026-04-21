@@ -28,7 +28,7 @@ import loginReducer from 'container/LoginContainer/slice';
 // import ratingReducer from 'container/RatingContainer/slice';
 
 import staffReducer from 'container/StaffContainer/slice';
-// import doctorReducer from 'container/DoctorContainer/slice';
+import doctorReducer from 'container/DoctorContainer/slice';
 // import patientReducer from 'container/PatientContainer/slice';
 
 const reducer = combineReducers({
@@ -37,7 +37,7 @@ const reducer = combineReducers({
 
 
   staff: staffReducer,
-  // doctor: doctorReducer,
+  doctor: doctorReducer,
   // patient: patientReducer
 });
 

@@ -1,44 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  TextField,
-  Button,
-  Avatar,
-  Chip
+  Grid, Card, CardContent, Typography, Box,
+  TextField, Button, Avatar, Chip, IconButton, Tooltip
 } from '@mui/material';
-
-import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import AddDoctorForm from './AddDoctorsForm'; // ✅ FIXED NAME
+import { EditOutlined, DeleteOutlined, SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDoctors, removeDoctor } from 'container/DoctorContainer/slice';
+import AddDoctorForm from './AddDoctorsForm';
 
 const DoctorsCard = () => {
-  const [doctors, setDoctors] = useState([]);
+  const dispatch = useDispatch();
+  const { doctorsList = [], loading } = useSelector((state) => state.doctor || {});
+
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null); // 🔥 for edit
 
-  // ✅ FETCH DOCTORS
-  const fetchDoctors = async () => {
-    try {
-      const res = await axios.get('http://localhost:5000/api/doctors');
-      setDoctors(res.data.doctors || []);
-    } catch (err) {
-      console.error(err);
+  /* ================= FETCH ================= */
+  useEffect(() => { dispatch(getDoctors()); }, [dispatch]);
+
+  /* ================= MODAL ================= */
+  const handleOpen = () => {
+    setSelectedDoctor(null); // clear for add
+    setOpen(true);
+  };
+
+  const handleEdit = (doc) => {
+    setSelectedDoctor(doc); // prefill for edit
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setSelectedDoctor(null);
+    setOpen(false);
+  };
+
+  /* ================= DELETE ================= */
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this doctor?')) {
+      dispatch(removeDoctor(id));
     }
   };
 
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
-  // ✅ MODAL HANDLERS
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  // ✅ STATUS COLOR (UPDATED)
+  /* ================= STATUS COLOR ================= */
   const getStatusColor = (status) => {
     if (status === 'active') return 'success';
     if (status === 'inactive') return 'warning';
@@ -46,8 +50,7 @@ const DoctorsCard = () => {
     return 'default';
   };
 
-  // ✅ SEARCH
-  const filteredDoctors = doctors.filter((doc) =>
+  const filteredDoctors = doctorsList.filter((doc) =>
     doc.name?.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -60,32 +63,20 @@ const DoctorsCard = () => {
           <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
             <CardContent>
               <Box display="flex" justifyContent="space-between" alignItems="center">
-
                 <Box display="flex" alignItems="center" gap={1} width="60%">
                   <SearchOutlined />
                   <TextField
-                    placeholder="Search doctors..."
-                    fullWidth
-                    size="small"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search doctors..." fullWidth size="small"
+                    value={search} onChange={(e) => setSearch(e.target.value)}
                   />
                 </Box>
-
                 <Button
-                  variant="contained"
-                  startIcon={<PlusOutlined />}
-                  onClick={handleOpen}
-                  sx={{
-                    borderRadius: 5,
-                    textTransform: 'none',
-                    backgroundColor: '#38c1b3ff',
-                    '&:hover': { backgroundColor: '#32a087ff' }
-                  }}
+                  variant="contained" startIcon={<PlusOutlined />} onClick={handleOpen}
+                  sx={{ borderRadius: 5, textTransform: 'none',
+                    backgroundColor: '#38c1b3', '&:hover': { backgroundColor: '#32a087' } }}
                 >
                   Add Doctor
                 </Button>
-
               </Box>
             </CardContent>
           </Card>
@@ -103,25 +94,20 @@ const DoctorsCard = () => {
                 <Grid item xs={2}>Experience</Grid>
                 <Grid item xs={2}>Availability</Grid>
                 <Grid item xs={1}>Status</Grid>
+                <Grid item xs={2} textAlign="center">Actions</Grid>
               </Grid>
 
-              {/* DATA */}
-              {filteredDoctors.map((doc) => (
+              {loading && <Typography textAlign="center">Loading...</Typography>}
+
+              {/* ROWS */}
+              {!loading && filteredDoctors.map((doc) => (
                 <Grid
-                  container
-                  key={doc._id}
-                  alignItems="center"
-                  sx={{
-                    py: 2,
-                    borderTop: '1px solid #eee',
-                    '&:hover': { backgroundColor: '#fafafa' }
-                  }}
+                  container key={doc._id} alignItems="center"
+                  sx={{ py: 2, borderTop: '1px solid #eee', '&:hover': { backgroundColor: '#fafafa' } }}
                 >
                   {/* Doctor */}
                   <Grid item xs={3} display="flex" alignItems="center" gap={2}>
-                    <Avatar src={doc.photo}>
-                      {doc.name?.charAt(0)}
-                    </Avatar>
+                    <Avatar src={doc.photo}>{doc.name?.charAt(0)}</Avatar>
                     <Typography fontWeight="bold">{doc.name}</Typography>
                   </Grid>
 
@@ -137,24 +123,40 @@ const DoctorsCard = () => {
 
                   {/* Availability */}
                   <Grid item xs={2}>
-                    <Typography>
-                      {doc.availability?.length || 0} slots
-                    </Typography>
+                    <Typography>{doc.availability?.length || 0} slots</Typography>
                   </Grid>
 
                   {/* Status */}
                   <Grid item xs={1}>
-                    <Chip
-                      label={doc.status}
-                      color={getStatusColor(doc.status)}
-                      size="small"
-                    />
+                    <Chip label={doc.status} color={getStatusColor(doc.status)} size="small" />
                   </Grid>
+
+                  {/* ✅ Actions */}
+                  <Grid item xs={2} display="flex" justifyContent="center" gap={1}>
+                    <Tooltip title="Edit">
+                      <IconButton
+                        size="small" onClick={() => handleEdit(doc)}
+                        sx={{ color: '#38c1b3', border: '1px solid #38c1b3',
+                          '&:hover': { backgroundColor: '#e8f8f7' } }}
+                      >
+                        <EditOutlined />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <IconButton
+                        size="small" onClick={() => handleDelete(doc._id)}
+                        sx={{ color: '#ff4d4f', border: '1px solid #ff4d4f',
+                          '&:hover': { backgroundColor: '#fff1f0' } }}
+                      >
+                        <DeleteOutlined />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+
                 </Grid>
               ))}
 
-              {/* EMPTY */}
-              {filteredDoctors.length === 0 && (
+              {!loading && filteredDoctors.length === 0 && (
                 <Typography textAlign="center" mt={3} color="text.secondary">
                   No doctors found
                 </Typography>
@@ -165,11 +167,11 @@ const DoctorsCard = () => {
         </Grid>
       </Grid>
 
-      {/* MODAL */}
+      {/* MODAL — same form for Add & Edit */}
       <AddDoctorForm
         open={open}
         handleClose={handleClose}
-        refreshDoctors={fetchDoctors}
+        selectedDoctor={selectedDoctor} // 🔥 pass selected doctor
       />
     </>
   );

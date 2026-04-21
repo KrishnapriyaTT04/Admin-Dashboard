@@ -1,4 +1,3 @@
-
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -55,7 +54,7 @@ function* userMe() {
       method: 'GET',
       successAction: actionType.userMeSuccess(),
       failAction: actionType.userMeFail(),
-      authorization: `Bearer`,
+      // authorization: `Bearer`,
      
     };
 

@@ -10,22 +10,41 @@ const staffSlice = createSlice({
   },
 
   reducers: {
-   addStaff: (state) => {
-  state.loading = true;
-},
+    /* ================= GET STAFF ================= */
+    getStaff: (state) => {
+      state.loading = true;
+    },
 
-addStaffSuccess: (state, action) => {
-  state.loading = false;
-},
+    getStaffSuccess: (state, action) => {
+      state.loading = false;
+      state.staffList = action.payload.data; // store API data
+    },
 
-addStaffFail: (state, action) => {
-  state.loading = false;
-  state.error = action.payload;
-}
+    getStaffFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    /* ================= ADD STAFF ================= */
+    addStaff: (state) => {
+      state.loading = true;
+    },
+
+    addStaffSuccess: (state) => {
+      state.loading = false;
+    },
+
+    addStaffFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    }
   }
 });
 
 export const {
+  getStaff,
+  getStaffSuccess,
+  getStaffFail,
   addStaff,
   addStaffSuccess,
   addStaffFail
