@@ -16,7 +16,7 @@ const staff = {
       title: 'Staff',
       type: 'item',
       url: '/staff',
-      icon: icons.IconUsers,
+      icon: "users",
       breadcrumbs: false
     }
   ]
