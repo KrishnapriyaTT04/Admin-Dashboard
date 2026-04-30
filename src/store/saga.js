@@ -1,38 +1,37 @@
 // import { all, call } from 'redux-saga/effects';
 
 // import LoginActionWatcher from 'container/LoginContainer/saga';
-// import ratingActionWatcher from 'container/RatingContainer/saga';
-
+// import staffActionWatcher from 'container/StaffContainer/saga';
+// import doctorsWatcher from 'container/DoctorContainer/saga';
+// import departmentSaga from 'container/departmentsContainer/saga';
 
 // function* rootSaga() {
-//      yield all([
-//         call(LoginActionWatcher),
-//         call(ratingActionWatcher),
-        
-//     ]);
+//   yield all([
+//     call(LoginActionWatcher),
+//     call(staffActionWatcher),
+//     call(doctorsWatcher),
+//     call(departmentSaga)
+//   ]);
 // }
 
 // export default rootSaga;
 
 
-
-
 import { all, call } from 'redux-saga/effects';
 
 import LoginActionWatcher from 'container/LoginContainer/saga';
-// import ratingActionWatcher from 'container/RatingContainer/saga';
-
 import staffActionWatcher from 'container/StaffContainer/saga';
 import doctorsWatcher from 'container/DoctorContainer/saga';
-// import patientActionWatcher from 'container/PatientContainer/saga';
+import departmentSaga from 'container/departmentsContainer/saga';
+import vendorSaga from 'container/VendorContainer/saga';
 
 function* rootSaga() {
   yield all([
     call(LoginActionWatcher),
-    // call(ratingActionWatcher),
     call(staffActionWatcher),
     call(doctorsWatcher),
-    // call(patientActionWatcher)
+    call(departmentSaga),
+    call(vendorSaga)
   ]);
 }
 

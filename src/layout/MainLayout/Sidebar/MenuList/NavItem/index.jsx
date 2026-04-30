@@ -90,7 +90,9 @@ const NavItem = ({ item, level, lastItem }) => {
       sx={{
         paddingY: 0,
         paddingRight: 0,
-        marginBottom: lastItem === item?.id ? '120px' : '6px',
+        // marginBottom: lastItem === item?.id ? '120px' : '12px',
+        marginBottom: '2px',
+
 
         '&.Mui-selected': {
           backgroundColor: 'rgba(43, 182, 163, 0.12)'

@@ -1,19 +1,18 @@
 // import { combineReducers } from 'redux';
 
-// // reducer import
 // import customizationReducer from './customizationReducer';
 // import loginReducer from 'container/LoginContainer/slice';
-// import ratingReducer from 'container/RatingContainer/slice';
 
-
-
-
-// // ==============================|| COMBINE REDUCER ||============================== //
+// import staffReducer from 'container/StaffContainer/slice';
+// import doctorReducer from 'container/DoctorContainer/slice';
+// import departmentsReducer from 'container/departmentsContainer/slice';
 
 // const reducer = combineReducers({
 //   login: loginReducer,
 //   customization: customizationReducer,
-//   rating: ratingReducer,
+//   staff: staffReducer,
+//   doctor: doctorReducer,
+//   departments: departmentsReducer
 // });
 
 // export default reducer;
@@ -25,20 +24,19 @@ import { combineReducers } from 'redux';
 
 import customizationReducer from './customizationReducer';
 import loginReducer from 'container/LoginContainer/slice';
-// import ratingReducer from 'container/RatingContainer/slice';
 
 import staffReducer from 'container/StaffContainer/slice';
 import doctorReducer from 'container/DoctorContainer/slice';
-// import patientReducer from 'container/PatientContainer/slice';
+import departmentsReducer from 'container/departmentsContainer/slice';
+import vendorReducer from 'container/VendorContainer/slice';
 
 const reducer = combineReducers({
   login: loginReducer,
   customization: customizationReducer,
-
-
   staff: staffReducer,
   doctor: doctorReducer,
-  // patient: patientReducer
+  departments: departmentsReducer,
+  vendors: vendorReducer
 });
 
 export default reducer;

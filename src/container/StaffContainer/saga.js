@@ -7,21 +7,17 @@ import * as actionType from './slice';
 function* fetchStaff() {
   try {
     const params = {
-      api: `${appConfig.ip}/staff/all`, // ✅ correct GET endpoint
+      api: `${appConfig.ip}/staff/all`,
       method: 'GET',
-      successAction: actionType.getStaffSuccess(), // ✅ must call
-      failAction: actionType.getStaffFail(),
-      authorization: null // ✅ cookie-based auth (no Bearer)
+      successAction: actionType.getStaffSuccess, // ✅ reference, not called
+      failAction: actionType.getStaffFail,
+      authorization: null
     };
 
-    yield call(commonApi, params); // ✅ commonApi handles dispatch
+    yield call(commonApi, params);
 
   } catch (error) {
-    yield put(
-      actionType.getStaffFail(
-        error.message || 'Failed to fetch staff'
-      )
-    );
+    yield put(actionType.getStaffFail(error.message || 'Failed to fetch staff'));
   }
 }
 
@@ -29,25 +25,60 @@ function* fetchStaff() {
 function* addStaff(action) {
   try {
     const params = {
-      api: `${appConfig.ip}/staff/signup`, // ✅ POST create route
+      api: `${appConfig.ip}/staff/signup`,
       method: 'POST',
-      successAction: actionType.addStaffSuccess(), // ✅ must call
-      failAction: actionType.addStaffFail(),
-      authorization: null, // ✅ cookie handles auth
-      body: JSON.stringify(action.payload) // ✅ send form data
+      successAction: actionType.addStaffSuccess, // ✅ fixed — no ()
+      failAction: actionType.addStaffFail,        // ✅ fixed — no ()
+      authorization: null,
+      body: JSON.stringify(action.payload)
     };
 
     yield call(commonApi, params);
-
-    // ✅ refresh staff list after adding
     yield put(actionType.getStaff());
 
   } catch (error) {
-    yield put(
-      actionType.addStaffFail(
-        error.message || 'Failed to add staff'
-      )
-    );
+    yield put(actionType.addStaffFail(error.message || 'Failed to add staff'));
+  }
+}
+
+/* ================= EDIT STAFF ================= */
+function* editStaff(action) {
+  try {
+    const { id, ...data } = action.payload;
+
+    const params = {
+      api: `${appConfig.ip}/staff/${id}`,
+      method: 'PUT',
+      successAction: actionType.editStaffSuccess,
+      failAction: actionType.editStaffFail,
+      authorization: null,
+      body: JSON.stringify(data)
+    };
+
+    yield call(commonApi, params);
+    yield put(actionType.getStaff()); // ✅ refresh list after edit
+
+  } catch (error) {
+    yield put(actionType.editStaffFail(error.message || 'Failed to update staff'));
+  }
+}
+
+/* ================= DELETE STAFF ================= */
+function* deleteStaff(action) {
+  try {
+    const params = {
+      api: `${appConfig.ip}/staff/${action.payload}`,
+      method: 'DELETE',
+      successAction: actionType.deleteStaffSuccess,
+      failAction: actionType.deleteStaffFail,
+      authorization: null
+    };
+
+    yield call(commonApi, params);
+    yield put(actionType.getStaff()); // ✅ refresh list after delete
+
+  } catch (error) {
+    yield put(actionType.deleteStaffFail(error.message || 'Failed to delete staff'));
   }
 }
 
@@ -55,4 +86,6 @@ function* addStaff(action) {
 export default function* staffActionWatcher() {
   yield takeEvery(actionType.getStaff.type, fetchStaff);
   yield takeEvery(actionType.addStaff.type, addStaff);
+  yield takeEvery(actionType.editStaff.type, editStaff);
+  yield takeEvery(actionType.deleteStaff.type, deleteStaff);
 }
