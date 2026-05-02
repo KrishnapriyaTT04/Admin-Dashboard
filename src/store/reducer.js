@@ -24,19 +24,17 @@ import { combineReducers } from 'redux';
 
 import customizationReducer from './customizationReducer';
 import loginReducer from 'container/LoginContainer/slice';
-
-import staffReducer from 'container/StaffContainer/slice';
-import doctorReducer from 'container/DoctorContainer/slice';
 import departmentsReducer from 'container/departmentsContainer/slice';
 import vendorReducer from 'container/VendorContainer/slice';
+import supportTypeReducer from 'container/SupportTypeContainer/slice';
+
 
 const reducer = combineReducers({
   login: loginReducer,
   customization: customizationReducer,
-  staff: staffReducer,
-  doctor: doctorReducer,
   departments: departmentsReducer,
-  vendors: vendorReducer
+  vendors: vendorReducer,
+  supportType: supportTypeReducer
 });
 
 export default reducer;

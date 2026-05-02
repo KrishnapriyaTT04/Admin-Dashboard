@@ -20,18 +20,16 @@
 import { all, call } from 'redux-saga/effects';
 
 import LoginActionWatcher from 'container/LoginContainer/saga';
-import staffActionWatcher from 'container/StaffContainer/saga';
-import doctorsWatcher from 'container/DoctorContainer/saga';
 import departmentSaga from 'container/departmentsContainer/saga';
 import vendorSaga from 'container/VendorContainer/saga';
+import supportTypeSaga from 'container/SupportTypeContainer/saga';
 
 function* rootSaga() {
   yield all([
     call(LoginActionWatcher),
-    call(staffActionWatcher),
-    call(doctorsWatcher),
     call(departmentSaga),
-    call(vendorSaga)
+    call(vendorSaga),
+    call(supportTypeSaga)
   ]);
 }
 

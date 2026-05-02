@@ -41,6 +41,7 @@ import dashboard from './dashboard';
 import vendors from './vendors';
 import departments from './departments';
 import support from './support';
+import supportType from './supportType'
 
 
 const menuItems = {
@@ -49,6 +50,7 @@ const menuItems = {
     vendors,
     departments,
     support,
+    supportType
   ]
 };
 
